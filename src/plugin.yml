@@ -1,0 +1,6 @@
+name: Libraries
+version: 1.0
+description: RevTut Network Libraries API
+author: RevTut
+website: www.revtut.net
+main: net.revtut.libraries.Libraries
