@@ -34,18 +34,21 @@ public final class ActionBarAPI {
     /**
      * Send a action bar to a player.
      *
-     * @param p      player to send the action bar
+     * @param p player to send the action bar
      * @param message  message to be sent
+     * @param stay time that the message should stay
      */
-    public static void sendActionBar(final Player p, final String message) {
+    public static void sendActionBar(final Player p, final String message, final int stay) {
         if (null == plugin) {
-            Logger.getLogger("Minecraft").log(Level.WARNING, "Libraries plugin is null inside ActionBarAPI!");
+            Logger.getLogger("Minecraft").log(Level.WARNING, "Main plugin is null inside ActionBarAPI!");
             return;
         }
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            IChatBaseComponent actionMessage = ChatSerializer.a(message);
-            PacketPlayOutChat ppoc = new PacketPlayOutChat(actionMessage, (byte) 2);
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(ppoc);
-        });
+        for(int i = 0; i < stay; i++) {
+            Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+                IChatBaseComponent actionMessage = ChatSerializer.a(message);
+                PacketPlayOutChat ppoc = new PacketPlayOutChat(actionMessage, (byte) 2);
+                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(ppoc);
+            }), i * 20);
+        }
     }
 }
