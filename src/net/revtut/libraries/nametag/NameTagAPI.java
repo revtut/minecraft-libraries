@@ -1,11 +1,14 @@
 package net.revtut.libraries.nametag;
 
+import net.revtut.permissions.api.PermissionsAPI;
+import net.revtut.permissions.group.Group;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Squid;
 import org.bukkit.event.Listener;
+import org.bukkit.permissions.Permission;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
@@ -58,13 +61,11 @@ public final class NameTagAPI implements Listener {
      *
      * @param board scoreBoard of the Teams
      * @param p   player to show the NameTag
-     * @param id     id of the group
-     * @param prefix prefix of the player
      * @param perPlayerScoreBoard if multiple ScoreBoards
      */
-    public static void setNameTag(Scoreboard board, Player p, String id, String prefix, boolean perPlayerScoreBoard) {
+    public static void setNameTag(Scoreboard board, Player p, boolean perPlayerScoreBoard) {
         if(!perPlayerScoreBoard) {
-            setNameTag(board, p, id, prefix); // Only one ScoreBoard is in use
+            setNameTag(board, p); // Only one ScoreBoard is in use
             return;
         }
 
@@ -72,8 +73,8 @@ public final class NameTagAPI implements Listener {
         for (Player alvo : Bukkit.getOnlinePlayers()) {
             alvoBoard = alvo.getScoreboard();
             if (alvoBoard != null)
-                setNameTag(alvoBoard, p, id, prefix); // Adicionar "Player" a ScoreBoard do Alvo
-            setNameTag(board, alvo, id, prefix); // Adicionar "Alvo" a ScoreBoard do Player
+                setNameTag(alvoBoard, p); // Adicionar "Player" a ScoreBoard do Alvo
+            setNameTag(board, alvo); // Adicionar "Alvo" a ScoreBoard do Player
         }
     }
 
@@ -81,11 +82,11 @@ public final class NameTagAPI implements Listener {
      * Change the nametag of a player.
      *
      * @param board  scoreBoard of the Teams
-     * @param p      player to show the NameTag
-     * @param id     id of the group
-     * @param prefix prefix of the player
+     * @param p player to set the name tag
      */
-    private static void setNameTag(Scoreboard board, Player p, String id, String prefix) {
+    private static void setNameTag(Scoreboard board, Player p) {
+        String id = PermissionsAPI.getGroupName(p);
+        String prefix = PermissionsAPI.getGroupTag(p);
         if(prefix.length() > 0)
             prefix += " ";
         String sufix = "";
