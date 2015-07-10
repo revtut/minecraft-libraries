@@ -2,11 +2,14 @@ package net.revtut.libraries.particles;
 
 import net.minecraft.server.v1_8_R1.EnumParticle;
 import net.minecraft.server.v1_8_R1.PacketPlayOutWorldParticles;
+import net.revtut.libraries.Libraries;
+import net.revtut.libraries.algebra.AlgebraAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -23,6 +26,11 @@ public final class ParticlesAPI {
      * Constructor of ParticlesAPI
      */
     private ParticlesAPI() {}
+
+    /**
+     * Libraries class
+     */
+    public static Libraries plugin = null;
 
     /**
      * Random class
@@ -83,6 +91,25 @@ public final class ParticlesAPI {
     }
 
     /**
+     * Play a circle particle effect at a location
+     * @param location location to be played the effect
+     * @param radius radius of the circle
+     * @param numberPoints number of points of the circle
+     * @param delay delay between each particle
+     * @param enumParticle particle to be played
+     */
+    public static void circleParticleEffect(Location location, double radius, int numberPoints, int delay, EnumParticle enumParticle) {
+        List<Location> haloLocations = AlgebraAPI.getCircle(location, radius, numberPoints);
+        for(int i = 0; i < haloLocations.size(); i++) {
+            final Location playLocation = haloLocations.get(i);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(enumParticle, false, (float) playLocation.getX(), (float) playLocation.getY(), (float) playLocation.getZ(), 0f, 0f, 0f, 0f, 1);
+                sendParticlePacket(location, particlePacket);
+            }, delay * i);
+        }
+    }
+
+    /**
      * Make a random particle
      * @return particle effect
      */
@@ -100,5 +127,17 @@ public final class ParticlesAPI {
             return EnumParticle.BLOCK_CRACK;
         }
         return EnumParticle.FIREWORKS_SPARK;
+    }
+
+    /**
+     * Send the particle packet to all the players
+     * @param location location to play the packet
+     * @param particlePacket particle packet
+     */
+    public static void sendParticlePacket(Location location, PacketPlayOutWorldParticles particlePacket) {
+        Bukkit.getOnlinePlayers().stream()
+                .filter(player -> player.getWorld().getName().equalsIgnoreCase(location.getWorld().getName()))
+                .filter(player -> AlgebraAPI.distanceBetween(player.getLocation(), location) <= 20.0D)
+                .forEach(player -> ((CraftPlayer) player).getHandle().playerConnection.sendPacket(particlePacket));
     }
 }

@@ -1,6 +1,7 @@
 package net.revtut.libraries.algebra;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -206,5 +207,28 @@ public final class AlgebraAPI {
             return false;
 
         return true;
+    }
+
+    /**
+     * Get a list of locations that create a circle around a position
+     * @param center center of the circle
+     * @param radius radius of the circle
+     * @param numberPoints number of points of the circle
+     * @return list with circle points
+     */
+    public static ArrayList<Location> getCircle(Location center, double radius, int numberPoints) {
+        World world = center.getWorld();
+
+        double increment = (2 * Math.PI) / numberPoints;
+
+        ArrayList<Location> locations = new ArrayList<>();
+        for(int i = 0; i < numberPoints; i++) {
+            double angle = i * increment;
+            double x = center.getX() + (radius * Math.cos(angle));
+            double z = center.getZ() + (radius * Math.sin(angle));
+            locations.add(new Location(world, x, center.getY(), z));
+        }
+
+        return locations;
     }
 }
