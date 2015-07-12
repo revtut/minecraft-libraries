@@ -23,12 +23,12 @@ public final class LanguageAPI {
     private LanguageAPI() {}
 
     /**
-     * Get the language of a player
+     * Get the language of a player using reflection
      *
      * @param player player to get the language
      * @return language of the player
      */
-    public static Language getLanguage(Player player){
+    public static Language getLanguageReflection(Player player){
         try {
             Object playerMethod = ReflectionAPI.getMethod(player.getClass(), "getHandle").invoke(player, (Object[]) null);
             Field field = ReflectionAPI.getField(playerMethod.getClass(), "locale");
@@ -42,6 +42,16 @@ public final class LanguageAPI {
             t.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * Get the language of a player
+     *
+     * @param player player to get the language
+     * @return language of the player
+     */
+    public static Language getLanguage(Player player) {
+        return getByCode(player.spigot().getLocale());
     }
 
     /**
