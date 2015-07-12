@@ -1,13 +1,12 @@
 package net.revtut.libraries.particles;
 
-import net.minecraft.server.v1_8_R1.EnumParticle;
-import net.minecraft.server.v1_8_R1.PacketPlayOutWorldParticles;
+import net.minecraft.server.v1_8_R3.EnumParticle;
+import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles;
 import net.revtut.libraries.Libraries;
 import net.revtut.libraries.algebra.AlgebraAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
-import org.bukkit.entity.Player;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 
 import java.util.List;
 import java.util.Random;
@@ -38,59 +37,6 @@ public final class ParticlesAPI {
     private static final Random r = new Random();
 
     /**
-     * Create helix particle effect follow X-Axis
-     *
-     * @param player player to create helix effect
-     */
-    public static void helixPosX(Player player) {
-        Location loc = player.getLocation();
-        int radius = 2;
-        for(double y = 0; y <= 50; y+=0.05) {
-            double x = radius * Math.cos(y);
-            double z = radius * Math.sin(y);
-            PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(EnumParticle.FLAME, true, (float) (loc.getX() + x), (float) (loc.getY() + y ), (float) (loc.getZ() + z), 0, 0, 0, 0, 1);
-            for(Player online : Bukkit.getOnlinePlayers()) {
-                ((CraftPlayer)online).getHandle().playerConnection.sendPacket(packet);
-            }
-        }
-    }
-
-    /**
-     * Create helix particle effect follow Y-Axis
-     *
-     * @param player player to create helix effect
-     */
-    public static void helixPosY(Player player) {
-        Location loc = player.getLocation();
-        int radius = 4;
-        for (double y = 0; y <= 50; y += 0.05) {
-            double x = radius * Math.cos(y);
-            double z = radius * Math.sin(y);
-            PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(randomParticles(), true, (float) (loc.getX() + y), (float) (loc.getY() + x ), (float) (loc.getZ() + z), 0, 0, 0, 0, 1);
-            for (Player online : Bukkit.getOnlinePlayers()) {
-                ((CraftPlayer) online).getHandle().playerConnection.sendPacket(packet);
-            }
-        }
-    }
-
-    /**
-     * Create helix particle effect follow Y-Axis
-     *
-     * @param location location to create helix effect
-     */
-    public static void helixPosY(Location location) {
-        int radius = 4;
-        for (double y = 0; y <= 50; y += 0.05) {
-            double x = radius * Math.cos(y);
-            double z = radius * Math.sin(y);
-            PacketPlayOutWorldParticles packet = new PacketPlayOutWorldParticles(randomParticles(), true, (float) (location.getX() + y), (float) (location.getY() + x ), (float) (location.getZ() + z), 0, 0, 0, 0, 1);
-            for (Player online : Bukkit.getOnlinePlayers()) {
-                ((CraftPlayer) online).getHandle().playerConnection.sendPacket(packet);
-            }
-        }
-    }
-
-    /**
      * Play a circle particle effect at a location
      * @param location location to be played the effect
      * @param radius radius of the circle
@@ -99,9 +45,10 @@ public final class ParticlesAPI {
      * @param enumParticle particle to be played
      */
     public static void circleParticleEffect(Location location, double radius, int numberPoints, int delay, EnumParticle enumParticle) {
-        List<Location> haloLocations = AlgebraAPI.getCircle(location, radius, numberPoints);
+        List<Location> haloLocations = AlgebraAPI.getCircle(location, 0, radius, numberPoints);
         for(int i = 0; i < haloLocations.size(); i++) {
             final Location playLocation = haloLocations.get(i);
+
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
                 PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(enumParticle, false, (float) playLocation.getX(), (float) playLocation.getY(), (float) playLocation.getZ(), 0f, 0f, 0f, 0f, 1);
                 sendParticlePacket(location, particlePacket);

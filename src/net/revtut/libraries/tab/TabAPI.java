@@ -1,11 +1,10 @@
 package net.revtut.libraries.tab;
 
-import net.minecraft.server.v1_8_R1.ChatSerializer;
-import net.minecraft.server.v1_8_R1.IChatBaseComponent;
-import net.minecraft.server.v1_8_R1.PacketPlayOutPlayerListHeaderFooter;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent;
+import net.minecraft.server.v1_8_R3.PacketPlayOutPlayerListHeaderFooter;
 import net.revtut.libraries.Libraries;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
@@ -47,8 +46,8 @@ public final class TabAPI {
         Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
             @Override
             public void run() {
-                IChatBaseComponent tabTitle = ChatSerializer.a(title);
-                IChatBaseComponent tabFooter = ChatSerializer.a(footer);
+                IChatBaseComponent tabTitle = IChatBaseComponent.ChatSerializer.a(title);
+                IChatBaseComponent tabFooter = IChatBaseComponent.ChatSerializer.a(footer);
                 PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
 
                 try {

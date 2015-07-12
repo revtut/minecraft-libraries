@@ -212,21 +212,44 @@ public final class AlgebraAPI {
     /**
      * Get a list of locations that create a circle around a position
      * @param center center of the circle
+     * @param startAngle start angle of the circle
      * @param radius radius of the circle
      * @param numberPoints number of points of the circle
      * @return list with circle points
      */
-    public static ArrayList<Location> getCircle(Location center, double radius, int numberPoints) {
+    public static List<Location> getCircle(Location center, double startAngle, double radius, int numberPoints) {
         World world = center.getWorld();
 
         double increment = (2 * Math.PI) / numberPoints;
 
-        ArrayList<Location> locations = new ArrayList<>();
+        List<Location> locations = new ArrayList<>();
         for(int i = 0; i < numberPoints; i++) {
-            double angle = i * increment;
+            double angle = i * increment + startAngle;
             double x = center.getX() + (radius * Math.cos(angle));
             double z = center.getZ() + (radius * Math.sin(angle));
             locations.add(new Location(world, x, center.getY(), z));
+        }
+
+        return locations;
+    }
+
+    /**
+     * Get a list of locations that create a helix around a position counter clockwise
+     * @param center center of the circle
+     * @param height height of the helix
+     * @param startAngle start angle of the helix
+     * @param radius radius of the circle
+     * @param numberPoints number of points of the circle
+     * @return list with circle points
+     */
+    public static List<Location> getHelixCCW(Location center, double height, double startAngle, double radius, int numberPoints) {
+        List<Location> locations = getCircle(center, startAngle, radius, numberPoints);
+
+        double incrementY = height / numberPoints;
+
+        for(int i = 0; i < numberPoints; i++) {
+            double y = center.getY() + incrementY * i;
+            locations.get(i).setY(y);
         }
 
         return locations;

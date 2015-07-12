@@ -1,12 +1,10 @@
 package net.revtut.libraries.titles;
 
-import net.minecraft.server.v1_8_R1.ChatSerializer;
-import net.minecraft.server.v1_8_R1.EnumTitleAction;
-import net.minecraft.server.v1_8_R1.IChatBaseComponent;
-import net.minecraft.server.v1_8_R1.PacketPlayOutTitle;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent;
+import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import net.revtut.libraries.Libraries;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.logging.Level;
@@ -44,8 +42,8 @@ public final class TitleAPI {
             return;
         }
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            IChatBaseComponent titleSerializer = ChatSerializer.a(title);
-            PacketPlayOutTitle packet = new PacketPlayOutTitle(EnumTitleAction.TITLE, titleSerializer);
+            IChatBaseComponent titleSerializer = IChatBaseComponent.ChatSerializer.a(title);
+            PacketPlayOutTitle packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, titleSerializer);
             ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
         });
     }
@@ -62,8 +60,8 @@ public final class TitleAPI {
             return;
         }
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            IChatBaseComponent subTitleSerializer = ChatSerializer.a(subtitle);
-            PacketPlayOutTitle packet = new PacketPlayOutTitle(EnumTitleAction.SUBTITLE, subTitleSerializer);
+            IChatBaseComponent subTitleSerializer = IChatBaseComponent.ChatSerializer.a(subtitle);
+            PacketPlayOutTitle packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, subTitleSerializer);
             ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
         });
     }
@@ -98,7 +96,7 @@ public final class TitleAPI {
             return;
         }
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            PacketPlayOutTitle packet = new PacketPlayOutTitle(EnumTitleAction.RESET, null);
+            PacketPlayOutTitle packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.RESET, null);
             ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
         });
     }
@@ -114,7 +112,7 @@ public final class TitleAPI {
             return;
         }
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            PacketPlayOutTitle packet = new PacketPlayOutTitle(EnumTitleAction.CLEAR, null);
+            PacketPlayOutTitle packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.CLEAR, null);
             ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
         });
     }

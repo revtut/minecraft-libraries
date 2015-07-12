@@ -1,9 +1,9 @@
 package net.revtut.libraries.camera;
 
-import net.minecraft.server.v1_8_R1.PacketPlayOutCamera;
+import net.minecraft.server.v1_8_R3.PacketPlayOutCamera;
 import net.revtut.libraries.Libraries;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.logging.Level;

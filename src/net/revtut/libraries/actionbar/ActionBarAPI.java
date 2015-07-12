@@ -1,11 +1,10 @@
 package net.revtut.libraries.actionbar;
 
-import net.minecraft.server.v1_8_R1.ChatSerializer;
-import net.minecraft.server.v1_8_R1.IChatBaseComponent;
-import net.minecraft.server.v1_8_R1.PacketPlayOutChat;
+import net.minecraft.server.v1_8_R3.IChatBaseComponent;
+import net.minecraft.server.v1_8_R3.PacketPlayOutChat;
 import net.revtut.libraries.Libraries;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_8_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.logging.Level;
@@ -45,7 +44,7 @@ public final class ActionBarAPI {
         }
         for(int i = 0; i < stay; i++) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-                IChatBaseComponent actionMessage = ChatSerializer.a(message);
+                IChatBaseComponent actionMessage = IChatBaseComponent.ChatSerializer.a(message);
                 PacketPlayOutChat ppoc = new PacketPlayOutChat(actionMessage, (byte) 2);
                 ((CraftPlayer) p).getHandle().playerConnection.sendPacket(ppoc);
             }), i * 20);
