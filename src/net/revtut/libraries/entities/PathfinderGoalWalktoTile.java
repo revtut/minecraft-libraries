@@ -50,6 +50,9 @@ public class PathfinderGoalWalktoTile extends PathfinderGoal {
      */
     @Override
     public boolean a() {
+        return true;
+
+        /*
         if (Bukkit.getPlayer(player) == null) {
             return path != null;
         }
@@ -58,11 +61,8 @@ public class PathfinderGoalWalktoTile extends PathfinderGoal {
         NavigationAbstract navigation = this.entity.getNavigation();
         this.path = navigation.a(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1);
 
-        if (this.path != null) {
-            this.c();
-        }
-
         return this.path != null;
+        */
     }
 
     /**
@@ -70,6 +70,8 @@ public class PathfinderGoalWalktoTile extends PathfinderGoal {
      */
     @Override
     public void c() {
+        Location targetLocation = Bukkit.getPlayer(player).getLocation();
+        this.path = entity.getNavigation().a(targetLocation.getX() + 1, targetLocation.getY(), targetLocation.getZ() + 1);
         this.entity.getNavigation().a(this.path, 1D);
     }
 }

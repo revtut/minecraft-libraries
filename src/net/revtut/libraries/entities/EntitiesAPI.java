@@ -1,10 +1,15 @@
 package net.revtut.libraries.entities;
 
 import net.minecraft.server.v1_8_R3.EntityInsentient;
+import net.minecraft.server.v1_8_R3.PathfinderGoal;
 import net.minecraft.server.v1_8_R3.PathfinderGoalFloat;
 import net.minecraft.server.v1_8_R3.PathfinderGoalSelector;
+import net.revtut.libraries.reflection.ReflectionAPI;
+import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 
 import java.lang.reflect.Field;
@@ -39,18 +44,37 @@ public class EntitiesAPI {
      * Initialize variables
      */
     static {
-        try {
-            gsa = PathfinderGoalSelector.class.getDeclaredField("b");
+        gsa = ReflectionAPI.getField(PathfinderGoalSelector.class, "b");
+        if(gsa != null)
             gsa.setAccessible(true);
 
-            goalSelector = EntityInsentient.class.getDeclaredField("goalSelector");
+        goalSelector = ReflectionAPI.getField(EntityInsentient.class, "goalSelector");
+        if(goalSelector != null)
             goalSelector.setAccessible(true);
 
-            targetSelector = EntityInsentient.class.getDeclaredField("targetSelector");
+        targetSelector = ReflectionAPI.getField(EntityInsentient.class, "targetSelector");
+        if(targetSelector != null)
             targetSelector.setAccessible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    }
+
+    /**
+     * Rename a entity
+     * @param entity entity to be renamed
+     * @param name new name of the entity
+     */
+    public static void renameEntity(Entity entity, String name) {
+        entity.setCustomNameVisible(true);
+        entity.setCustomName(name);
+    }
+
+    /**
+     * Spawn a entity on a given location
+     * @param entityType entity type to spawn
+     * @param location location to spawn
+     * @return spawned entity
+     */
+    public static Entity spawnEntity(EntityType entityType, Location location) {
+        return location.getWorld().spawnEntity(location, entityType);
     }
 
     /**
@@ -71,6 +95,7 @@ public class EntitiesAPI {
 
                 goal.a(0, new PathfinderGoalFloat((EntityInsentient) nmsEntity));
                 goal.a(1, new PathfinderGoalWalktoTile((EntityInsentient) nmsEntity, player));
+                System.out.println("Here");
             } else {
                 throw new IllegalArgumentException(entity.getType().getName() + " is not an instance of an EntityInsentient.");
             }
@@ -79,4 +104,25 @@ public class EntitiesAPI {
         }
     }
 
+    /**
+     * Freeze a entity
+     * @param entity entity to be frozen
+     */
+    public static void freezeEntity(LivingEntity entity) {
+        try {
+            Object nmsEntity = ((CraftLivingEntity) entity).getHandle();
+
+            if (nmsEntity instanceof EntityInsentient) {
+                PathfinderGoalSelector goal = (PathfinderGoalSelector) goalSelector.get(nmsEntity);
+                PathfinderGoalSelector target = (PathfinderGoalSelector) targetSelector.get(nmsEntity);
+
+                gsa.set(goal, new UnsafeList<>());
+                gsa.set(target, new UnsafeList<>());
+            } else {
+                throw new IllegalArgumentException(entity.getType().getName() + " is not an instance of an EntityInsentient.");
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 }
