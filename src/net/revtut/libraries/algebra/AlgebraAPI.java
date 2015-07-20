@@ -8,7 +8,6 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Algebra Library.
@@ -34,36 +33,37 @@ public final class AlgebraAPI {
      * @return location that will look lookAt
      */
     public static Location locationLookAt(Location location, Location lookAt) {
-        //Clone the loc to prevent applied changes to the input loc
-        location = location.clone();
-
         // Values of change in distance (make it relative)
         double deltaX = lookAt.getX() - location.getX();
         double deltaY = lookAt.getY() - location.getY();
         double deltaZ = lookAt.getZ() - location.getZ();
 
+        // Values of the new location
+        double x = location.getX(), y = location.getY(), z = location.getZ();
+        float yaw = location.getYaw(), pitch;
+
         // Set yaw
         if (deltaX != 0) {
             // Set yaw start value based on deltaX
             if (deltaX < 0)
-                location.setYaw((float) (1.5 * Math.PI));
+                yaw = (float) (1.5 * Math.PI);
             else
-                location.setYaw((float) (0.5 * Math.PI));
-            location.setYaw(location.getYaw() - (float) Math.atan(deltaZ / deltaX));
+                yaw = (float) (0.5 * Math.PI);
+            yaw -= Math.atan(deltaZ / deltaX);
         } else if (deltaZ < 0)
-            location.setYaw((float) Math.PI);
+            yaw = (float) Math.PI;
 
         // Get the distance from deltaX/deltaZ
-        double dxz = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaZ, 2));
+        double deltaXZ = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaZ, 2));
 
         // Set pitch
-        location.setPitch((float) -Math.atan(deltaY / dxz));
+        pitch = (float) -Math.atan(deltaY / deltaXZ);
 
         // Set values, convert to degrees (invert the yaw since Bukkit uses a different yaw dimension format)
-        location.setYaw(-location.getYaw() * 180f / (float) Math.PI);
-        location.setPitch(location.getPitch() * 180f / (float) Math.PI);
+        yaw *= -1 * 180f / (float) Math.PI;
+        pitch *= 180f / (float) Math.PI;
 
-        return location;
+        return new Location(location.getWorld(), x, y, z, yaw, pitch);
     }
 
     /**
@@ -113,19 +113,19 @@ public final class AlgebraAPI {
     /**
      * Generates a list with unique random integers
      *
+     * @param minInteger minimum integer that may be generated
      * @param maxInteger maximum integer that may be generated
      * @param numberIntegers number of unique integeres to be generated
      * @return list with random integers
      */
-    public static List<Integer> getUniqueRandomIntegers(int maxInteger, int numberIntegers) {
+    public static List<Integer> getUniqueRandomIntegers(int minInteger, int maxInteger, int numberIntegers) {
         if(maxInteger < numberIntegers)
             return null;
         List<Integer> list = new ArrayList<>();
-        Random random = new Random();
         int number;
         for(int i = 0; i < numberIntegers; i++) {
             do {
-                number = random.nextInt(maxInteger);
+                number = (int) (Math.random() * (maxInteger - minInteger)) + minInteger;
             } while(list.contains(number));
             list.add(number);
         }
@@ -210,21 +210,45 @@ public final class AlgebraAPI {
     }
 
     /**
-     * Get a list of locations that create a circle around a position
+     * Get a list of locations that create a circle around a position counter clockwise
      * @param center center of the circle
      * @param startAngle start angle of the circle
      * @param radius radius of the circle
      * @param numberPoints number of points of the circle
      * @return list with circle points
      */
-    public static List<Location> getCircle(Location center, double startAngle, double radius, int numberPoints) {
+    public static List<Location> getCircleCCW(Location center, double startAngle, double radius, int numberPoints) {
         World world = center.getWorld();
 
         double increment = (2 * Math.PI) / numberPoints;
 
         List<Location> locations = new ArrayList<>();
         for(int i = 0; i < numberPoints; i++) {
-            double angle = i * increment + startAngle;
+            double angle = startAngle + i * increment;
+            double x = center.getX() + (radius * Math.cos(angle));
+            double z = center.getZ() + (radius * Math.sin(angle));
+            locations.add(new Location(world, x, center.getY(), z));
+        }
+
+        return locations;
+    }
+
+    /**
+     * Get a list of locations that create a circle around a position clockwise
+     * @param center center of the circle
+     * @param startAngle start angle of the circle
+     * @param radius radius of the circle
+     * @param numberPoints number of points of the circle
+     * @return list with circle points
+     */
+    public static List<Location> getCircleCW(Location center, double startAngle, double radius, int numberPoints) {
+        World world = center.getWorld();
+
+        double increment = (2 * Math.PI) / numberPoints;
+
+        List<Location> locations = new ArrayList<>();
+        for(int i = 0; i < numberPoints; i++) {
+            double angle = startAngle - i * increment;
             double x = center.getX() + (radius * Math.cos(angle));
             double z = center.getZ() + (radius * Math.sin(angle));
             locations.add(new Location(world, x, center.getY(), z));
@@ -243,7 +267,29 @@ public final class AlgebraAPI {
      * @return list with circle points
      */
     public static List<Location> getHelixCCW(Location center, double height, double startAngle, double radius, int numberPoints) {
-        List<Location> locations = getCircle(center, startAngle, radius, numberPoints);
+        List<Location> locations = getCircleCCW(center, startAngle, radius, numberPoints);
+
+        double incrementY = height / numberPoints;
+
+        for(int i = 0; i < numberPoints; i++) {
+            double y = center.getY() + incrementY * i;
+            locations.get(i).setY(y);
+        }
+
+        return locations;
+    }
+
+    /**
+     * Get a list of locations that create a helix around a position clockwise
+     * @param center center of the circle
+     * @param height height of the helix
+     * @param startAngle start angle of the helix
+     * @param radius radius of the circle
+     * @param numberPoints number of points of the circle
+     * @return list with circle points
+     */
+    public static List<Location> getHelixCW(Location center, double height, double startAngle, double radius, int numberPoints) {
+        List<Location> locations = getCircleCW(center, startAngle, radius, numberPoints);
 
         double incrementY = height / numberPoints;
 
