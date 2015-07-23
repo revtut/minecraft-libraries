@@ -2,6 +2,7 @@ package net.revtut.libraries.entities.goals;
 
 import net.minecraft.server.v1_8_R3.*;
 import net.revtut.libraries.entities.PetGoal;
+import org.bukkit.Location;
 
 /**
  * Pet goal follow owner
@@ -9,9 +10,19 @@ import net.revtut.libraries.entities.PetGoal;
 public class PetGoalFollowOwner extends PetGoal {
 
     /**
-     * Maximum distance to the owner so it teleports
+     * Pet entity
      */
-    private float maxDistance;
+    private EntityInsentient pet;
+
+    /**
+     * Owner of the pet
+     */
+    private EntityLiving owner;
+
+    /**
+     * Follow speed
+     */
+    private double speed;
 
     /**
      * Distance to the owner so it start moving
@@ -24,24 +35,14 @@ public class PetGoalFollowOwner extends PetGoal {
     private float stopDistance;
 
     /**
-     * Follow speed
+     * Maximum distance to the owner so it teleports
      */
-    private double speed;
-
-    /**
-     * Pet
-     */
-    private EntityInsentient  pet;
+    private float maxDistance;
 
     /**
      * Navigation of the pet
      */
     private Navigation navigation;
-
-    /**
-     * Owner of the pet
-     */
-    private EntityLiving owner;
 
     /**
      * Timer for ticking
@@ -120,7 +121,7 @@ public class PetGoalFollowOwner extends PetGoal {
      * Tick method
      */
     public void tick() {
-        pet.getControllerLook().a(owner, 10.0F, (float) pet.bQ());
+        //pet.getControllerLook().a(owner, 10.0F, (float) pet.bQ());
 
         if(--timer > 0)
             return;
@@ -131,17 +132,17 @@ public class PetGoalFollowOwner extends PetGoal {
         if (!owner.getBukkitEntity().isOnGround())
             return;
 
-            /*if (pet.h(owner) > maxDistance && owner.getBukkitEntity().isOnGround()) {
-                //this.pet.getPet().teleportToOwner();
-                // Teleport PET
-                return;
-            }*/
+        // Teleport back to the owner if too far
+        if (pet.h(owner) > maxDistance) {
+            pet.teleportTo(new Location(owner.world.getWorld(), owner.locX, owner.locY, owner.locZ), false);
+            return;
+        }
 
         if (pet.getGoalTarget() == null) {
-            PathEntity path = pet.getNavigation().a(owner);
+            PathEntity path = navigation.a(owner);
 
             //Smooth path finding to entity instead of location
-            pet.getNavigation().a(path, speed);
+            navigation.a(path, speed);
         }
     }
 }

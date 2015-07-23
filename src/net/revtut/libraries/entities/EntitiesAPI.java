@@ -72,14 +72,8 @@ public class EntitiesAPI {
                 // Clear target
                 bSelector.set(entityInsentient.targetSelector, new UnsafeList<>());
 
-                System.out.println("Adding goals...");
-
                 // Add goals
-                entityInsentient.goalSelector.a(1, new PetGoalFollowOwner(entityInsentient, ((CraftPlayer) player).getHandle(), 1.0D, 5.0F, 3.0F, 10.0F));
-
-                // Check if was added
-                List object = (List) bSelector.get(entityInsentient.goalSelector);
-                System.out.println("Size of the list: " + object.size());
+                entityInsentient.goalSelector.a(1, new PetGoalFollowOwner(entityInsentient, ((CraftPlayer) player).getHandle(), 2.0D, 5.0F, 3.0F, 10.0F));
             } else {
                 throw new IllegalArgumentException(entity.getType().getName() + " is not an instance of an EntityInsentient.");
             }
