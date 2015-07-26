@@ -35,7 +35,7 @@ public final class AppearanceAPI {
     /**
      * Copy of random class
      */
-    private static final Random r = new Random();
+    private static final Random random = new Random();
 
     /**
      * Launch firework on player
@@ -54,7 +54,7 @@ public final class AppearanceAPI {
                 final Firework fw = player.getWorld().spawn(player.getLocation(), Firework.class);
                 final FireworkMeta fm = fw.getFireworkMeta();
 
-                final int fType = r.nextInt(5) + 1;
+                final int fType = random.nextInt(5) + 1;
                 FireworkEffect.Type type;
                 switch (fType) {
                     case 1:
@@ -77,10 +77,10 @@ public final class AppearanceAPI {
                         break;
                 }
 
-                final Color c1 = getColor(r.nextInt(16) + 1);
-                final Color c2 = getColor(r.nextInt(16) + 1);
+                final Color color = getColor(random.nextInt(16) + 1);
+                final Color fade = getColor(random.nextInt(16) + 1);
 
-                final FireworkEffect effect = FireworkEffect.builder().flicker(r.nextBoolean()).withColor(c1).withFade(c2).with(type).trail(r.nextBoolean()).build();
+                final FireworkEffect effect = FireworkEffect.builder().flicker(random.nextBoolean()).withColor(color).withFade(fade).with(type).trail(random.nextBoolean()).build();
                 fm.addEffect(effect);
                 fm.setPower(1);
                 fw.setFireworkMeta(fm);
@@ -91,11 +91,11 @@ public final class AppearanceAPI {
     /**
      * Convert integer to color
      *
-     * @param c integer to be converted
+     * @param number integer to be converted
      * @return correspondent color
      */
-    private static Color getColor(final int c) {
-        switch (c) {
+    private static Color getColor(final int number) {
+        switch (number) {
             case 1:
             default:
                 return Color.AQUA;

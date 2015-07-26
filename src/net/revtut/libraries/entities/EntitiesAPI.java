@@ -1,8 +1,8 @@
 package net.revtut.libraries.entities;
 
-import com.google.common.reflect.Reflection;
 import net.minecraft.server.v1_8_R3.*;
-import net.revtut.libraries.entities.goals.PetGoalFollowOwner;
+import net.revtut.libraries.entities.goals.PetGoalFollowEntity;
+import net.revtut.libraries.entities.goals.PetGoalLookEntity;
 import net.revtut.libraries.reflection.ReflectionAPI;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
@@ -12,11 +12,7 @@ import org.bukkit.entity.*;
 import org.bukkit.entity.Entity;
 
 import java.lang.reflect.Field;
-import java.sql.Ref;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Entities API.
@@ -73,12 +69,13 @@ public class EntitiesAPI {
                 bSelector.set(entityInsentient.targetSelector, new UnsafeList<>());
 
                 // Add goals
-                entityInsentient.goalSelector.a(1, new PetGoalFollowOwner(entityInsentient, ((CraftPlayer) player).getHandle(), 2.0D, 5.0F, 3.0F, 10.0F));
+                entityInsentient.goalSelector.a(1, new PetGoalFollowEntity(entityInsentient, ((CraftPlayer) player).getHandle(), 2.5D, 3.0F, 1.0F, 10.0F));
+                entityInsentient.goalSelector.a(2, new PetGoalLookEntity(entityInsentient, ((CraftPlayer) player).getHandle(), 3.0F));
             } else {
                 throw new IllegalArgumentException(entity.getType().getName() + " is not an instance of an EntityInsentient.");
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -93,26 +90,22 @@ public class EntitiesAPI {
             if (entityLiving instanceof EntityInsentient) {
                 EntityInsentient entityInsentient = (EntityInsentient) entityLiving;
 
-                // Clear goals
-                Field goalSelector = ReflectionAPI.getField(PathfinderGoalSelector.class, "b");
-                if(goalSelector == null)
+                // Get "b"
+                Field bSelector = ReflectionAPI.getField(PathfinderGoalSelector.class, "b");
+                if(bSelector == null)
                     return;
+                bSelector.setAccessible(true);
 
-                goalSelector.setAccessible(true);
-                goalSelector.set(entityInsentient.goalSelector, new UnsafeList<>());
+                // Clear goals
+                bSelector.set(entityInsentient.goalSelector, new UnsafeList<>());
 
                 // Clear target
-                Field targetSelector = ReflectionAPI.getField(PathfinderGoalSelector.class, "b");
-                if(targetSelector == null)
-                    return;
-
-                targetSelector.setAccessible(true);
-                targetSelector.set(entityInsentient.targetSelector, new UnsafeList<>());
+                bSelector.set(entityInsentient.targetSelector, new UnsafeList<>());
             } else {
                 throw new IllegalArgumentException(entity.getType().getName() + " is not an instance of an EntityInsentient.");
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -124,19 +117,19 @@ public class EntitiesAPI {
      */
     public static void registerEntity(String name, int id, Class<?> customClass) {
         try {
-            List<Map<?, ?>> dataMaps = new ArrayList();
+            List<Map<Object, Object>> dataMaps = new ArrayList<>();
             Field[] arrayOfField;
             int j = (arrayOfField = EntityTypes.class.getDeclaredFields()).length;
             for (int i = 0; i < j; i++) {
-                Field f = arrayOfField[i];
-                if (f.getType().getSimpleName().equals(Map.class.getSimpleName())) {
-                    f.setAccessible(true);
-                    dataMaps.add((Map)f.get(null));
+                Field field = arrayOfField[i];
+                if (field.getType().getSimpleName().equals(Map.class.getSimpleName())) {
+                    field.setAccessible(true);
+                    dataMaps.add((Map<Object, Object>) field.get(null));
                 }
             }
 
-            ((Map)dataMaps.get(1)).put(customClass, name);
-            ((Map)dataMaps.get(3)).put(customClass, Integer.valueOf(id));
+            dataMaps.get(1).put(customClass, name);
+            dataMaps.get(3).put(customClass, id);
         } catch (Exception e) {
             e.printStackTrace();
         }

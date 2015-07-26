@@ -2,12 +2,11 @@ package net.revtut.libraries.entities.goals;
 
 import net.minecraft.server.v1_8_R3.*;
 import net.revtut.libraries.entities.PetGoal;
-import org.bukkit.Location;
 
 /**
- * Pet goal follow owner
+ * Pet goal follow entity
  */
-public class PetGoalFollowOwner extends PetGoal {
+public class PetGoalFollowEntity extends PetGoal {
 
     /**
      * Pet entity
@@ -15,9 +14,9 @@ public class PetGoalFollowOwner extends PetGoal {
     private EntityInsentient pet;
 
     /**
-     * Owner of the pet
+     * Target of the pet
      */
-    private EntityLiving owner;
+    private EntityLiving target;
 
     /**
      * Follow speed
@@ -25,17 +24,17 @@ public class PetGoalFollowOwner extends PetGoal {
     private double speed;
 
     /**
-     * Distance to the owner so it start moving
+     * Distance to the target so it start moving
      */
     private float startDistance;
 
     /**
-     * Distance to the owner so it stop moving
+     * Distance to the target so it stop moving
      */
     private float stopDistance;
 
     /**
-     * Maximum distance to the owner so it teleports
+     * Maximum distance to the target so it teleports
      */
     private float maxDistance;
 
@@ -50,17 +49,17 @@ public class PetGoalFollowOwner extends PetGoal {
     private int timer = 0;
 
     /**
-     * Constructor of PetGoalFollowOwner
+     * Constructor of PetGoalFollowEntity
      * @param pet pet of the goal
-     * @param owner owner of the pet
+     * @param target target of the pet
      * @param speed speed of the pet
-     * @param startDistance start distance so pet follow owner
+     * @param startDistance start distance so pet follow target
      * @param stopDistance stop distance pet will stop following
-     * @param maxDistance maximum distance between owner and pet
+     * @param maxDistance maximum distance between target and pet
      */
-    public PetGoalFollowOwner(EntityInsentient pet, EntityLiving owner, double speed, float startDistance, float stopDistance, float maxDistance) {
+    public PetGoalFollowEntity(EntityInsentient pet, EntityLiving target, double speed, float startDistance, float stopDistance, float maxDistance) {
         this.pet = pet;
-        this.owner = owner;
+        this.target = target;
         this.speed = speed;
         this.startDistance = startDistance;
         this.stopDistance = stopDistance;
@@ -75,12 +74,15 @@ public class PetGoalFollowOwner extends PetGoal {
     public boolean shouldStart() {
         if (!pet.isAlive())
             return false;
-        else if (owner == null)
+        else if (target == null)
             return false;
-        else if (pet.h(owner) < startDistance)
+        else if (pet.h(target) < Math.pow(startDistance, 2))
             return false;
-        else
-            return !(pet.getGoalTarget() != null && pet.getGoalTarget().isAlive());
+        else if(pet.getGoalTarget() != null)
+            if(pet.getGoalTarget().isAlive())
+                return false;
+
+        return true;
     }
 
     /**
@@ -90,9 +92,9 @@ public class PetGoalFollowOwner extends PetGoal {
     public boolean shouldContinue() {
         if (navigation.g())
             return false;
-        else if (owner == null)
+        else if (target == null)
             return false;
-        else if (this.pet.h(owner) <= stopDistance)
+        else if (pet.h(target) < Math.pow(stopDistance, 2))
             return false;
 
         return true;
@@ -121,25 +123,23 @@ public class PetGoalFollowOwner extends PetGoal {
      * Tick method
      */
     public void tick() {
-        //pet.getControllerLook().a(owner, 10.0F, (float) pet.bQ());
-
         if(--timer > 0)
             return;
 
         timer = 10;
 
-        //Don't move pet when owner flying
-        if (!owner.getBukkitEntity().isOnGround())
+        //Don't move pet when target flying
+        if (!target.getBukkitEntity().isOnGround())
             return;
 
-        // Teleport back to the owner if too far
-        if (pet.h(owner) > maxDistance) {
-            pet.teleportTo(new Location(owner.world.getWorld(), owner.locX, owner.locY, owner.locZ), false);
+        // Teleport back to the target if too far
+        if (pet.h(target) > Math.pow(maxDistance, 2)) {
+            pet.getBukkitEntity().teleport(target.getBukkitEntity());
             return;
         }
 
         if (pet.getGoalTarget() == null) {
-            PathEntity path = navigation.a(owner);
+            PathEntity path = navigation.a(target);
 
             //Smooth path finding to entity instead of location
             navigation.a(path, speed);
