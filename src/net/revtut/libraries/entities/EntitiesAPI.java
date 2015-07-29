@@ -3,16 +3,18 @@ package net.revtut.libraries.entities;
 import net.minecraft.server.v1_8_R3.*;
 import net.revtut.libraries.entities.goals.PetGoalFollowEntity;
 import net.revtut.libraries.entities.goals.PetGoalLookEntity;
+import net.revtut.libraries.entities.goals.PetGoalRideByEntity;
 import net.revtut.libraries.reflection.ReflectionAPI;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
-import org.bukkit.entity.*;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Entities API.
@@ -22,7 +24,7 @@ import java.util.*;
  * @author João Silva
  * @version 1.0
  */
-public class EntitiesAPI {
+public final class EntitiesAPI {
 
     /**
      * Rename a entity
@@ -47,9 +49,68 @@ public class EntitiesAPI {
     /**
      * Make a entity follow a player
      * @param entity entity to follow
-     * @param player player to be followed
+     * @param target target to be followed
+     * @param lookTarget true if want the entity to look at the target
      */
-    public static void entityFollow(Entity entity, Player player) {
+    public static void entityFollow(Entity entity, Entity target, boolean lookTarget) {
+        EntityLiving entityLiving = ((CraftLivingEntity) entity).getHandle();
+
+        if (entityLiving instanceof EntityInsentient) {
+            EntityCreature entityInsentient = (EntityCreature) entityLiving;
+
+            // Clear goals
+            clearGoals(entity);
+            clearTargets(entity);
+
+            // Add goals
+            addGoal(entity, new PetGoalFollowEntity(entityInsentient, ((CraftLivingEntity) target).getHandle(), 2.5D, 3.0F, 1.0F, 10.0F), 1);
+
+            if(lookTarget)
+                addGoal(entity, new PetGoalLookEntity(entityInsentient, ((CraftLivingEntity) target).getHandle(), 3.0F), 2);
+        } else {
+            throw new IllegalArgumentException(entity.getType().getName() + " is not an instance of an EntityInsentient.");
+        }
+    }
+
+    /**
+     * Freeze a entity
+     * @param entity entity to be frozen
+     */
+    public static void freezeEntity(Entity entity) {
+        clearGoals(entity);
+        clearTargets(entity);
+    }
+
+    /**
+     * Ride a entity
+     * @param entity entity to be ridden
+     * @param rider rider of the entity
+     */
+    public static void rideEntity(Entity entity, Entity rider) {
+        // Set passenger
+        entity.setPassenger(rider);
+
+        EntityLiving entityLiving = ((CraftLivingEntity) entity).getHandle();
+
+        if (entityLiving instanceof EntityInsentient) {
+            EntityCreature entityInsentient = (EntityCreature) entityLiving;
+
+            // Clear goals
+            clearGoals(entity);
+            clearTargets(entity);
+
+            // Add goals
+            addGoal(entity, new PetGoalRideByEntity(entityInsentient, ((CraftLivingEntity) rider).getHandle(), 0.4F, 0.5F), 1); // Default speed is 0.2 and jump 0.5
+        } else {
+            throw new IllegalArgumentException(entity.getType().getName() + " is not an instance of an EntityInsentient.");
+        }
+    }
+
+    /**
+     * Clear goals of a entity
+     * @param entity entity to be cleared
+     */
+    public static void clearGoals(Entity entity) {
         EntityLiving entityLiving = ((CraftLivingEntity) entity).getHandle();
 
         try {
@@ -64,13 +125,6 @@ public class EntitiesAPI {
 
                 // Clear goals
                 bSelector.set(entityInsentient.goalSelector, new UnsafeList<>());
-
-                // Clear target
-                bSelector.set(entityInsentient.targetSelector, new UnsafeList<>());
-
-                // Add goals
-                entityInsentient.goalSelector.a(1, new PetGoalFollowEntity(entityInsentient, ((CraftPlayer) player).getHandle(), 2.5D, 3.0F, 1.0F, 10.0F));
-                entityInsentient.goalSelector.a(2, new PetGoalLookEntity(entityInsentient, ((CraftPlayer) player).getHandle(), 3.0F));
             } else {
                 throw new IllegalArgumentException(entity.getType().getName() + " is not an instance of an EntityInsentient.");
             }
@@ -80,15 +134,15 @@ public class EntitiesAPI {
     }
 
     /**
-     * Freeze a entity
-     * @param entity entity to be frozen
+     * Clear the targets of a entity
+     * @param entity entity to be cleared
      */
-    public static void freezeEntity(LivingEntity entity) {
+    public static void clearTargets(Entity entity) {
         EntityLiving entityLiving = ((CraftLivingEntity) entity).getHandle();
 
         try {
             if (entityLiving instanceof EntityInsentient) {
-                EntityInsentient entityInsentient = (EntityInsentient) entityLiving;
+                EntityCreature entityInsentient = (EntityCreature) entityLiving;
 
                 // Get "b"
                 Field bSelector = ReflectionAPI.getField(PathfinderGoalSelector.class, "b");
@@ -96,11 +150,31 @@ public class EntitiesAPI {
                     return;
                 bSelector.setAccessible(true);
 
-                // Clear goals
-                bSelector.set(entityInsentient.goalSelector, new UnsafeList<>());
-
-                // Clear target
+                // Clear targets
                 bSelector.set(entityInsentient.targetSelector, new UnsafeList<>());
+            } else {
+                throw new IllegalArgumentException(entity.getType().getName() + " is not an instance of an EntityInsentient.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Add a goal to a entity
+     * @param entity entity to receive the goal
+     * @param goal goal to be added
+     * @param priority priority of the goal
+     */
+    public static void addGoal(Entity entity, PetGoal goal, int priority) {
+        EntityLiving entityLiving = ((CraftLivingEntity) entity).getHandle();
+
+        try {
+            if (entityLiving instanceof EntityInsentient) {
+                EntityCreature entityInsentient = (EntityCreature) entityLiving;
+
+                // Add goal
+                entityInsentient.goalSelector.a(priority, goal);
             } else {
                 throw new IllegalArgumentException(entity.getType().getName() + " is not an instance of an EntityInsentient.");
             }

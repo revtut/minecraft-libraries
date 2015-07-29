@@ -1,9 +1,10 @@
 package net.revtut.libraries.items;
 
-import net.minecraft.server.v1_8_R3.NBTTagCompound;
-import net.minecraft.server.v1_8_R3.NBTTagList;
+import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -18,7 +19,7 @@ import java.util.List;
  * @author João Silva
  * @version 1.0
  */
-public class ItemAPI {
+public final class ItemAPI {
 
     /**
      * Create a ItemStack
@@ -101,5 +102,4 @@ public class ItemAPI {
         itemStack.setTag(tag);
         return CraftItemStack.asCraftMirror(itemStack);
     }
-
 }

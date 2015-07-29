@@ -16,7 +16,7 @@ public class PetGoalFollowEntity extends PetGoal {
     /**
      * Target of the pet
      */
-    private EntityLiving target;
+    private Entity target;
 
     /**
      * Follow speed
@@ -57,7 +57,7 @@ public class PetGoalFollowEntity extends PetGoal {
      * @param stopDistance stop distance pet will stop following
      * @param maxDistance maximum distance between target and pet
      */
-    public PetGoalFollowEntity(EntityInsentient pet, EntityLiving target, double speed, float startDistance, float stopDistance, float maxDistance) {
+    public PetGoalFollowEntity(EntityInsentient pet, Entity target, double speed, float startDistance, float stopDistance, float maxDistance) {
         this.pet = pet;
         this.target = target;
         this.speed = speed;
