@@ -29,16 +29,7 @@ public final class ItemAPI {
      * @return
      */
     public static ItemStack createItemStack(Material material, String name, String[] lines) {
-        org.bukkit.inventory.ItemStack itemStack = new org.bukkit.inventory.ItemStack(material);
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(name);
-        List<String> lore = new ArrayList<>();
-        for (String line : lines) {
-            lore.add(line);
-        }
-        itemMeta.setLore(lore);
-        itemStack.setItemMeta(itemMeta);
-        return itemStack;
+        return createItemStack(material.getId(), (short) 0, name, lines);
     }
 
     /**
@@ -50,16 +41,7 @@ public final class ItemAPI {
      * @return
      */
     public static ItemStack createItemStack(Material material, short value, String name, String[] lines) {
-        org.bukkit.inventory.ItemStack itemStack = new org.bukkit.inventory.ItemStack(material, 1, value);
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.setDisplayName(name);
-        List<String> lore = new ArrayList<>();
-        for (String line : lines) {
-            lore.add(line);
-        }
-        itemMeta.setLore(lore);
-        itemStack.setItemMeta(itemMeta);
-        return itemStack;
+        return createItemStack(material.getId(), value, name, lines);
     }
 
     /**
@@ -71,7 +53,7 @@ public final class ItemAPI {
      * @return
      */
     public static ItemStack createItemStack(int materialID, short value, String name, String[] lines) {
-        org.bukkit.inventory.ItemStack itemStack = new org.bukkit.inventory.ItemStack(materialID, 1, value);
+        ItemStack itemStack = new ItemStack(materialID, 1, value);
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(name);
         List<String> lore = new ArrayList<>();
@@ -101,5 +83,21 @@ public final class ItemAPI {
         tag.set("ench", ench);
         itemStack.setTag(tag);
         return CraftItemStack.asCraftMirror(itemStack);
+    }
+
+    /**
+     * Open an anvil menu to player
+     * @param player player to open the anvil menu
+     */
+    public static void openAnvil(Player player) {
+        EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
+
+        AnvilContainer container = new AnvilContainer(entityPlayer);
+
+        int containerCounter = entityPlayer.nextContainerCounter();
+        entityPlayer.playerConnection.sendPacket(new PacketPlayOutOpenWindow(containerCounter, "minecraft:anvil", new ChatMessage("Repairing"), 0));
+        entityPlayer.activeContainer = container;
+        entityPlayer.activeContainer.windowId = containerCounter;
+        entityPlayer.activeContainer.addSlotListener(entityPlayer);
     }
 }

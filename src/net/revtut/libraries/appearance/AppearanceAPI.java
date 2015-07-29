@@ -2,6 +2,7 @@ package net.revtut.libraries.appearance;
 
 import net.revtut.libraries.Libraries;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.entity.Firework;
@@ -94,7 +95,7 @@ public final class AppearanceAPI {
      * @param number integer to be converted
      * @return correspondent color
      */
-    private static Color getColor(final int number) {
+    public static Color getColor(final int number) {
         switch (number) {
             case 1:
             default:
@@ -130,7 +131,15 @@ public final class AppearanceAPI {
             case 16:
                 return Color.WHITE;
             case 17:
+                return Color.YELLOW;
         }
-        return Color.YELLOW;
+    }
+
+    /**
+     * Get a random chat color
+     * @return random chat color
+     */
+    public static ChatColor getRandomChatColor() {
+        return ChatColor.values()[(int) (Math.random() * ChatColor.values().length)];
     }
 }
