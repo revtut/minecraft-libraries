@@ -140,6 +140,6 @@ public final class AppearanceAPI {
      * @return random chat color
      */
     public static ChatColor getRandomChatColor() {
-        return ChatColor.values()[(int) (Math.random() * ChatColor.values().length)];
+        return ChatColor.values()[(int) (Math.random() * (ChatColor.values().length - 6))];
     }
 }

@@ -2,6 +2,7 @@ package net.revtut.libraries.entities.goals;
 
 import net.minecraft.server.v1_8_R3.*;
 import net.revtut.libraries.entities.PetGoal;
+import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -142,6 +143,10 @@ public class PetGoalRideByEntity extends PetGoal {
 
         pet.S = 0.5F; // Climb automatically half slabs
 
+        // Make entity look in front
+        pet.getControllerLook().a(pet.locX + Math.random(), pet.locY + (double) pet.getHeadHeight(), pet.locZ + Math.random(), 10.0F, (float) pet.bQ());
+
+        // Apply jump
         if (JUMP_FIELD != null && pet.onGround) {
             try {
                 if(JUMP_FIELD.getBoolean(passenger)) {

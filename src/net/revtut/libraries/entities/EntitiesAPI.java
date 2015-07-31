@@ -56,13 +56,14 @@ public final class EntitiesAPI {
         EntityLiving entityLiving = ((CraftLivingEntity) entity).getHandle();
 
         if (entityLiving instanceof EntityInsentient) {
-            EntityCreature entityInsentient = (EntityCreature) entityLiving;
+            EntityInsentient entityInsentient = (EntityInsentient) entityLiving;
 
             // Clear goals
             clearGoals(entity);
             clearTargets(entity);
 
             // Add goals
+            addGoal(entity, new PathfinderGoalFloat(entityInsentient), 0);
             addGoal(entity, new PetGoalFollowEntity(entityInsentient, ((CraftLivingEntity) target).getHandle(), 2.5D, 3.0F, 1.0F, 10.0F), 1);
 
             if(lookTarget)
@@ -93,13 +94,14 @@ public final class EntitiesAPI {
         EntityLiving entityLiving = ((CraftLivingEntity) entity).getHandle();
 
         if (entityLiving instanceof EntityInsentient) {
-            EntityCreature entityInsentient = (EntityCreature) entityLiving;
+            EntityInsentient entityInsentient = (EntityInsentient) entityLiving;
 
             // Clear goals
             clearGoals(entity);
             clearTargets(entity);
 
             // Add goals
+            addGoal(entity, new PathfinderGoalFloat(entityInsentient), 0);
             addGoal(entity, new PetGoalRideByEntity(entityInsentient, ((CraftLivingEntity) rider).getHandle(), 0.4F, 0.5F), 1); // Default speed is 0.2 and jump 0.5
         } else {
             throw new IllegalArgumentException(entity.getType().getName() + " is not an instance of an EntityInsentient.");
@@ -115,7 +117,7 @@ public final class EntitiesAPI {
 
         try {
             if (entityLiving instanceof EntityInsentient) {
-                EntityCreature entityInsentient = (EntityCreature) entityLiving;
+                EntityInsentient entityInsentient = (EntityInsentient) entityLiving;
 
                 // Get "b"
                 Field bSelector = ReflectionAPI.getField(PathfinderGoalSelector.class, "b");
@@ -142,7 +144,7 @@ public final class EntitiesAPI {
 
         try {
             if (entityLiving instanceof EntityInsentient) {
-                EntityCreature entityInsentient = (EntityCreature) entityLiving;
+                EntityInsentient entityInsentient = (EntityInsentient) entityLiving;
 
                 // Get "b"
                 Field bSelector = ReflectionAPI.getField(PathfinderGoalSelector.class, "b");
@@ -166,12 +168,12 @@ public final class EntitiesAPI {
      * @param goal goal to be added
      * @param priority priority of the goal
      */
-    public static void addGoal(Entity entity, PetGoal goal, int priority) {
+    public static void addGoal(Entity entity, PathfinderGoal goal, int priority) {
         EntityLiving entityLiving = ((CraftLivingEntity) entity).getHandle();
 
         try {
             if (entityLiving instanceof EntityInsentient) {
-                EntityCreature entityInsentient = (EntityCreature) entityLiving;
+                EntityInsentient entityInsentient = (EntityInsentient) entityLiving;
 
                 // Add goal
                 entityInsentient.goalSelector.a(priority, goal);
