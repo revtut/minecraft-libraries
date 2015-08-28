@@ -8,8 +8,6 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Tab List Library.
@@ -27,11 +25,6 @@ public final class TabAPI {
     private TabAPI() {}
 
     /**
-     * Libraries class
-     */
-    public static Libraries plugin = null;
-
-    /**
      * Set the tab list of a player.
      *
      * @param p      player to send the tab
@@ -39,10 +32,7 @@ public final class TabAPI {
      * @param footer tab foot
      */
     public static void setTab(final Player p, final String title, final String footer) {
-        if (null == plugin) {
-            Logger.getLogger("Minecraft").log(Level.WARNING, "Libraries plugin is null inside TabAPI!");
-            return;
-        }
+        Libraries plugin = Libraries.getInstance();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
             @Override
             public void run() {

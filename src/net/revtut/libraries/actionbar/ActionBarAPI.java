@@ -7,9 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  * Action Bar Library.
  *
@@ -26,11 +23,6 @@ public final class ActionBarAPI {
     private ActionBarAPI() {}
 
     /**
-     * Libraries class
-     */
-    public static Libraries plugin = null;
-
-    /**
      * Send a action bar to a player.
      *
      * @param p player to send the action bar
@@ -38,10 +30,7 @@ public final class ActionBarAPI {
      * @param stay time that the message should stay
      */
     public static void sendActionBar(final Player p, final String message, final int stay) {
-        if (null == plugin) {
-            Logger.getLogger("Minecraft").log(Level.WARNING, "Main plugin is null inside ActionBarAPI!");
-            return;
-        }
+        Libraries plugin = Libraries.getInstance();
         for(int i = 0; i < stay; i++) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
                 IChatBaseComponent actionMessage = IChatBaseComponent.ChatSerializer.a(message);

@@ -133,6 +133,19 @@ public final class AlgebraAPI {
     }
 
     /**
+     * Get a random vector
+     * @return random vector
+     */
+    public static Vector getRandomVector() {
+        double x, y, z;
+        x = Math.random() * 2 - 1;
+        y = Math.random() * 2 - 1;
+        z = Math.random() * 2 - 1;
+
+        return new Vector(x, y, z).normalize();
+    }
+
+    /**
      * Check if a player has hit someone
      *
      * @param player player to check if interacted
@@ -210,6 +223,51 @@ public final class AlgebraAPI {
     }
 
     /**
+     * Rotate a vector around the X axis
+     * @param vector vector to be rotated
+     * @param angle angle to rotate
+     * @return rotated vector
+     */
+    public static Vector rotateAroundAxisX(Vector vector, double angle) {
+        double y, z, cos, sin;
+        cos = Math.cos(angle);
+        sin = Math.sin(angle);
+        y = vector.getY() * cos - vector.getZ() * sin;
+        z = vector.getY() * sin + vector.getZ() * cos;
+        return vector.setY(y).setZ(z);
+    }
+
+    /**
+     * Rotate a vector around the Y axis
+     * @param vector vector to be rotated
+     * @param angle angle to rotate
+     * @return rotated vector
+     */
+    public static Vector rotateAroundAxisY(Vector vector, double angle) {
+        double x, z, cos, sin;
+        cos = Math.cos(angle);
+        sin = Math.sin(angle);
+        x = vector.getX() * cos + vector.getZ() * sin;
+        z = vector.getX() * -sin + vector.getZ() * cos;
+        return vector.setX(x).setZ(z);
+    }
+
+    /**
+     * Rotate a vector around the Z axis
+     * @param vector vector to be rotated
+     * @param angle angle to rotate
+     * @return rotated vector
+     */
+    public static Vector rotateAroundAxisZ(Vector vector, double angle) {
+        double x, y, cos, sin;
+        cos = Math.cos(angle);
+        sin = Math.sin(angle);
+        x = vector.getX() * cos - vector.getY() * sin;
+        y = vector.getX() * sin + vector.getY() * cos;
+        return vector.setX(x).setY(y);
+    }
+
+    /**
      * Get a list of locations that create a circle around a position counter clockwise
      * @param center center of the circle
      * @param startAngle start angle of the circle
@@ -259,16 +317,21 @@ public final class AlgebraAPI {
 
     /**
      * Get a list of locations that create a helix around a position counter clockwise
-     * @param center center of the circle
+     * @param center center of the helix
      * @param height height of the helix
      * @param startAngle start angle of the helix
      * @param radius radius of the circle
-     * @param numberPoints number of points of the circle
-     * @return list with circle points
+     * @param numberPoints number of points per circle
+     * @param numberCircles number of circles of the helix
+     * @return list with helix points
      */
-    public static List<Location> getHelixCCW(Location center, double height, double startAngle, double radius, int numberPoints) {
-        List<Location> locations = getCircleCCW(center, startAngle, radius, numberPoints);
+    public static List<Location> getHelixCCW(Location center, double height, double startAngle, double radius, int numberPoints, int numberCircles) {
+        List<Location> locations = new ArrayList<>();
+        for(int i = 0; i < numberCircles; i++) {
+            locations.addAll(getCircleCCW(center, startAngle, radius, numberPoints));
+        }
 
+        numberPoints *= numberCircles;
         double incrementY = height / numberPoints;
 
         for(int i = 0; i < numberPoints; i++) {
@@ -281,21 +344,109 @@ public final class AlgebraAPI {
 
     /**
      * Get a list of locations that create a helix around a position clockwise
-     * @param center center of the circle
+     * @param center center of the helix
      * @param height height of the helix
      * @param startAngle start angle of the helix
      * @param radius radius of the circle
      * @param numberPoints number of points of the circle
-     * @return list with circle points
+     * @param numberCircles number of circles of the helix
+     * @return list with helix points
      */
-    public static List<Location> getHelixCW(Location center, double height, double startAngle, double radius, int numberPoints) {
-        List<Location> locations = getCircleCW(center, startAngle, radius, numberPoints);
+    public static List<Location> getHelixCW(Location center, double height, double startAngle, double radius, int numberPoints, int numberCircles) {
+        List<Location> locations = new ArrayList<>();
+        for(int i = 0; i < numberCircles; i++) {
+            locations.addAll(getCircleCW(center, startAngle, radius, numberPoints));
+        }
 
+        numberPoints *= numberCircles;
         double incrementY = height / numberPoints;
 
         for(int i = 0; i < numberPoints; i++) {
             double y = center.getY() + incrementY * i;
             locations.get(i).setY(y);
+        }
+
+        return locations;
+    }
+
+    /**
+     * Get a list of locations that create a sphere
+     * @param center center of the sphere
+     * @param radius radius of the circle
+     * @param numberPoints number of points of the sphere
+     * @return list with sphere points
+     */
+    public static List<Location> getSphere(Location center, double radius, int numberPoints) {
+        List<Location> locations = new ArrayList<>();
+        for(int i = 0; i < numberPoints; i++)
+            locations.add(center.clone().add(getRandomVector().multiply(radius)));
+
+        return locations;
+    }
+
+    /**
+     * Get a list of locations that create a tornado around a position counter clockwise
+     * @param bottom bottom location of the tornado
+     * @param height height of the tornado
+     * @param maxRadius maximum radius of the tornado
+     * @param numberPoints number of points of the tornado
+     * @param numberCircles number of circles of the tornado
+     * @return list with sphere points
+     */
+    public static List<Location> getTornadoCCW(Location bottom, double height, double maxRadius, int numberPoints, int numberCircles) {
+        int index = 0;
+        int multiplier = 0;
+
+        int totalPoints = numberPoints * numberCircles;
+        double incrementRadius = maxRadius / totalPoints;
+        double incrementY = height / totalPoints;
+
+        List<Location> locations = new ArrayList<>();
+        for(int i = 0; i < numberCircles; i++) {
+            for(int j = 0; j < numberPoints; j++) {
+                double y = bottom.getY() + incrementY * multiplier;
+                double radius = incrementRadius * multiplier;
+                Location location = getCircleCCW(bottom, 0, radius, numberPoints).get(index);
+                location.setY(y);
+                locations.add(location);
+                index++;
+                multiplier++;
+            }
+            index = 0;
+        }
+
+        return locations;
+    }
+
+    /**
+     * Get a list of locations that create a tornado around a position clockwise
+     * @param bottom bottom location of the tornado
+     * @param height height of the tornado
+     * @param maxRadius maximum radius of the tornado
+     * @param numberPoints number of points of the tornado
+     * @param numberCircles number of circles of the tornado
+     * @return list with sphere points
+     */
+    public static List<Location> getTornadoCW(Location bottom, double height, double maxRadius, int numberPoints, int numberCircles) {
+        int index = 0;
+        int multiplier = 0;
+
+        int totalPoints = numberPoints * numberCircles;
+        double incrementRadius = maxRadius / totalPoints;
+        double incrementY = height / totalPoints;
+
+        List<Location> locations = new ArrayList<>();
+        for(int i = 0; i < numberCircles; i++) {
+            for(int j = 0; j < numberPoints; j++) {
+                double y = bottom.getY() + incrementY * multiplier;
+                double radius = incrementRadius * multiplier;
+                Location location = getCircleCW(bottom, 0, radius, numberPoints).get(index);
+                location.setY(y);
+                locations.add(location);
+                index++;
+                multiplier++;
+            }
+            index = 0;
         }
 
         return locations;

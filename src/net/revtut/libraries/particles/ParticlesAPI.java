@@ -2,14 +2,12 @@ package net.revtut.libraries.particles;
 
 import net.minecraft.server.v1_8_R3.EnumParticle;
 import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles;
-import net.revtut.libraries.Libraries;
 import net.revtut.libraries.algebra.AlgebraAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  * Particle API.
@@ -25,11 +23,6 @@ public final class ParticlesAPI {
      * Constructor of ParticlesAPI
      */
     private ParticlesAPI() {}
-
-    /**
-     * Libraries class
-     */
-    public static Libraries plugin = null;
 
     /**
      * Play a circle particle effect at a location
@@ -54,10 +47,11 @@ public final class ParticlesAPI {
      * @param height height of the helix
      * @param radius radius of the circle
      * @param numberPoints number of points of the helix
+     * @param numberCircles number of circles of the helix
      * @param enumParticle particle to be played
      */
-    public static void helixParticleEffect(Location center, double height, double radius, int numberPoints, EnumParticle enumParticle) {
-        List<Location> helixLocations = AlgebraAPI.getHelixCW(center, height, 0, radius, numberPoints);
+    public static void helixParticleEffect(Location center, double height, double radius, int numberPoints, int numberCircles, EnumParticle enumParticle) {
+        List<Location> helixLocations = AlgebraAPI.getHelixCW(center, height, 0, radius, numberPoints, numberCircles);
         for(int i = 0; i < helixLocations.size(); i++) {
             final Location playLocation = helixLocations.get(i);
 

@@ -7,9 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  * Title Library.
  *
@@ -24,11 +21,6 @@ public final class TitleAPI {
      * Constructor of TitleAPI
      */
     private TitleAPI() {}
-    
-    /**
-     * Libraries class
-     */
-    public static Libraries plugin = null;
 
     /**
      * Send a title to a player.
@@ -37,10 +29,7 @@ public final class TitleAPI {
      * @param title json title to send
      */
     public static void sendTitle(final Player p, final String title) {
-        if (null == plugin) {
-            Logger.getLogger("Minecraft").log(Level.WARNING, "Libraries plugin is null inside TitleAPI!");
-            return;
-        }
+        Libraries plugin = Libraries.getInstance();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             IChatBaseComponent titleSerializer = IChatBaseComponent.ChatSerializer.a(title);
             PacketPlayOutTitle packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, titleSerializer);
@@ -55,10 +44,7 @@ public final class TitleAPI {
      * @param subtitle json subtitle to send
      */
     public static void sendSubTitle(final Player p, final String subtitle) {
-        if (null == plugin) {
-            Logger.getLogger("Minecraft").log(Level.WARNING, "Libraries plugin is null inside TitleAPI!");
-            return;
-        }
+        Libraries plugin = Libraries.getInstance();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             IChatBaseComponent subTitleSerializer = IChatBaseComponent.ChatSerializer.a(subtitle);
             PacketPlayOutTitle packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, subTitleSerializer);
@@ -75,10 +61,7 @@ public final class TitleAPI {
      * @param fadeOut time the title should take to fade out
      */
     public static void sendTimes(final Player p, final int fadeIn, final int stay, final int fadeOut) {
-        if (null == plugin) {
-            Logger.getLogger("Minecraft").log(Level.WARNING, "Libraries plugin is null inside TitleAPI!");
-            return;
-        }
+        Libraries plugin = Libraries.getInstance();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             PacketPlayOutTitle packet = new PacketPlayOutTitle(fadeIn, stay, fadeOut);
             ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
@@ -91,10 +74,7 @@ public final class TitleAPI {
      * @param p player to be reseted
      */
     public static void reset(final Player p) {
-        if (null == plugin) {
-            Logger.getLogger("Minecraft").log(Level.WARNING, "Libraries plugin is null inside TitleAPI!");
-            return;
-        }
+        Libraries plugin = Libraries.getInstance();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             PacketPlayOutTitle packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.RESET, null);
             ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
@@ -107,10 +87,7 @@ public final class TitleAPI {
      * @param p player to be cleared
      */
     public static void clear(final Player p) {
-        if (null == plugin) {
-            Logger.getLogger("Minecraft").log(Level.WARNING, "Libraries plugin is null inside TitleAPI!");
-            return;
-        }
+        Libraries plugin = Libraries.getInstance();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
             PacketPlayOutTitle packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.CLEAR, null);
             ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);

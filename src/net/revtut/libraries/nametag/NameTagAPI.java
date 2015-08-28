@@ -40,6 +40,9 @@ public final class NameTagAPI implements Listener {
      */
     public static void unHideNametag(Player p) {
         LivingEntity entidade = (LivingEntity) p.getPassenger();
+        if(entidade == null)
+            return;
+
         p.eject();
         entidade.remove();
     }

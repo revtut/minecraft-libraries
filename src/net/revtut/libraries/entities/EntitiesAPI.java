@@ -102,7 +102,7 @@ public final class EntitiesAPI {
 
             // Add goals
             addGoal(entity, new PathfinderGoalFloat(entityInsentient), 0);
-            addGoal(entity, new PetGoalRideByEntity(entityInsentient, ((CraftLivingEntity) rider).getHandle(), 0.4F, 0.5F), 1); // Default speed is 0.2 and jump 0.5
+            addGoal(entity, new PetGoalRideByEntity(entityInsentient, ((CraftLivingEntity) rider).getHandle(), 0.3F, 0.5F), 1); // Default speed is 0.2 and jump 0.5
         } else {
             throw new IllegalArgumentException(entity.getType().getName() + " is not an instance of an EntityInsentient.");
         }

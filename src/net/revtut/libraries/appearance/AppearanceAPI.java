@@ -10,8 +10,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Appearance Library.
@@ -29,11 +27,6 @@ public final class AppearanceAPI {
     private AppearanceAPI() {}
 
     /**
-     * Libraries class
-     */
-    public static Libraries plugin = null;
-
-    /**
      * Copy of random class
      */
     private static final Random random = new Random();
@@ -46,10 +39,7 @@ public final class AppearanceAPI {
      * @param delay  delay between each firework
      */
     public static void launchFirework(final Player player, final int amount, final int delay) {
-        if (null == plugin) {
-            Logger.getLogger("Minecraft").log(Level.WARNING, "Libraries plugin is null inside AppearanceAPI!");
-            return;
-        }
+        Libraries plugin = Libraries.getInstance();
         for (int i = 0; i < amount; i++) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 final Firework fw = player.getWorld().spawn(player.getLocation(), Firework.class);
