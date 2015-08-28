@@ -27,12 +27,13 @@ public final class ParticlesAPI {
     /**
      * Play a circle particle effect at a location
      * @param center center location to be played the effect
+     * @param slope slope of the circle
      * @param radius radius of the circle
      * @param numberPoints number of points of the circle
      * @param enumParticle particle to be played
      */
-    public static void circleParticleEffect(Location center, double radius, int numberPoints, EnumParticle enumParticle) {
-        List<Location> circleLocations = AlgebraAPI.getCircleCW(center, 0, radius, numberPoints);
+    public static void circleParticleEffect(Location center, double slope, double radius, int numberPoints, EnumParticle enumParticle) {
+        List<Location> circleLocations = AlgebraAPI.getCircleCW(center, 0, slope, radius, numberPoints);
         for(int i = 0; i < circleLocations.size(); i++) {
             final Location playLocation = circleLocations.get(i);
 

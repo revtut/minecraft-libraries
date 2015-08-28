@@ -271,21 +271,29 @@ public final class AlgebraAPI {
      * Get a list of locations that create a circle around a position counter clockwise
      * @param center center of the circle
      * @param startAngle start angle of the circle
+     * @param slope slope of the circle
      * @param radius radius of the circle
      * @param numberPoints number of points of the circle
      * @return list with circle points
      */
-    public static List<Location> getCircleCCW(Location center, double startAngle, double radius, int numberPoints) {
+    public static List<Location> getCircleCCW(Location center, double startAngle, double slope, double radius, int numberPoints) {
         World world = center.getWorld();
 
-        double increment = (2 * Math.PI) / numberPoints;
+        double incrementAngle = (2 * Math.PI) / numberPoints;
+        double incrementY = Math.tan(slope) * radius * 2 / numberPoints;
+        double y = center.getY() - incrementY * numberPoints / 4;
 
         List<Location> locations = new ArrayList<>();
         for(int i = 0; i < numberPoints; i++) {
-            double angle = startAngle + i * increment;
+            double angle = startAngle + i * incrementAngle;
             double x = center.getX() + (radius * Math.cos(angle));
             double z = center.getZ() + (radius * Math.sin(angle));
-            locations.add(new Location(world, x, center.getY(), z));
+            locations.add(new Location(world, x, y, z));
+
+            if(i < numberPoints / 2)
+                y += incrementY;
+            else
+                y -= incrementY;
         }
 
         return locations;
@@ -295,21 +303,29 @@ public final class AlgebraAPI {
      * Get a list of locations that create a circle around a position clockwise
      * @param center center of the circle
      * @param startAngle start angle of the circle
+     * @param slope slope of the circle
      * @param radius radius of the circle
      * @param numberPoints number of points of the circle
      * @return list with circle points
      */
-    public static List<Location> getCircleCW(Location center, double startAngle, double radius, int numberPoints) {
+    public static List<Location> getCircleCW(Location center, double startAngle, double slope, double radius, int numberPoints) {
         World world = center.getWorld();
 
-        double increment = (2 * Math.PI) / numberPoints;
+        double incrementAngle = (2 * Math.PI) / numberPoints;
+        double incrementY = Math.tan(slope) * radius * 2 / numberPoints;
+        double y = center.getY() - incrementY * numberPoints / 4;
 
         List<Location> locations = new ArrayList<>();
         for(int i = 0; i < numberPoints; i++) {
-            double angle = startAngle - i * increment;
+            double angle = startAngle - i * incrementAngle;
             double x = center.getX() + (radius * Math.cos(angle));
             double z = center.getZ() + (radius * Math.sin(angle));
-            locations.add(new Location(world, x, center.getY(), z));
+            locations.add(new Location(world, x, y, z));
+
+            if(i < numberPoints / 2)
+                y += incrementY;
+            else
+                y -= incrementY;
         }
 
         return locations;
@@ -328,7 +344,7 @@ public final class AlgebraAPI {
     public static List<Location> getHelixCCW(Location center, double height, double startAngle, double radius, int numberPoints, int numberCircles) {
         List<Location> locations = new ArrayList<>();
         for(int i = 0; i < numberCircles; i++) {
-            locations.addAll(getCircleCCW(center, startAngle, radius, numberPoints));
+            locations.addAll(getCircleCCW(center, startAngle, 0, radius, numberPoints));
         }
 
         numberPoints *= numberCircles;
@@ -355,7 +371,7 @@ public final class AlgebraAPI {
     public static List<Location> getHelixCW(Location center, double height, double startAngle, double radius, int numberPoints, int numberCircles) {
         List<Location> locations = new ArrayList<>();
         for(int i = 0; i < numberCircles; i++) {
-            locations.addAll(getCircleCW(center, startAngle, radius, numberPoints));
+            locations.addAll(getCircleCW(center, startAngle, 0, radius, numberPoints));
         }
 
         numberPoints *= numberCircles;
@@ -406,7 +422,7 @@ public final class AlgebraAPI {
             for(int j = 0; j < numberPoints; j++) {
                 double y = bottom.getY() + incrementY * multiplier;
                 double radius = incrementRadius * multiplier;
-                Location location = getCircleCCW(bottom, 0, radius, numberPoints).get(index);
+                Location location = getCircleCCW(bottom, 0, 0, radius, numberPoints).get(index);
                 location.setY(y);
                 locations.add(location);
                 index++;
@@ -440,7 +456,7 @@ public final class AlgebraAPI {
             for(int j = 0; j < numberPoints; j++) {
                 double y = bottom.getY() + incrementY * multiplier;
                 double radius = incrementRadius * multiplier;
-                Location location = getCircleCW(bottom, 0, radius, numberPoints).get(index);
+                Location location = getCircleCW(bottom, 0, 0, radius, numberPoints).get(index);
                 location.setY(y);
                 locations.add(location);
                 index++;
