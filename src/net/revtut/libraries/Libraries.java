@@ -6,7 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * Main class.
  *
  * <P>Libraries with methods related to Minecraft that may useful in a lot of plugins.</P>
- * <P>Contains methods about almost anything including algebra, camera, world and so on.</P>
+ * <P>Contains methods about almost anything including maths, camera, world and so on.</P>
  *
  * @author Joao Silva
  * @version 1.0

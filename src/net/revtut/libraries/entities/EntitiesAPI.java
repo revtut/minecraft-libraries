@@ -4,7 +4,7 @@ import net.minecraft.server.v1_8_R3.*;
 import net.revtut.libraries.entities.goals.PetGoalFollowEntity;
 import net.revtut.libraries.entities.goals.PetGoalLookEntity;
 import net.revtut.libraries.entities.goals.PetGoalRideByEntity;
-import net.revtut.libraries.reflection.ReflectionAPI;
+import net.revtut.libraries.utils.ReflectionAPI;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;

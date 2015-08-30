@@ -1,9 +1,8 @@
 package net.revtut.libraries.entities.goals;
 
-import net.minecraft.server.v1_8_R3.*;
-import net.revtut.libraries.algebra.AlgebraAPI;
+import net.minecraft.server.v1_8_R3.Entity;
+import net.minecraft.server.v1_8_R3.EntityInsentient;
 import net.revtut.libraries.entities.PetGoal;
-import org.bukkit.Location;
 
 /**
  * Pet goal look entity
