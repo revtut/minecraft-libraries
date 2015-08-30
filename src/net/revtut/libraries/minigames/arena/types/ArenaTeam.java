@@ -6,8 +6,10 @@ import net.revtut.libraries.minigames.arena.Arena;
 import net.revtut.libraries.minigames.arena.ArenaState;
 import net.revtut.libraries.minigames.player.PlayerData;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +19,7 @@ import java.util.logging.Level;
 /**
  * Arena Team Object
  */
-public class ArenaTeam extends Arena {
+public abstract class ArenaTeam extends Arena {
 
     /**
      * List with all teams of the arena
@@ -35,6 +37,11 @@ public class ArenaTeam extends Arena {
     private Map<Team, Location> deathLocations;
 
     /**
+     * Map with death match locations per team
+     */
+    private Map<Team, List<Location>> deathMatchLocations;
+
+    /**
      * Constructor of ArenaTeam
      * @param plugin plugin owner of the arena
      */
@@ -43,6 +50,27 @@ public class ArenaTeam extends Arena {
 
         this.teams = new ArrayList<>();
         this.spawnLocations = new HashMap<>();
+        this.deathLocations = new HashMap<>();
+        this.deathMatchLocations = new HashMap<>();
+    }
+
+    /**
+     * Initialize the arena
+     * @param worldsFolder folder where worlds are located
+     * @param minPlayers minimum players to start the game
+     * @param maxPlayers maximum players on the arena
+     * @param arenaWorld world of the arena
+     * @param lobbyLocation location of the lobby
+     * @param spectatorLocation location of the spectator's spawn
+     * @param spawnLocations locations of the spawn
+     * @param deathLocations locations to spawn dead players
+     * @param deathMatchLocations locations for the death match
+     */
+    public void init(File worldsFolder, int minPlayers, int maxPlayers, World arenaWorld, Location lobbyLocation, Location spectatorLocation, Map<Team, List<Location>> spawnLocations, Map<Team, Location> deathLocations, Map<Team, List<Location>> deathMatchLocations) {
+        super.init(worldsFolder, minPlayers, maxPlayers, arenaWorld, lobbyLocation, spectatorLocation);
+        this.spawnLocations = spawnLocations;
+        this.deathLocations = deathLocations;
+        this.deathMatchLocations = deathMatchLocations;
     }
 
     /**
@@ -72,6 +100,15 @@ public class ArenaTeam extends Arena {
     }
 
     /**
+     * Get the death match locations of a team
+     * @param team team to get death match locations
+     * @return death match locations of the team
+     */
+    public List<Location> getDeathMatchLocations(Team team) {
+        return deathMatchLocations.get(team);
+    }
+
+    /**
      * Get all the players on the arena
      * @return players on the arena
      */
@@ -83,12 +120,21 @@ public class ArenaTeam extends Arena {
     }
 
     /**
-     * Get the number of players on the arena
-     * @return number of players on the arena
+     * Get the emptier team
+     * @return emptier team
      */
-    @Override
-    public int numberPlayers() {
-        return getAllPlayers().size();
+    public Team getEmptierTeam() {
+        Team emptierTeam = null;
+        int minimumPlayers = Integer.MAX_VALUE;
+        for(Team team : teams) {
+            int numberPlayers = team.getAllPlayers().size();
+            if (numberPlayers < minimumPlayers) {
+                emptierTeam = team;
+                minimumPlayers = numberPlayers;
+            }
+        }
+
+        return emptierTeam;
     }
 
     /**
@@ -97,7 +143,10 @@ public class ArenaTeam extends Arena {
      */
     @Override
     public void join(PlayerData player) {
+        if(teams.size() <= 0)
+            throw new IllegalStateException("Player is trying to join a arena without any team!");
 
+        join(player, getEmptierTeam());
     }
 
     /**
@@ -106,7 +155,9 @@ public class ArenaTeam extends Arena {
      * @param team team to be joined
      */
     public void join(PlayerData player, Team team) {
+        super.join(player);
 
+        team.join(player);
     }
 
     /**
@@ -115,7 +166,15 @@ public class ArenaTeam extends Arena {
      */
     @Override
     public void leave(PlayerData player) {
+        super.leave(player);
 
+        for(Team team : teams) {
+            if (!team.isOnTeam(player))
+                continue;
+
+            team.leave(player);
+            break;
+        }
     }
 
     /**
@@ -123,118 +182,90 @@ public class ArenaTeam extends Arena {
      * @param player player to spectate
      */
     public void spectate(PlayerData player) {
+        super.spectate(player);
 
+        if(teams.size() <= 0)
+            throw new IllegalStateException("Player is trying to spectate a arena without any team!");
+
+        teams.get(0).spectate(player);
     }
 
     /**
-     * Check if a player can join a arena
-     * @param player player to be joined
-     * @return true if can, false otherwise
-     */
-    @Override
-    public boolean canJoin(PlayerData player) {
-        // Arena is already ingame
-        if(getState() != ArenaState.JOIN)
-            return false;
-
-        // Maximum players already achieved
-        if(numberPlayers() >= getConfiguration().getMaxPlayers())
-            return false;
-
-        return true;
-    }
-
-    /**
-     * Start building the arena
+     * Building the arena
      */
     @Override
     public void build() {
-        updateState(ArenaState.BUILD);
-        updateTimer(Integer.MAX_VALUE);
+        // First time calling this method
+        if(getState() != ArenaState.BUILD) {
+            // Build the arena
+        }
 
         Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Started building!");
-
-        // Build the arena, after that update timer
     }
 
     /**
-     * Tick the arena when it is building
+     * Waiting for players to join
      */
     @Override
-    public void tickBuild() {
-        Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Building!");
-    }
+    public void lobby() {
+        // First time calling this method
+        if(getState() != ArenaState.LOBBY) {
 
-    /**
-     * Start waiting for players to join
-     */
-    @Override
-    public void join() {
-        updateState(ArenaState.JOIN);
-        updateTimer(getConfiguration().getLobbyDuration());
+        }
 
         Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Started waiting for players!");
     }
 
     /**
-     * Tick the arena when it is waiting for players
-     */
-    public void tickJoin() {
-        Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Waiting players!");
-    }
-
-    /**
-     * Start the warm up
+     * Warming up the game
      */
     @Override
     public void warmUp() {
-        updateState(ArenaState.WARMUP);
-        updateTimer(getConfiguration().getWarmUpDuration());
+        // First time calling this method
+        if(getState() != ArenaState.WARMUP) {
+
+        }
 
         Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Started the warm up!");
     }
 
     /**
-     * Tick the arena when it is on warm up
-     */
-    public void tickWarmUp() {
-        Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Warming up!");
-    }
-
-    /**
-     * Start the game
+     * Game is running
      */
     @Override
     public void start() {
-        updateState(ArenaState.START);
-        updateTimer(getConfiguration().getGameDuration());
+        // First time calling this method
+        if(getState() != ArenaState.START) {
+
+        }
 
         Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Started the game!");
     }
 
     /**
-     * Tick the arena when game has started
+     * Death match is running
      */
-    public void tickStart() {
-        Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Game is running!");
+    @Override
+    public void deathMatch() {
+        // First time calling this method
+        if(getState() != ArenaState.DEATHMATCH) {
+
+        }
+
+        Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Started the death match!");
     }
 
     /**
-     * Finish the game
+     * Game has finished
      */
     @Override
     public void finish() {
-        updateState(ArenaState.FINISH);
-        updateTimer(getConfiguration().getEndGameDuration());
+        // First time calling this method
+        if(getState() != ArenaState.FINISH) {
+
+        }
 
         Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Finished the game!");
-    }
-
-    /**
-     * Tick the arena when game has finished
-     */
-    public void tickFinish() {
-        Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Game is finishing!");
     }
 
     /**
@@ -242,19 +273,13 @@ public class ArenaTeam extends Arena {
      */
     @Override
     public void stop() {
-        updateState(ArenaState.STOP);
-        updateTimer(Integer.MAX_VALUE);
+        // First time calling this method
+        if(getState() != ArenaState.STOP) {
+
+        }
 
         Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Started stopping!");
     }
-
-    /**
-     * Tick the arena when stopped
-     */
-    public void tickStop() {
-        Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Arena is stopping!");
-    }
-
     /**
      * Update the arena game in the database
      */

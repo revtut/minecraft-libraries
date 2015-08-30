@@ -67,7 +67,7 @@ public class Team {
      * @return players on the team
      */
     public List<PlayerData> getAllPlayers() {
-        return new ArrayList<>(players);
+        return players;
     }
 
     /**
@@ -76,11 +76,11 @@ public class Team {
      * @return players that correspond to that state
      */
     public List<PlayerData> getPlayers(PlayerState state) {
-        List<PlayerData> players = new ArrayList<>();
-        for(PlayerData player : this.players)
+        List<PlayerData> filteredPlayers = new ArrayList<>();
+        for(PlayerData player : players)
             if(player.getState() == state)
-                players.add(player);
-        return players;
+                filteredPlayers.add(player);
+        return filteredPlayers;
     }
 
     /**
@@ -88,8 +88,8 @@ public class Team {
      * @param player player to be checked
      * @return true if belongs, false otherwise
      */
-    public boolean hasPlayer(PlayerData player) {
-        return hasPlayer(player.getUuid());
+    public boolean isOnTeam(PlayerData player) {
+        return isOnTeam(player.getUuid());
     }
 
     /**
@@ -97,7 +97,7 @@ public class Team {
      * @param player UUID of the player to be checked
      * @return true if belongs, false otherwise
      */
-    public boolean hasPlayer(UUID player) {
+    public boolean isOnTeam(UUID player) {
         for(PlayerData target : players)
             if(player.equals(target.getUuid()))
                 return true;
@@ -105,25 +105,31 @@ public class Team {
     }
 
     /**
-     * Add a player to the team
+     * Make a player join this team
      * @param player player to be added
-     * @return true if successfully added, false otherwise
      */
-    public boolean addPlayer(PlayerData player) {
+    public void join(PlayerData player) {
         if(players.contains(player))
-            return false;
-        return players.add(player);
+            return;
+        players.add(player);
     }
 
     /**
-     * Remove a player from the team
+     * Make a player leave the team
      * @param player player to be removed
-     * @return true if successfully removed, false otherwise
      */
-    public boolean removePlayer(PlayerData player) {
+    public void leave(PlayerData player) {
         if(!players.contains(player))
-            return false;
-        return players.remove(player);
+            return;
+        players.remove(player);
+    }
+
+    /**
+     * Make a player spectate the team
+     * @param player player to spectate
+     */
+    public void spectate(PlayerData player) {
+        join(player);
     }
 
     /**

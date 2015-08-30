@@ -1,10 +1,21 @@
 package net.revtut.libraries.minigames.arena;
 
+import net.revtut.libraries.Libraries;
+import net.revtut.libraries.minigames.events.arena.ArenaLoadEvent;
+import net.revtut.libraries.minigames.events.arena.ArenaSwitchStateEvent;
+import net.revtut.libraries.minigames.events.player.PlayerJoinArenaEvent;
+import net.revtut.libraries.minigames.events.player.PlayerLeaveArenaEvent;
+import net.revtut.libraries.minigames.events.player.PlayerSpectateArenaEvent;
 import net.revtut.libraries.minigames.player.PlayerData;
+import net.revtut.libraries.minigames.player.PlayerState;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Arena Object
@@ -27,19 +38,39 @@ public abstract class Arena {
     private String name;
 
     /**
-     * Configuration of the arena
-     */
-    private Configuration configuration;
-
-    /**
      * State of the arena
      */
     private ArenaState state;
 
     /**
+     * Initial value of the timer
+     */
+    private int initialTimer;
+
+    /**
      * Timer of the arena (used for countdown, game time, etc)
      */
-    private int timer;
+    private int currentTimer;
+
+    /**
+     * File where worlds are located
+     */
+    private File worldsFolder;
+
+    /**
+     * Minimum players on the arena
+     */
+    private int minPlayers;
+
+    /**
+     * Maximum players on the arena
+     */
+    private int maxPlayers;
+
+    /**
+     * World of the arena
+     */
+    private World arenaWorld;
 
     /**
      * Lobby location of the arena
@@ -56,17 +87,34 @@ public abstract class Arena {
      * @param plugin plugin owner of the arena
      */
     public Arena(JavaPlugin plugin) {
-        this(plugin.getName() + currentID);
+        // Call event
+        ArenaLoadEvent event = new ArenaLoadEvent(this);
+        Libraries.getInstance().getServer().getPluginManager().callEvent(event);
+
+        if(event.isCancelled())
+            throw new IllegalStateException("Arena creation was cancelled!");
+
+        this.id = currentID++;
+        this.name = plugin.getName() + this.id;
+        this.state = ArenaState.NONE;
     }
 
     /**
-     * Constructor of the Arena
-     * @param name name of the arena
+     * Initialize the arena
+     * @param worldsFolder folder where worlds are located
+     * @param minPlayers minimum players to start the game
+     * @param maxPlayers maximum players on the arena
+     * @param arenaWorld world of the arena
+     * @param lobbyLocation location of the lobby
+     * @param spectatorLocation location of the spectator's spawn
      */
-    public Arena(String name) {
-        this.name = name;
-        this.id = currentID++;
-        this.configuration = new Configuration();
+    public void init(File worldsFolder, int minPlayers, int maxPlayers, World arenaWorld, Location lobbyLocation, Location spectatorLocation) {
+        this.worldsFolder = worldsFolder;
+        this.minPlayers = minPlayers;
+        this.maxPlayers = maxPlayers;
+        this.arenaWorld = arenaWorld;
+        this.lobbyLocation = lobbyLocation;
+        this.spectatorLocation = spectatorLocation;
     }
 
     /**
@@ -86,14 +134,6 @@ public abstract class Arena {
     }
 
     /**
-     * Get the configuration of the arena
-     * @return configuration of the arena
-     */
-    public Configuration getConfiguration() {
-        return configuration;
-    }
-
-    /**
      * Get the state of the arena
      * @return state of the arena
      */
@@ -105,8 +145,40 @@ public abstract class Arena {
      * Get the timer of the arena
      * @return timer of the arena
      */
-    public int getTimer() {
-        return timer;
+    public int getCurrentTimer() {
+        return currentTimer;
+    }
+
+    /**
+     * Get the worlds folder of the arena
+     * @return worlds folder of the arena
+     */
+    public File getWorldsFolder() {
+        return worldsFolder;
+    }
+
+    /**
+     * Get the minimum players
+     * @return minimum players
+     */
+    public int getMinPlayers() {
+        return minPlayers;
+    }
+
+    /**
+     * Get the maximum players
+     * @return maximum players
+     */
+    public int getMaxPlayers() {
+        return maxPlayers;
+    }
+
+    /**
+     * Get the world of the arena
+     * @return world of the arena
+     */
+    public World getWorld() {
+        return arenaWorld;
     }
 
     /**
@@ -126,74 +198,225 @@ public abstract class Arena {
     }
 
     /**
+     * Get players that are currently on a state
+     * @param state state to filter players
+     * @return players that correspond to that state
+     */
+    public List<PlayerData> getPlayers(PlayerState state) {
+        return getAllPlayers().stream().filter(player -> player.getState() == state).collect(Collectors.toList());
+    }
+
+    /**
      * Update the arena state
      * @param state new value for the state
+     * @param duration duration of the new state
      */
-    public void updateState(ArenaState state) {
+    public void updateState(ArenaState state, int duration) {
+        // Call event
+        ArenaSwitchStateEvent event = new ArenaSwitchStateEvent(this, this.state, state, duration);
+        Libraries.getInstance().getServer().getPluginManager().callEvent(event);
+
+        if(event.isCancelled()) {
+            resetTimer();
+            return;
+        }
+
+        // Update state
         this.state = state;
+        this.currentTimer = duration;
+        this.initialTimer = duration;
     }
 
     /**
      * Update the arena timer
-     * @param timer new value for the timer
      */
-    public void updateTimer(int timer) {
-        this.timer = timer;
+    public void resetTimer() {
+        this.currentTimer = this.initialTimer;
     }
 
     /**
      * Tick the arena
      */
     public void tick() {
-        timer--;
+        currentTimer--;
 
-        if(timer > 0) {
+        // Update arena state
+        if(currentTimer == 0) {
+            ArenaState nextState;
+            int duration;
             switch (state) {
                 case BUILD:
-                    tickBuild();
+                    nextState = ArenaState.LOBBY;
+                    duration = 500;
                     break;
-                case JOIN:
-                    tickJoin();
-                    break;
-                case WARMUP:
-                    tickWarmUp();
-                    break;
-                case START:
-                    tickStart();
-                    break;
-                case FINISH:
-                    tickFinish();
-                    break;
-                case STOP:
-                    tickStop();
-                    break;
-            }
-        } else {
-            switch (state) {
-                case BUILD:
-                    build();
-                    break;
-                case JOIN:
-                    join();
+                case LOBBY:
+                    nextState = ArenaState.WARMUP;
+                    duration = 30;
                     break;
                 case WARMUP:
-                    warmUp();
+                    nextState = ArenaState.START;
+                    duration = 900;
                     break;
                 case START:
-                    start();
+                    nextState = ArenaState.DEATHMATCH;
+                    duration = 20;
+                    break;
+                case DEATHMATCH:
+                    nextState = ArenaState.FINISH;
+                    duration = 500;
                     break;
                 case FINISH:
-                    finish();
+                    nextState = ArenaState.BUILD;
+                    duration = Integer.MAX_VALUE;
                     break;
                 case STOP:
-                    stop();
-                    break;
+                    resetTimer(); // On stop reset timer only
+                    return;
+                default:
+                    return;
             }
+
+            updateState(nextState, duration);
         }
 
-        // XP timer
-        if(getConfiguration().enabledXPTimer())
-            getAllPlayers().stream().filter(player -> player.getBukkitPlayer() != null).forEach(player -> player.getBukkitPlayer().setLevel(getTimer()));
+        // Tick states
+        switch (state) {
+            case BUILD:
+                build();
+                break;
+            case LOBBY:
+                lobby();
+                break;
+            case WARMUP:
+                warmUp();
+                break;
+            case START:
+                start();
+                break;
+            case DEATHMATCH:
+                deathMatch();
+                break;
+            case FINISH:
+                finish();
+                break;
+            case STOP:
+                stop();
+                break;
+            default:
+                return;
+        }
+    }
+
+    /**
+     * Get the number of players on the arena
+     * @return number of players on the arena
+     */
+    public int numberPlayers() {
+        return getAllPlayers().size();
+    }
+
+    /**
+     * Make a player join the arena
+     * @param player player to join
+     */
+    public void join(PlayerData player) {
+        if(!canJoin(player))
+            return;
+
+        // Call event
+        PlayerJoinArenaEvent event = new PlayerJoinArenaEvent(player, this, player.getName() + " has joined the arena " + name);
+        Libraries.getInstance().getServer().getPluginManager().callEvent(event);
+
+        if(event.isCancelled())
+            return;
+
+        broadcastMessage(event.getJoinMessage());
+
+        // Update player
+        player.updateState(PlayerState.ALIVE);
+        player.setCurrentArena(this);
+        player.getBukkitPlayer().teleport(lobbyLocation);
+
+        // Visibility configuration
+        for(PlayerData target : getAllPlayers()) {
+            target.getBukkitPlayer().showPlayer(player.getBukkitPlayer());
+
+            if(target.getState() == PlayerState.SPECTATOR)
+                player.getBukkitPlayer().hidePlayer(target.getBukkitPlayer());
+            else if(target.getState() == PlayerState.ALIVE)
+                player.getBukkitPlayer().showPlayer(target.getBukkitPlayer());
+        }
+    }
+
+    /**
+     * Make a player leave the arena
+     * @param player player to leave
+     */
+    public void leave(PlayerData player) {
+        // Call event
+        PlayerLeaveArenaEvent event = new PlayerLeaveArenaEvent(player, this, player.getName() + " has left the arena " + name);
+        Libraries.getInstance().getServer().getPluginManager().callEvent(event);
+
+        if(event.isCancelled())
+            return;
+
+        broadcastMessage(event.getLeaveMessage());
+
+        // Update player
+        player.updateState(PlayerState.NOT_ASSIGNED);
+        player.setCurrentArena(null);
+        player.getBukkitPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+    }
+
+    /**
+     * Make a player spectate the arena
+     * @param player player to spectate
+     */
+    public void spectate(PlayerData player) {
+        // Call event
+        PlayerSpectateArenaEvent event = new PlayerSpectateArenaEvent(player, this, player.getName() + " is spectating the arena " + name);
+        Libraries.getInstance().getServer().getPluginManager().callEvent(event);
+
+        if(event.isCancelled())
+            return;
+
+        broadcastMessage(event.getJoinMessage());
+
+        // Update player
+        player.updateState(PlayerState.SPECTATOR);
+        player.setCurrentArena(this);
+        player.getBukkitPlayer().teleport(spectatorLocation);
+
+        // Hide to players ingame except spectators
+        for(PlayerData target : getAllPlayers())
+            if(target.getState() != PlayerState.SPECTATOR)
+                player.getBukkitPlayer().hidePlayer(target.getBukkitPlayer());
+    }
+
+    /**
+     * Check if a player can join a arena
+     * @param player player to be joined
+     * @return true if can, false otherwise
+     */
+    public boolean canJoin(PlayerData player) {
+        // Maximum players already achieved
+        if(numberPlayers() >= getMaxPlayers())
+            return false;
+
+        // Arena is already ingame
+        if(getState() != ArenaState.LOBBY)
+            return false;
+
+        return true;
+    }
+
+    /**
+     * Broadcast a message to the arena
+     * @param message message to be broadcasted
+     */
+    public void broadcastMessage(String message) {
+        for(PlayerData player : getAllPlayers())
+            player.getBukkitPlayer().sendMessage(message);
     }
 
     /**
@@ -203,95 +426,39 @@ public abstract class Arena {
     public abstract List<PlayerData> getAllPlayers();
 
     /**
-     * Get the number of players on the arena
-     * @return number of players on the arena
-     */
-    public abstract int numberPlayers();
-
-    /**
-     * Make a player join the arena
-     * @param player player to join
-     */
-    public abstract void join(PlayerData player);
-
-    /**
-     * Make a player leave the arena
-     * @param player player to leave
-     */
-    public abstract void leave(PlayerData player);
-
-    /**
-     * Make a player spectate the arena
-     * @param player player to spectate
-     */
-    public abstract void spectate(PlayerData player);
-
-    /**
-     * Check if a player can join a arena
-     * @param player player to be joined
-     * @return true if can, false otherwise
-     */
-    public abstract boolean canJoin(PlayerData player);
-
-    /**
-     * Start building the arena
+     * Building the arena
      */
     public abstract void build();
 
     /**
-     * Tick the arena when it is building
+     * Waiting for players to join
      */
-    public abstract void tickBuild();
+    public abstract void lobby();
 
     /**
-     * Start waiting for players to join
-     */
-    public abstract void join();
-
-    /**
-     * Tick the arena when it is waiting for players
-     */
-    public abstract void tickJoin();
-
-    /**
-     * Start the warm up
+     * Warming up the game
      */
     public abstract void warmUp();
 
     /**
-     * Tick the arena when it is on warm up
-     */
-    public abstract void tickWarmUp();
-
-    /**
-     * Start the game
+     * Game is running
      */
     public abstract void start();
 
     /**
-     * Tick the arena when game has started
+     * Death match is running
      */
-    public abstract void tickStart();
+    public abstract void deathMatch();
 
     /**
-     * Finish the game
+     * Game has finished
      */
     public abstract void finish();
-
-    /**
-     * Tick the arena when game has finished
-     */
-    public abstract void tickFinish();
 
     /**
      * Stop the arena
      */
     public abstract void stop();
-
-    /**
-     * Tick the arena when stopped
-     */
-    public abstract void tickStop();
 
     /**
      * Update the arena game in the database

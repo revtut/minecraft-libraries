@@ -12,7 +12,7 @@ public enum ArenaState {
     /**
      * Waiting for players to join the arena
      */
-    JOIN,
+    LOBBY,
 
     /**
      * Warming up the game
@@ -25,6 +25,11 @@ public enum ArenaState {
     START,
 
     /**
+     * Death match has started
+     */
+    DEATHMATCH,
+
+    /**
      * Game has finished
      */
     FINISH,
@@ -32,5 +37,10 @@ public enum ArenaState {
     /**
      * Arena has stopped
      */
-    STOP
+    STOP,
+
+    /**
+     * Arena exists but it is not in any state
+     */
+    NONE;
 }

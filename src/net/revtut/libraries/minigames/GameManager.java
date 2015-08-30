@@ -2,7 +2,6 @@ package net.revtut.libraries.minigames;
 
 import net.revtut.libraries.Libraries;
 import net.revtut.libraries.minigames.arena.Arena;
-import net.revtut.libraries.minigames.arena.ArenaType;
 import net.revtut.libraries.minigames.arena.types.ArenaTeam;
 import net.revtut.libraries.minigames.player.PlayerData;
 import net.revtut.libraries.minigames.player.PlayerState;

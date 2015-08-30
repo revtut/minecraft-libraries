@@ -43,6 +43,7 @@ public class PlayerData {
      * @param statistics statistics of the player
      */
     public PlayerData(Player player, Language language, PlayerStatistics statistics) {
+        this.bukkitPlayer = player;
         this.language = language;
         this.state = PlayerState.ALIVE;
         this.statistics = statistics;
