@@ -1,6 +1,7 @@
 package net.revtut.libraries.games.arena.types;
 
 import net.revtut.libraries.games.arena.Arena;
+import net.revtut.libraries.games.arena.session.GameSession;
 import net.revtut.libraries.games.player.PlayerData;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -14,7 +15,7 @@ import java.util.List;
  * Arena Solo Object.
  * Arena where you don't have any teams free for all style.
  */
-public abstract class ArenaSolo extends Arena {
+public class ArenaSolo extends Arena {
 
     /**
      * List with players in the arena
@@ -22,9 +23,9 @@ public abstract class ArenaSolo extends Arena {
     private List<PlayerData> players;
 
     /**
-     * List with all spawn locations
+     * List with all spawn locations and death match locations
      */
-    private List<Location> spawnLocations;
+    private List<Location> spawnLocations, deathMatchLocations;
 
     /**
      * Death location of the arena
@@ -32,34 +33,29 @@ public abstract class ArenaSolo extends Arena {
     private Location deathLocation;
 
     /**
-     * List with all death match spawn locations
-     */
-    private List<Location> deathMatchLocations;
-
-    /**
      * Constructor of ArenaTeam
      * @param plugin plugin owner of the arena
+     * @param worldsFolder folder where worlds are located
      */
-    public ArenaSolo(JavaPlugin plugin) {
-        super(plugin);
+    public ArenaSolo(JavaPlugin plugin, File worldsFolder) {
+        super(plugin, worldsFolder);
 
         this.players = new ArrayList<>();
     }
 
     /**
      * Initialize the arena
-     * @param worldsFolder folder where worlds are located
-     * @param minPlayers minimum players to start the game
-     * @param maxPlayers maximum players on the arena
      * @param arenaWorld world of the arena
      * @param lobbyLocation location of the lobby
      * @param spectatorLocation location of the spectator's spawn
+     * @param corners corners of the arena
      * @param spawnLocations locations of the spawn
      * @param deathLocation location to spawn dead players
      * @param deathMatchLocations locations for the death match
+     * @param gameSession session of the arena
      */
-    public void init(File worldsFolder, int minPlayers, int maxPlayers, World arenaWorld, Location lobbyLocation, Location spectatorLocation, List<Location> spawnLocations, Location deathLocation, List<Location> deathMatchLocations) {
-        super.init(worldsFolder, minPlayers, maxPlayers, arenaWorld, lobbyLocation, spectatorLocation);
+    public void init(World arenaWorld, Location lobbyLocation, Location spectatorLocation, Location[] corners, List<Location> spawnLocations, Location deathLocation, List<Location> deathMatchLocations, GameSession gameSession) {
+        super.init(arenaWorld, lobbyLocation, spectatorLocation, corners, gameSession);
         this.spawnLocations = spawnLocations;
         this.deathLocation = deathLocation;
         this.deathMatchLocations = deathMatchLocations;

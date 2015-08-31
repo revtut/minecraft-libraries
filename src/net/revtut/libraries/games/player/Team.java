@@ -1,11 +1,9 @@
-package net.revtut.libraries.games;
+package net.revtut.libraries.games.player;
 
 import net.revtut.libraries.Libraries;
 import net.revtut.libraries.games.events.player.PlayerJoinTeamEvent;
 import net.revtut.libraries.games.events.player.PlayerLeaveTeamEvent;
 import net.revtut.libraries.games.events.player.PlayerSpectateTeamEvent;
-import net.revtut.libraries.games.player.PlayerData;
-import net.revtut.libraries.games.player.PlayerState;
 import net.revtut.libraries.games.utils.Color;
 
 import java.util.ArrayList;
@@ -37,7 +35,7 @@ public class Team {
      * Default constructor of Team
      */
     public Team() {
-        this("Default", Color.WHITE);
+        this("Default", Color.values()[(int) (Math.random() * (Color.values().length - 1))]);
     }
 
     /**
@@ -85,12 +83,20 @@ public class Team {
     }
 
     /**
+     * Get the size of the team
+     * @return size of the team
+     */
+    public int getSize() {
+        return players.size();
+    }
+
+    /**
      * Check if a player belongs to this team
      * @param player player to be checked
      * @return true if belongs, false otherwise
      */
-    public boolean isOnTeam(PlayerData player) {
-        return isOnTeam(player.getUuid());
+    public boolean containsPlayer(PlayerData player) {
+        return containsPlayer(player.getUuid());
     }
 
     /**
@@ -98,7 +104,7 @@ public class Team {
      * @param player UUID of the player to be checked
      * @return true if belongs, false otherwise
      */
-    public boolean isOnTeam(UUID player) {
+    public boolean containsPlayer(UUID player) {
         for(PlayerData target : players)
             if(player.equals(target.getUuid()))
                 return true;

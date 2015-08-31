@@ -1,8 +1,8 @@
 package net.revtut.libraries.games.events.player;
 
-import net.revtut.libraries.games.Team;
 import net.revtut.libraries.games.arena.Arena;
 import net.revtut.libraries.games.player.PlayerData;
+import net.revtut.libraries.games.player.Team;
 import org.bukkit.event.HandlerList;
 
 /**

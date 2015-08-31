@@ -1,5 +1,6 @@
 package net.revtut.libraries.games.utils;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -9,89 +10,84 @@ import org.bukkit.inventory.ItemStack;
 public enum Color {
 
     /**
-     * White color
+     * Black color
      */
-    WHITE("White", org.bukkit.Color.WHITE, new ItemStack(Material.WOOL, 1, (short) 0)),
+    BLACK("Black", org.bukkit.ChatColor.BLACK, new ItemStack(Material.WOOL, 1, (short) 15)),
 
     /**
-     * Silver color
+     * Dark blue color
      */
-    SILVER("Silver", org.bukkit.Color.SILVER, new ItemStack(Material.WOOL, 1, (short) 8)),
+    DARK_BLUE("Dark Blue", ChatColor.DARK_BLUE, new ItemStack(Material.WOOL, 1, (short) 11)),
+
+    /**
+     * Dark green color
+     */
+    DARK_GREEN("Dark Green", ChatColor.DARK_GREEN, new ItemStack(Material.WOOL, 1, (short) 13)),
+
+    /**
+     * Dark aqua color
+     */
+    DARK_AQUA("Dark Aqua", ChatColor.DARK_AQUA, new ItemStack(Material.WOOL, 1, (short) 9)),
+
+    /**
+     * Dark red color
+     */
+    DARK_RED("Dark Red", ChatColor.DARK_RED, new ItemStack(Material.WOOL, 1, (short) 14)),
+
+    /**
+     * Dark purple color
+     */
+    DARK_PURPLE("Dark Purple", ChatColor.DARK_PURPLE, new ItemStack(Material.WOOL, 1, (short) 10)),
+
+    /**
+     * Gold color
+     */
+    GOLD("Gold", ChatColor.GOLD, new ItemStack(Material.WOOL, 1, (short) 1)),
 
     /**
      * Gray color
      */
-    GRAY("Gray", org.bukkit.Color.GRAY, new ItemStack(Material.WOOL, 1, (short) 7)),
+    GRAY("Gray", ChatColor.GRAY, new ItemStack(Material.WOOL, 1, (short) 8)),
 
     /**
-     * Black color
+     * Dark gray color
      */
-    BLACK("Black", org.bukkit.Color.BLACK, new ItemStack(Material.WOOL, 1, (short) 15)),
-
-    /**
-     * Red color
-     */
-    RED("Red", org.bukkit.Color.RED, new ItemStack(Material.WOOL, 1, (short) 14)),
-
-    /**
-     * Maroon color
-     */
-    MAROON("Maroon", org.bukkit.Color.MAROON, new ItemStack(Material.WOOL, 1, (short) 12)),
-
-    /**
-     * Yellow color
-     */
-    YELLOW("Yellow", org.bukkit.Color.YELLOW, new ItemStack(Material.WOOL, 1, (short) 4)),
-
-    /**
-     * Olive color
-     */
-    OLIVE("Olive", org.bukkit.Color.OLIVE, new ItemStack(Material.WOOL, 1, (short) 13)),
-
-    /**
-     * Lime color
-     */
-    LIME("Lime", org.bukkit.Color.LIME, new ItemStack(Material.WOOL, 1, (short) 5)),
-
-    /**
-     * Green color
-     */
-    GREEN("Green", org.bukkit.Color.GREEN, new ItemStack(Material.WOOL, 1, (short) 13)),
-
-    /**
-     * Aqua color
-     */
-    AQUA("Aqua", org.bukkit.Color.AQUA, new ItemStack(Material.WOOL, 1, (short) 3)),
-
-    /**
-     * Teal color
-     */
-    TEAL("Teal", org.bukkit.Color.TEAL, new ItemStack(Material.WOOL, 1, (short) 9)),
+    DARK_GRAY("Dark Gray", ChatColor.DARK_GRAY, new ItemStack(Material.WOOL, 1, (short) 7)),
 
     /**
      * Blue color
      */
-    BLUE("Blue", org.bukkit.Color.BLUE, new ItemStack(Material.WOOL, 1, (short) 11)),
+    BLUE("Blue", ChatColor.BLUE, new ItemStack(Material.WOOL, 1, (short) 11)),
 
     /**
-     * Navy color
+     * Green color
      */
-    NAVY("Navy", org.bukkit.Color.NAVY, new ItemStack(Material.WOOL, 1, (short) 11)),
+    GREEN("Green", ChatColor.GREEN, new ItemStack(Material.WOOL, 1, (short) 5)),
 
     /**
-     * Fuchsia color
+     * Aqua color
      */
-    FUCHSIA("Fuchsia", org.bukkit.Color.FUCHSIA, new ItemStack(Material.WOOL, 1, (short) 2)),
+    AQUA("Aqua", ChatColor.AQUA, new ItemStack(Material.WOOL, 1, (short) 3)),
 
     /**
-     * Purple color
+     * Red color
      */
-    PURPLE("Purple", org.bukkit.Color.PURPLE, new ItemStack(Material.WOOL, 1, (short) 10)),
+    RED("Red", ChatColor.RED, new ItemStack(Material.WOOL, 1, (short) 6)),
 
     /**
-     * Orange color
+     * Light purple color
      */
-    ORANGE("Orange", org.bukkit.Color.ORANGE, new ItemStack(Material.WOOL, 1, (short) 1));
+    LIGHT_PURPLE("Light Purple", ChatColor.LIGHT_PURPLE, new ItemStack(Material.WOOL, 1, (short) 2)),
+
+    /**
+     * Yellow color
+     */
+    YELLOW("Yellow", ChatColor.YELLOW, new ItemStack(Material.WOOL, 1, (short) 4)),
+
+    /**
+     * White color
+     */
+    WHITE("White", ChatColor.WHITE, new ItemStack(Material.WOOL, 1, (short) 0));
 
     /**
      * Name of the color
@@ -101,7 +97,7 @@ public enum Color {
     /**
      * Bukkit color
      */
-    private org.bukkit.Color bukkitColor;
+    private org.bukkit.ChatColor bukkitColor;
 
     /**
      * Wool with that color
@@ -114,7 +110,7 @@ public enum Color {
      * @param bukkitColor bukkit color
      * @param item wool item with that color
      */
-    Color(String name, org.bukkit.Color bukkitColor, ItemStack item) {
+    Color(String name, org.bukkit.ChatColor bukkitColor, ItemStack item) {
         this.name = name;
         this.bukkitColor = bukkitColor;
         this.item = item;
@@ -132,7 +128,7 @@ public enum Color {
      * Get the bukkit color
      * @return bukkit color
      */
-    public org.bukkit.Color getBukkitColor() {
+    public org.bukkit.ChatColor getBukkitColor() {
         return bukkitColor;
     }
 

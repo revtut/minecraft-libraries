@@ -1,14 +1,14 @@
-package net.revtut.libraries.games.events.arena;
+package net.revtut.libraries.games.events.session;
 
-import net.revtut.libraries.games.arena.Arena;
+import net.revtut.libraries.games.arena.session.GameSession;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- * Arena Event
+ * Session Event
  */
-public abstract class ArenaEvent extends Event implements Cancellable {
+public abstract class SessionEvent extends Event implements Cancellable {
 
     /**
      * Handlers list
@@ -16,9 +16,9 @@ public abstract class ArenaEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     /**
-     * Arena where the event occurred
+     * Session where the event occurred
      */
-    private Arena arena;
+    private GameSession gameSession;
 
     /**
      * Flag to check if the event was cancelled
@@ -26,20 +26,20 @@ public abstract class ArenaEvent extends Event implements Cancellable {
     private boolean isCancelled;
 
     /**
-     * Constructor of ArenaEvent
-     * @param arena arena where the event occurred
+     * Constructor of SessionEvent
+     * @param gameSession session where the event occurred
      */
-    public ArenaEvent(Arena arena) {
-        this.arena = arena;
+    public SessionEvent(GameSession gameSession) {
+        this.gameSession = gameSession;
         this.isCancelled = false;
     }
 
     /**
-     * Get the arena where the event occurred
-     * @return arena where the event occurred
+     * Get the session where the event occurred
+     * @return session where the event occurred
      */
-    public Arena getArena() {
-        return arena;
+    public GameSession getSession() {
+        return gameSession;
     }
 
     /**

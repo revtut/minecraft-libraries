@@ -19,12 +19,17 @@ public class Libraries extends JavaPlugin {
     private static Libraries instance;
 
     /**
+     * Constructor of Libraries
+     */
+    public Libraries() {
+        instance = this;
+    }
+
+    /**
      * Enable the plugin
      */
     @Override
-    public void onEnable() {
-        instance = this;
-    }
+    public void onEnable() { }
 
     /**
      * Disable the plugin

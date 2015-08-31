@@ -1,16 +1,16 @@
-package net.revtut.libraries.games.arena;
+package net.revtut.libraries.games.arena.session;
 
 /**
- * Arena States
+ * Game States
  */
-public enum ArenaState {
+public enum GameState {
     /**
      * Building the arena
      */
     BUILD,
 
     /**
-     * Waiting for players to join the arena
+     * Waiting for players to join the session
      */
     LOBBY,
 
@@ -35,12 +35,7 @@ public enum ArenaState {
     FINISH,
 
     /**
-     * Arena has stopped
-     */
-    STOP,
-
-    /**
-     * Arena exists but it is not in any state
+     * Session exists but it is not in any state
      */
     NONE;
 }

@@ -1,22 +1,22 @@
-package net.revtut.libraries.games.events.arena;
+package net.revtut.libraries.games.events.session;
 
-import net.revtut.libraries.games.arena.Arena;
-import net.revtut.libraries.games.arena.ArenaState;
+import net.revtut.libraries.games.arena.session.GameSession;
+import net.revtut.libraries.games.arena.session.GameState;
 
 /**
- * Arena Switch State Event
+ * Session Switch State Event
  */
-public class ArenaSwitchStateEvent extends ArenaEvent {
+public class SessionSwitchStateEvent extends SessionEvent {
 
     /**
      * State before the switch
      */
-    private ArenaState previousState;
+    private GameState previousState;
 
     /**
      * State after the switch
      */
-    private ArenaState nextState;
+    private GameState nextState;
 
     /**
      * Duration of the next state
@@ -24,13 +24,13 @@ public class ArenaSwitchStateEvent extends ArenaEvent {
     private int duration;
 
     /**
-     * Constructor of ArenaSwitchStateEvent
-     * Arena where the event occurred
+     * Constructor of SessionSwitchStateEvent
+     * @param gameSession Session where the event occurred
      * @param previousState state before the switch
      * @param nextState state after the switch
      */
-    public ArenaSwitchStateEvent(Arena arena, ArenaState previousState, ArenaState nextState, int duration) {
-        super(arena);
+    public SessionSwitchStateEvent(GameSession gameSession, GameState previousState, GameState nextState, int duration) {
+        super(gameSession);
         this.previousState = previousState;
         this.nextState = nextState;
     }
@@ -39,7 +39,7 @@ public class ArenaSwitchStateEvent extends ArenaEvent {
      * Get the state before the switch
      * @return state before the switch
      */
-    public ArenaState getPreviousState() {
+    public GameState getPreviousState() {
         return previousState;
     }
 
@@ -47,7 +47,7 @@ public class ArenaSwitchStateEvent extends ArenaEvent {
      * Get the state after the switch
      * @return state after the switch
      */
-    public ArenaState getNextState() {
+    public GameState getNextState() {
         return nextState;
     }
 

@@ -3,6 +3,7 @@ package net.revtut.libraries.games.player;
 import net.revtut.libraries.games.arena.Arena;
 import net.revtut.libraries.text.Language;
 import net.revtut.libraries.text.LanguageAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -15,7 +16,7 @@ public class PlayerData {
     /**
      * Player owner of this data
      */
-    private Player bukkitPlayer;
+    private UUID uuid;
 
     /**
      * Current arena of the player
@@ -34,11 +35,11 @@ public class PlayerData {
 
     /**
      * Constructor of PlayerData
-     * @param player player owner of the data
+     * @param uuid uuid of the owner player
      * @param statistics statistics of the player
      */
-    public PlayerData(Player player, PlayerStatistics statistics) {
-        this.bukkitPlayer = player;
+    public PlayerData(UUID uuid, PlayerStatistics statistics) {
+        this.uuid = uuid;
         this.state = PlayerState.ALIVE;
         this.statistics = statistics;
     }
@@ -47,14 +48,14 @@ public class PlayerData {
      * Get the Bukkit player of the player data
      * @return Bukkit player of the player data
      */
-    public Player getBukkitPlayer() { return bukkitPlayer; }
+    public Player getBukkitPlayer() { return Bukkit.getPlayer(uuid); }
 
     /**
      * Get the UUID of the player
      * @return UUID of the player
      */
     public UUID getUuid() {
-        return bukkitPlayer.getUniqueId();
+        return uuid;
     }
 
     /**
@@ -62,7 +63,7 @@ public class PlayerData {
      * @return name of the player
      */
     public String getName() {
-        return bukkitPlayer.getName();
+        return Bukkit.getPlayer(uuid).getName();
     }
 
     /**
@@ -70,7 +71,7 @@ public class PlayerData {
      * @return language of the player
      */
     public Language getLanguage() {
-        return LanguageAPI.getByCode(bukkitPlayer.spigot().getLocale());
+        return LanguageAPI.getByCode(getBukkitPlayer().spigot().getLocale());
     }
 
     /**

@@ -1,10 +1,11 @@
 package net.revtut.libraries.games.arena.types;
 
 import net.revtut.libraries.Libraries;
-import net.revtut.libraries.games.Team;
 import net.revtut.libraries.games.arena.Arena;
-import net.revtut.libraries.games.arena.ArenaState;
+import net.revtut.libraries.games.arena.session.GameSession;
+import net.revtut.libraries.games.arena.session.GameState;
 import net.revtut.libraries.games.player.PlayerData;
+import net.revtut.libraries.games.player.Team;
 import net.revtut.libraries.utils.WorldAPI;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -20,7 +21,7 @@ import java.util.logging.Level;
  * Arena Team Object.
  * Arena where you have teams, each team has several players.
  */
-public abstract class ArenaTeam extends Arena {
+public class ArenaTeam extends Arena {
 
     /**
      * List with all teams of the arena
@@ -28,9 +29,9 @@ public abstract class ArenaTeam extends Arena {
     private List<Team> teams;
 
     /**
-     * Map with spawn locations per team
+     * Map with spawn locations per team and death match locations per team
      */
-    private Map<Team, List<Location>> spawnLocations;
+    private Map<Team, List<Location>> spawnLocations, deathMatchLocations;
 
     /**
      * Map with death location per team
@@ -38,33 +39,28 @@ public abstract class ArenaTeam extends Arena {
     private Map<Team, Location> deathLocations;
 
     /**
-     * Map with death match locations per team
-     */
-    private Map<Team, List<Location>> deathMatchLocations;
-
-    /**
      * Constructor of ArenaTeam
      * @param plugin plugin owner of the arena
+     * @param worldsFolder folder where worlds are located
      */
-    public ArenaTeam(JavaPlugin plugin) {
-        super(plugin);
+    public ArenaTeam(JavaPlugin plugin, File worldsFolder) {
+        super(plugin, worldsFolder);
     }
 
     /**
      * Initialize the arena
-     * @param worldsFolder folder where worlds are located
-     * @param minPlayers minimum players to start the game
-     * @param maxPlayers maximum players on the arena
      * @param arenaWorld world of the arena
      * @param lobbyLocation location of the lobby
      * @param spectatorLocation location of the spectator's spawn
+     * @param corners corners of the arena
      * @param spawnLocations locations of the spawn
      * @param deathLocations locations to spawn dead players
      * @param deathMatchLocations locations for the death match
      * @param teams teams of the arena
+     * @param gameSession session of the arena
      */
-    public void init(File worldsFolder, int minPlayers, int maxPlayers, World arenaWorld, Location lobbyLocation, Location spectatorLocation, Map<Team, List<Location>> spawnLocations, Map<Team, Location> deathLocations, Map<Team, List<Location>> deathMatchLocations, List<Team> teams) {
-        super.init(worldsFolder, minPlayers, maxPlayers, arenaWorld, lobbyLocation, spectatorLocation);
+    public void init(World arenaWorld, Location lobbyLocation, Location spectatorLocation, Location[] corners, Map<Team, List<Location>> spawnLocations, Map<Team, Location> deathLocations, Map<Team, List<Location>> deathMatchLocations, List<Team> teams, GameSession gameSession) {
+        super.init(arenaWorld, lobbyLocation, spectatorLocation, corners, gameSession);
         this.spawnLocations = spawnLocations;
         this.deathLocations = deathLocations;
         this.deathMatchLocations = deathMatchLocations;
@@ -86,7 +82,7 @@ public abstract class ArenaTeam extends Arena {
      */
     public Team getTeam(PlayerData player) {
         for(Team team : teams)
-            if(team.isOnTeam(player))
+            if(team.containsPlayer(player))
                 return team;
         return null;
     }
@@ -185,7 +181,7 @@ public abstract class ArenaTeam extends Arena {
             return false;
 
         for(Team team : teams) {
-            if (!team.isOnTeam(player))
+            if (!team.containsPlayer(player))
                 continue;
 
             team.leave(player);
@@ -215,10 +211,9 @@ public abstract class ArenaTeam extends Arena {
     /**
      * Building the arena
      */
-    @Override
     public void build() {
         // First time calling this method
-        if(getState() != ArenaState.BUILD) {
+        if(getSession().getState() != GameState.BUILD) {
             Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Started building!");
 
             // Remove previous world
@@ -249,77 +244,5 @@ public abstract class ArenaTeam extends Arena {
                 throw new IllegalStateException("Loaded world is null.");
             world.setAutoSave(false);
         }
-    }
-
-    /**
-     * Waiting for players to join
-     */
-    @Override
-    public void lobby() {
-        // First time calling this method
-        if(getState() != ArenaState.LOBBY) {
-            Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Started waiting for players!");
-        }
-    }
-
-    /**
-     * Warming up the game
-     */
-    @Override
-    public void warmUp() {
-        // First time calling this method
-        if(getState() != ArenaState.WARMUP) {
-            Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Started the warm up!");
-        }
-    }
-
-    /**
-     * Game is running
-     */
-    @Override
-    public void start() {
-        // First time calling this method
-        if(getState() != ArenaState.START) {
-            Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Started the game!");
-        }
-    }
-
-    /**
-     * Death match is running
-     */
-    @Override
-    public void deathMatch() {
-        // First time calling this method
-        if(getState() != ArenaState.DEATHMATCH) {
-            Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Started the death match!");
-        }
-    }
-
-    /**
-     * Game has finished
-     */
-    @Override
-    public void finish() {
-        // First time calling this method
-        if(getState() != ArenaState.FINISH) {
-            Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Finished the game!");
-        }
-    }
-
-    /**
-     * Stop the arena
-     */
-    @Override
-    public void stop() {
-        // First time calling this method
-        if(getState() != ArenaState.STOP) {
-            Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Started stopping!");
-        }
-    }
-    /**
-     * Update the arena game in the database
-     */
-    public void updateDatabase() {
-
     }
 }
