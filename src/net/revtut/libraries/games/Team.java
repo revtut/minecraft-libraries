@@ -1,5 +1,9 @@
 package net.revtut.libraries.games;
 
+import net.revtut.libraries.Libraries;
+import net.revtut.libraries.games.events.player.PlayerJoinTeamEvent;
+import net.revtut.libraries.games.events.player.PlayerLeaveTeamEvent;
+import net.revtut.libraries.games.events.player.PlayerSpectateTeamEvent;
 import net.revtut.libraries.games.player.PlayerData;
 import net.revtut.libraries.games.player.PlayerState;
 import net.revtut.libraries.games.utils.Color;
@@ -7,6 +11,7 @@ import net.revtut.libraries.games.utils.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Team Object
@@ -76,11 +81,7 @@ public class Team {
      * @return players that correspond to that state
      */
     public List<PlayerData> getPlayers(PlayerState state) {
-        List<PlayerData> filteredPlayers = new ArrayList<>();
-        for(PlayerData player : players)
-            if(player.getState() == state)
-                filteredPlayers.add(player);
-        return filteredPlayers;
+        return players.stream().filter(player -> player.getState() == state).collect(Collectors.toList());
     }
 
     /**
@@ -107,29 +108,70 @@ public class Team {
     /**
      * Make a player join this team
      * @param player player to be added
+     * @return true if has joined, false otherwise
      */
-    public void join(PlayerData player) {
+    public boolean join(PlayerData player) {
         if(players.contains(player))
-            return;
+            return true;
+
+        // Call event
+        PlayerJoinTeamEvent event = new PlayerJoinTeamEvent(player, player.getCurrentArena(), this, player.getName() + " has joined the team " + name);
+        Libraries.getInstance().getServer().getPluginManager().callEvent(event);
+
+        if(event.isCancelled())
+            return false;
+
+        broadcastMessage(event.getJoinMessage());
+
         players.add(player);
+
+        return true;
     }
 
     /**
      * Make a player leave the team
      * @param player player to be removed
+     * @return true if has left, false otherwise
      */
-    public void leave(PlayerData player) {
+    public boolean leave(PlayerData player) {
         if(!players.contains(player))
-            return;
+            return true;
+
+        // Call event
+        PlayerLeaveTeamEvent event = new PlayerLeaveTeamEvent(player, player.getCurrentArena(), this, player.getName() + " has left the team " + name);
+        Libraries.getInstance().getServer().getPluginManager().callEvent(event);
+
+        if(event.isCancelled())
+            return false;
+
+        broadcastMessage(event.getLeaveMessage());
+
         players.remove(player);
+
+        return true;
     }
 
     /**
      * Make a player spectate the team
      * @param player player to spectate
+     * @return true if is spectating, false otherwise
      */
-    public void spectate(PlayerData player) {
-        join(player);
+    public boolean spectate(PlayerData player) {
+        if(players.contains(player))
+            return true;
+
+        // Call event
+        PlayerSpectateTeamEvent event = new PlayerSpectateTeamEvent(player, player.getCurrentArena(), this, player.getName() + " is now spectating the team " + name);
+        Libraries.getInstance().getServer().getPluginManager().callEvent(event);
+
+        if(event.isCancelled())
+            return false;
+
+        broadcastMessage(event.getJoinMessage());
+
+        players.add(player);
+
+        return true;
     }
 
     /**

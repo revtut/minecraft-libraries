@@ -2,6 +2,7 @@ package net.revtut.libraries.games.player;
 
 import net.revtut.libraries.games.arena.Arena;
 import net.revtut.libraries.text.Language;
+import net.revtut.libraries.text.LanguageAPI;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -15,11 +16,6 @@ public class PlayerData {
      * Player owner of this data
      */
     private Player bukkitPlayer;
-
-    /**
-     * Language of the player
-     */
-    private Language language;
 
     /**
      * Current arena of the player
@@ -39,12 +35,10 @@ public class PlayerData {
     /**
      * Constructor of PlayerData
      * @param player player owner of the data
-     * @param language language of the player
      * @param statistics statistics of the player
      */
-    public PlayerData(Player player, Language language, PlayerStatistics statistics) {
+    public PlayerData(Player player, PlayerStatistics statistics) {
         this.bukkitPlayer = player;
-        this.language = language;
         this.state = PlayerState.ALIVE;
         this.statistics = statistics;
     }
@@ -76,7 +70,7 @@ public class PlayerData {
      * @return language of the player
      */
     public Language getLanguage() {
-        return language;
+        return LanguageAPI.getByCode(bukkitPlayer.spigot().getLocale());
     }
 
     /**

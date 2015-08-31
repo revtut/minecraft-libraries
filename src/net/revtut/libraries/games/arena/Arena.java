@@ -235,6 +235,133 @@ public abstract class Arena {
     }
 
     /**
+     * Get the number of players on the arena
+     * @return number of players on the arena
+     */
+    public int numberPlayers() {
+        return getAllPlayers().size();
+    }
+
+    /**
+     * Make a player join the arena
+     * @param player player to join
+     * @return true if has joined, false otherwise
+     */
+    public boolean join(PlayerData player) {
+        if(!canJoin(player))
+            return false;
+
+        // Call event
+        PlayerJoinArenaEvent event = new PlayerJoinArenaEvent(player, this, player.getName() + " has joined the arena " + name);
+        Libraries.getInstance().getServer().getPluginManager().callEvent(event);
+
+        if(event.isCancelled())
+            return false;
+
+        broadcastMessage(event.getJoinMessage());
+
+        // Update player
+        player.updateState(PlayerState.ALIVE);
+        player.setCurrentArena(this);
+        player.getBukkitPlayer().teleport(lobbyLocation);
+
+        // Visibility configuration
+        for(PlayerData target : getAllPlayers()) {
+            target.getBukkitPlayer().showPlayer(player.getBukkitPlayer());
+
+            if(target.getState() == PlayerState.SPECTATOR)
+                player.getBukkitPlayer().hidePlayer(target.getBukkitPlayer());
+            else if(target.getState() == PlayerState.ALIVE)
+                player.getBukkitPlayer().showPlayer(target.getBukkitPlayer());
+        }
+
+        return true;
+    }
+
+    /**
+     * Make a player leave the arena
+     * @param player player to leave
+     * @return true if has left, false otherwise
+     */
+    public boolean leave(PlayerData player) {
+        // Call event
+        PlayerLeaveArenaEvent event = new PlayerLeaveArenaEvent(player, this, player.getName() + " has left the arena " + name);
+        Libraries.getInstance().getServer().getPluginManager().callEvent(event);
+
+        if(event.isCancelled())
+            return false;
+
+        broadcastMessage(event.getLeaveMessage());
+
+        // Update player
+        player.updateState(PlayerState.NOT_ASSIGNED);
+        player.setCurrentArena(null);
+        player.getBukkitPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+
+        return true;
+    }
+
+    /**
+     * Make a player spectate the arena
+     * @param player player to spectate
+     * @return true if is spectating, false otherwise
+     */
+    public boolean spectate(PlayerData player) {
+        // Call event
+        PlayerSpectateArenaEvent event = new PlayerSpectateArenaEvent(player, this, player.getName() + " is spectating the arena " + name);
+        Libraries.getInstance().getServer().getPluginManager().callEvent(event);
+
+        if(event.isCancelled())
+            return false;
+
+        broadcastMessage(event.getJoinMessage());
+
+        // Update player
+        player.updateState(PlayerState.SPECTATOR);
+        player.setCurrentArena(this);
+        player.getBukkitPlayer().teleport(spectatorLocation);
+
+        // Hide to players ingame except spectators
+        for(PlayerData target : getAllPlayers())
+            if(target.getState() != PlayerState.SPECTATOR)
+                player.getBukkitPlayer().hidePlayer(target.getBukkitPlayer());
+
+        return true;
+    }
+
+    /**
+     * Check if a player can join a arena
+     * @param player player to be joined
+     * @return true if can, false otherwise
+     */
+    public boolean canJoin(PlayerData player) {
+        // Maximum players already achieved
+        if(numberPlayers() >= getMaxPlayers())
+            return false;
+
+        // Arena is already ingame
+        if(getState() != ArenaState.LOBBY)
+            return false;
+
+        return true;
+    }
+
+    /**
+     * Broadcast a message to the arena
+     * @param message message to be broadcast
+     */
+    public void broadcastMessage(String message) {
+        for(PlayerData player : getAllPlayers())
+            player.getBukkitPlayer().sendMessage(message);
+    }
+
+    /**
+     * Get all the players on the arena
+     * @return players on the arena
+     */
+    public abstract List<PlayerData> getAllPlayers();
+
+    /**
      * Tick the arena
      */
     public void tick() {
@@ -250,6 +377,11 @@ public abstract class Arena {
                     duration = 500;
                     break;
                 case LOBBY:
+                    // Check minimum players
+                    if(numberPlayers() < getMinPlayers()) {
+                        resetTimer();
+                        return;
+                    }
                     nextState = ArenaState.WARMUP;
                     duration = 30;
                     break;
@@ -306,124 +438,6 @@ public abstract class Arena {
                 return;
         }
     }
-
-    /**
-     * Get the number of players on the arena
-     * @return number of players on the arena
-     */
-    public int numberPlayers() {
-        return getAllPlayers().size();
-    }
-
-    /**
-     * Make a player join the arena
-     * @param player player to join
-     */
-    public void join(PlayerData player) {
-        if(!canJoin(player))
-            return;
-
-        // Call event
-        PlayerJoinArenaEvent event = new PlayerJoinArenaEvent(player, this, player.getName() + " has joined the arena " + name);
-        Libraries.getInstance().getServer().getPluginManager().callEvent(event);
-
-        if(event.isCancelled())
-            return;
-
-        broadcastMessage(event.getJoinMessage());
-
-        // Update player
-        player.updateState(PlayerState.ALIVE);
-        player.setCurrentArena(this);
-        player.getBukkitPlayer().teleport(lobbyLocation);
-
-        // Visibility configuration
-        for(PlayerData target : getAllPlayers()) {
-            target.getBukkitPlayer().showPlayer(player.getBukkitPlayer());
-
-            if(target.getState() == PlayerState.SPECTATOR)
-                player.getBukkitPlayer().hidePlayer(target.getBukkitPlayer());
-            else if(target.getState() == PlayerState.ALIVE)
-                player.getBukkitPlayer().showPlayer(target.getBukkitPlayer());
-        }
-    }
-
-    /**
-     * Make a player leave the arena
-     * @param player player to leave
-     */
-    public void leave(PlayerData player) {
-        // Call event
-        PlayerLeaveArenaEvent event = new PlayerLeaveArenaEvent(player, this, player.getName() + " has left the arena " + name);
-        Libraries.getInstance().getServer().getPluginManager().callEvent(event);
-
-        if(event.isCancelled())
-            return;
-
-        broadcastMessage(event.getLeaveMessage());
-
-        // Update player
-        player.updateState(PlayerState.NOT_ASSIGNED);
-        player.setCurrentArena(null);
-        player.getBukkitPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
-    }
-
-    /**
-     * Make a player spectate the arena
-     * @param player player to spectate
-     */
-    public void spectate(PlayerData player) {
-        // Call event
-        PlayerSpectateArenaEvent event = new PlayerSpectateArenaEvent(player, this, player.getName() + " is spectating the arena " + name);
-        Libraries.getInstance().getServer().getPluginManager().callEvent(event);
-
-        if(event.isCancelled())
-            return;
-
-        broadcastMessage(event.getJoinMessage());
-
-        // Update player
-        player.updateState(PlayerState.SPECTATOR);
-        player.setCurrentArena(this);
-        player.getBukkitPlayer().teleport(spectatorLocation);
-
-        // Hide to players ingame except spectators
-        for(PlayerData target : getAllPlayers())
-            if(target.getState() != PlayerState.SPECTATOR)
-                player.getBukkitPlayer().hidePlayer(target.getBukkitPlayer());
-    }
-
-    /**
-     * Check if a player can join a arena
-     * @param player player to be joined
-     * @return true if can, false otherwise
-     */
-    public boolean canJoin(PlayerData player) {
-        // Maximum players already achieved
-        if(numberPlayers() >= getMaxPlayers())
-            return false;
-
-        // Arena is already ingame
-        if(getState() != ArenaState.LOBBY)
-            return false;
-
-        return true;
-    }
-
-    /**
-     * Broadcast a message to the arena
-     * @param message message to be broadcast
-     */
-    public void broadcastMessage(String message) {
-        for(PlayerData player : getAllPlayers())
-            player.getBukkitPlayer().sendMessage(message);
-    }
-
-    /**
-     * Get all the players on the arena
-     * @return players on the arena
-     */
-    public abstract List<PlayerData> getAllPlayers();
 
     /**
      * Building the arena
