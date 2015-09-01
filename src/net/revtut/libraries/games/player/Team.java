@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 /**
  * Team Object
  */
-public class Team {
+public class Team implements Winner {
 
     /**
      * Name of the team
@@ -199,5 +199,10 @@ public class Team {
             return false;
         Team target = (Team) obj;
         return target.getName().equals(name);
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

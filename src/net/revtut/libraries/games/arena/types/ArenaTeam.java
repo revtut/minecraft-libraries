@@ -15,6 +15,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 
 /**
@@ -141,6 +142,18 @@ public class ArenaTeam extends Arena {
         for(Team team : teams)
             players.addAll(team.getAllPlayers());
         return players;
+    }
+
+    /**
+     * Check if the arena contains a given player by its UUID
+     * @param uuid uuid of the player to be checked
+     * @return true if contains, false otherwise
+     */
+    public boolean containsPlayer(UUID uuid) {
+        for(Team team : teams)
+            if(team.containsPlayer(uuid))
+                return true;
+        return false;
     }
 
     /**

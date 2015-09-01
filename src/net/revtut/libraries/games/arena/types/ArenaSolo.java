@@ -10,6 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Arena Solo Object.
@@ -91,6 +92,18 @@ public class ArenaSolo extends Arena {
      */
     public List<PlayerData> getAllPlayers() {
         return players;
+    }
+
+    /**
+     * Check if the arena contains a given player by its UUID
+     * @param uuid uuid of the player to be checked
+     * @return true if contains, false otherwise
+     */
+    public boolean containsPlayer(UUID uuid) {
+        for(PlayerData target : players)
+            if(target.getUuid().equals(uuid))
+                return true;
+        return false;
     }
 
     /**

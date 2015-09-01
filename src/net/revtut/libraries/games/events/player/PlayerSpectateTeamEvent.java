@@ -8,12 +8,7 @@ import org.bukkit.event.HandlerList;
 /**
  * Player Spectate Team Event
  */
-public class PlayerSpectateTeamEvent extends PlayerEvent {
-
-    /**
-     * Message on joining the team
-     */
-    private String joinMessage;
+public class PlayerSpectateTeamEvent extends PlayerSpectateArenaEvent {
 
     /**
      * Team that was spectated
@@ -28,17 +23,8 @@ public class PlayerSpectateTeamEvent extends PlayerEvent {
      * @param joinMessage join message
      */
     public PlayerSpectateTeamEvent(PlayerData player, Arena arena, Team team, String joinMessage) {
-        super(player, arena);
-        this.joinMessage = joinMessage;
+        super(player, arena, joinMessage);
         this.team = team;
-    }
-
-    /**
-     * Get the join message
-     * @return join message
-     */
-    public String getJoinMessage() {
-        return this.joinMessage;
     }
 
     /**
@@ -47,14 +33,6 @@ public class PlayerSpectateTeamEvent extends PlayerEvent {
      */
     public Team getTeam() {
         return team;
-    }
-
-    /**
-     * Set the join message
-     * @param joinMessage new join message
-     */
-    public void setJoinMessage(String joinMessage) {
-        this.joinMessage = joinMessage;
     }
 
     /**

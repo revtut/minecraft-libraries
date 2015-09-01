@@ -11,7 +11,7 @@ import java.util.UUID;
 /**
  * PlayerData Object
  */
-public class PlayerData {
+public class PlayerData implements Winner {
 
     /**
      * Player owner of this data
@@ -42,6 +42,8 @@ public class PlayerData {
         this.uuid = uuid;
         this.state = PlayerState.ALIVE;
         this.statistics = statistics;
+
+        PlayerManager.getInstance().addPlayer(this);
     }
 
     /**
@@ -112,5 +114,14 @@ public class PlayerData {
      */
     public void updateState(PlayerState state) {
         this.state = state;
+    }
+
+    /**
+     * Convert a player data to string
+     * @return converted string
+     */
+    @Override
+    public String toString() {
+        return uuid.toString();
     }
 }

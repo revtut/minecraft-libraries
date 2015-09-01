@@ -146,12 +146,12 @@ public final class AlgebraAPI {
     }
 
     /**
-     * Check if a player has hit someone
+     * Get the player that was hit by another one
      *
-     * @param player player to check if interacted
-     * @return player that was damaged
+     * @param player player to get hit target
+     * @return player that was hit
      */
-    public static Player hasHit(Player player) {
+    public static Player getHitPlayer(Player player) {
         final int ATTACK_REACH = 4;
 
         Location playerPos = player.getEyeLocation();
@@ -178,12 +178,9 @@ public final class AlgebraAPI {
             Vector minimum = targetPos.add(new Vector(-0.5, 0, 0.5));
             Vector maximum = targetPos.add(new Vector(0.5, 1.67, 0.5));
 
-            if (hasIntersection(playerStart, playerEnd, minimum, maximum)) {
-                if (hit == null || AlgebraAPI.distanceBetween(hit.getLocation(), playerPos) > AlgebraAPI.distanceBetween(target.getLocation(), playerPos)) {
+            if (hasIntersection(playerStart, playerEnd, minimum, maximum))
+                if (hit == null || AlgebraAPI.distanceBetween(hit.getLocation(), playerPos) > AlgebraAPI.distanceBetween(target.getLocation(), playerPos))
                     hit = target;
-                    continue;
-                }
-            }
         }
 
         return hit;
@@ -220,6 +217,17 @@ public final class AlgebraAPI {
             return false;
 
         return true;
+    }
+
+    /**
+     * Check if a location is inside AABB
+     * @param location location to be checked
+     * @param minimum minimum location
+     * @param maximum maximum location
+     * @return true if is inside AABB, false otherwise
+     */
+    public static boolean isInAABB(Location location, Location minimum, Location maximum){
+        return location.getX() >= minimum.getX() && location.getX() <= maximum.getX() && location.getY() >= minimum.getY() && location.getY() <= maximum.getY() && location.getZ() >= minimum.getZ() && location.getZ() <= maximum.getZ();
     }
 
     /**

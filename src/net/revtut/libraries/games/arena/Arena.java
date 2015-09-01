@@ -16,6 +16,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -79,6 +80,8 @@ public abstract class Arena {
         this.id = currentID++;
         this.name = plugin.getName() + this.id;
         this.worldsFolder = worldsFolder;
+
+        ArenaManager.getInstance().addArena(this);
     }
 
     /**
@@ -146,6 +149,22 @@ public abstract class Arena {
     }
 
     /**
+     * Get the corners of the arena
+     * @return corners of the arena
+     */
+    public Location[] getCorners() {
+        return corners;
+    }
+
+    /**
+     * Get the current session of the arena
+     * @return current session of the arena
+     */
+    public GameSession getSession() {
+        return currentSession;
+    }
+
+    /**
      * Get players that are currently on a state
      * @param state state to filter players
      * @return players that correspond to that state
@@ -160,14 +179,6 @@ public abstract class Arena {
      */
     public int getSize() {
         return getAllPlayers().size();
-    }
-
-    /**
-     * Get the current session of the arena
-     * @return current session of the arena
-     */
-    public GameSession getSession() {
-        return currentSession;
     }
 
     /**
@@ -296,8 +307,24 @@ public abstract class Arena {
     }
 
     /**
+     * Check if the arena contains a given player
+     * @param player player to be checked
+     * @return true if contains, false otherwise
+     */
+    public boolean containsPlayer(PlayerData player) {
+        return containsPlayer(player.getUuid());
+    }
+
+    /**
      * Get all the players on the arena
      * @return players on the arena
      */
     public abstract List<PlayerData> getAllPlayers();
+
+    /**
+     * Check if the arena contains a given player by its UUID
+     * @param uuid uuid of the player to be checked
+     * @return true if contains, false otherwise
+     */
+    public abstract boolean containsPlayer(UUID uuid);
 }

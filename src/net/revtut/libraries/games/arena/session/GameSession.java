@@ -122,4 +122,20 @@ public class GameSession {
         if(event.isCancelled())
             ++currentTimer;
     }
+
+    /**
+     * Convert game session to a string
+     * @return converted string
+     */
+    @Override
+    public String toString() {
+        return "GameSession{" +
+                "arena=" + arena +
+                ", state=" + state +
+                ", initialTimer=" + initialTimer +
+                ", currentTimer=" + currentTimer +
+                ", minPlayers=" + minPlayers +
+                ", maxPlayers=" + maxPlayers +
+                '}';
+    }
 }

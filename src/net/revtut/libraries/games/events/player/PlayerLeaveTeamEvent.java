@@ -8,12 +8,7 @@ import org.bukkit.event.HandlerList;
 /**
  * Player Leave Team Event
  */
-public class PlayerLeaveTeamEvent extends PlayerEvent {
-
-    /**
-     * Message on leaving the team
-     */
-    private String leaveMessage;
+public class PlayerLeaveTeamEvent extends PlayerLeaveArenaEvent {
 
     /**
      * Team that was joined
@@ -28,17 +23,8 @@ public class PlayerLeaveTeamEvent extends PlayerEvent {
      * @param leaveMessage leave message
      */
     public PlayerLeaveTeamEvent(PlayerData player, Arena arena, Team team, String leaveMessage) {
-        super(player, arena);
-        this.leaveMessage = leaveMessage;
+        super(player, arena, leaveMessage);
         this.team = team;
-    }
-
-    /**
-     * Get the leave message
-     * @return leave message
-     */
-    public String getLeaveMessage() {
-        return this.leaveMessage;
     }
 
     /**
@@ -47,14 +33,6 @@ public class PlayerLeaveTeamEvent extends PlayerEvent {
      */
     public Team getTeam() {
         return team;
-    }
-
-    /**
-     * Set the leave message
-     * @param leaveMessage new leave message
-     */
-    public void setLeaveMessage(String leaveMessage) {
-        this.leaveMessage = leaveMessage;
     }
 
     /**
