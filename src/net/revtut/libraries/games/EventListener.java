@@ -2,7 +2,6 @@ package net.revtut.libraries.games;
 
 import net.revtut.libraries.games.arena.Arena;
 import net.revtut.libraries.games.events.player.PlayerCrossArenaBorderEvent;
-import net.revtut.libraries.games.events.player.PlayerEvent;
 import net.revtut.libraries.games.player.PlayerData;
 import net.revtut.libraries.maths.AlgebraAPI;
 import org.bukkit.Bukkit;
@@ -62,7 +61,7 @@ public class EventListener implements Listener {
         // Crossing borders
         if(!AlgebraAPI.isInAABB(event.getTo(), arena.getCorners()[0], arena.getCorners()[1])) {
             // Call event
-            PlayerEvent crossArenaBorderEvent = new PlayerCrossArenaBorderEvent(player, arena);
+            PlayerCrossArenaBorderEvent crossArenaBorderEvent = new PlayerCrossArenaBorderEvent(player, arena);
             Bukkit.getPluginManager().callEvent(crossArenaBorderEvent);
 
             if(event.isCancelled()) {

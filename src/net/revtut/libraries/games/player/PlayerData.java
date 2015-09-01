@@ -8,6 +8,9 @@ import net.revtut.libraries.text.LanguageAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -19,6 +22,11 @@ public class PlayerData implements Winner {
      * Player owner of this data
      */
     private UUID uuid;
+
+    /**
+     * Date of the last login
+     */
+    private Date lastLogin;
 
     /**
      * Current arena of the player
@@ -33,17 +41,17 @@ public class PlayerData implements Winner {
     /**
      * Statistics of the player
      */
-    private PlayerStatistics statistics;
+    private Map<PlayerStatistic, Long> statistics;
 
     /**
      * Constructor of PlayerData
      * @param uuid uuid of the owner player
-     * @param statistics statistics of the player
      */
-    public PlayerData(UUID uuid, PlayerStatistics statistics) {
+    public PlayerData(UUID uuid) {
         this.uuid = uuid;
+        this.lastLogin = new Date();
         this.state = PlayerState.ALIVE;
-        this.statistics = statistics;
+        this.statistics = new HashMap<>();
 
         GameAPI.getInstance().addPlayer(this);
     }
@@ -79,6 +87,14 @@ public class PlayerData implements Winner {
     }
 
     /**
+     * Get the last login date
+     * @return last login date
+     */
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    /**
      * Get the current arena of the player
      * @return current arena of the player
      */
@@ -95,11 +111,14 @@ public class PlayerData implements Winner {
     }
 
     /**
-     * Get the statistics of the player
-     * @return statistics of the player
+     * Get a statistic from player
+     * @param statistic statistic to get
+     * @return value of the statistic
      */
-    public PlayerStatistics getStatistics() {
-        return statistics;
+    public long getStatistic(PlayerStatistic statistic) {
+        if(!statistics.containsKey(statistic))
+            return 0;
+        return statistics.get(statistic);
     }
 
     /**
@@ -116,6 +135,23 @@ public class PlayerData implements Winner {
      */
     public void updateState(PlayerState state) {
         this.state = state;
+    }
+
+    /**
+     * Increment a statistic of the player
+     * @param statistic statistic to be incremented
+     */
+    public void incrementStatistic(PlayerStatistic statistic) {
+        incrementStatistic(statistic, 1);
+    }
+
+    /**
+     * Decrement a statistic of the player
+     * @param statistic statistic to be decremented
+     * @param value value to be decremented
+     */
+    public void incrementStatistic(PlayerStatistic statistic, long value) {
+        statistics.put(statistic, getStatistic(statistic) + value);
     }
 
     /**
