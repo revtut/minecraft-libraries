@@ -1,6 +1,5 @@
 package net.revtut.libraries.games.arena;
 
-import net.revtut.libraries.Libraries;
 import net.revtut.libraries.games.arena.session.GameSession;
 import net.revtut.libraries.games.arena.session.GameState;
 import net.revtut.libraries.games.events.arena.ArenaLoadEvent;
@@ -9,12 +8,11 @@ import net.revtut.libraries.games.events.player.PlayerLeaveArenaEvent;
 import net.revtut.libraries.games.events.player.PlayerSpectateArenaEvent;
 import net.revtut.libraries.games.player.PlayerData;
 import net.revtut.libraries.games.player.PlayerState;
+import net.revtut.libraries.utils.WorldAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -40,11 +38,6 @@ public abstract class Arena {
     private String name;
 
     /**
-     * File where worlds are located
-     */
-    private File worldsFolder;
-
-    /**
      * World of the arena
      */
     private World arenaWorld;
@@ -66,22 +59,17 @@ public abstract class Arena {
 
     /**
      * Constructor of the Arena
-     * @param plugin plugin owner of the arena
-     * @param worldsFolder folder where worlds are located
      */
-    public Arena(JavaPlugin plugin, File worldsFolder) {
+    public Arena(String name) {
         // Call event
         ArenaLoadEvent event = new ArenaLoadEvent(this);
-        Libraries.getInstance().getServer().getPluginManager().callEvent(event);
+        Bukkit.getPluginManager().callEvent(event);
 
         if(event.isCancelled())
             throw new IllegalStateException("Arena creation was cancelled!");
 
         this.id = currentID++;
-        this.name = plugin.getName() + this.id;
-        this.worldsFolder = worldsFolder;
-
-        ArenaManager.getInstance().addArena(this);
+        this.name = this.id + "_" + name;
     }
 
     /**
@@ -92,12 +80,46 @@ public abstract class Arena {
      * @param corners corners of the arena
      * @param gameSession session of the arena
      */
-    public void init(World arenaWorld, Location lobbyLocation, Location spectatorLocation, Location[] corners, GameSession gameSession) {
+    public void initialize(World arenaWorld, Location lobbyLocation, Location spectatorLocation, Location[] corners, GameSession gameSession) {
         this.arenaWorld = arenaWorld;
         this.lobbyLocation = lobbyLocation;
         this.spectatorLocation = spectatorLocation;
-        this.corners = corners;
         this.currentSession = gameSession;
+
+        // Make sure corners are in the right position
+        Location lowestCorner = corners[0];
+        Location highestCorner = corners[1];
+
+        if(highestCorner.getX() < lowestCorner.getX()){
+            double temporary = highestCorner.getX();
+            highestCorner.setX(lowestCorner.getX());
+            lowestCorner.setX(temporary);
+        }
+
+        if(highestCorner.getY() < lowestCorner.getY()){
+            double temporary = highestCorner.getY();
+            highestCorner.setY(lowestCorner.getY());
+            lowestCorner.setY(temporary);
+        }
+
+        if(highestCorner.getZ() < lowestCorner.getZ()){
+            double temporary = highestCorner.getZ();
+            highestCorner.setZ(lowestCorner.getZ());
+            lowestCorner.setZ(temporary);
+        }
+
+        this.corners = corners;
+    }
+
+    /**
+     * Close the arena
+     */
+    public void close() {
+        if(arenaWorld == null)
+            return;
+
+        WorldAPI.unloadWorld(arenaWorld.getName());
+        WorldAPI.removeDirectory(arenaWorld.getWorldFolder());
     }
 
     /**
@@ -114,14 +136,6 @@ public abstract class Arena {
      */
     public String getName() {
         return name;
-    }
-
-    /**
-     * Get the worlds folder of the arena
-     * @return worlds folder of the arena
-     */
-    public File getWorldsFolder() {
-        return worldsFolder;
     }
 
     /**
@@ -150,7 +164,7 @@ public abstract class Arena {
 
     /**
      * Get the corners of the arena
-     * @return corners of the arena
+     * @return corners of the arena, corner[0] lowest, corner[1] highest
      */
     public Location[] getCorners() {
         return corners;
@@ -182,14 +196,6 @@ public abstract class Arena {
     }
 
     /**
-     * Update the current session of the game
-     * @param session session of the game
-     */
-    public void setSession(GameSession session) {
-        this.currentSession = session;
-    }
-
-    /**
      * Make a player join the arena
      * @param player player to join
      * @return true if has joined, false otherwise
@@ -200,7 +206,7 @@ public abstract class Arena {
 
         // Call event
         PlayerJoinArenaEvent event = new PlayerJoinArenaEvent(player, this, player.getName() + " has joined the arena " + name);
-        Libraries.getInstance().getServer().getPluginManager().callEvent(event);
+        Bukkit.getPluginManager().callEvent(event);
 
         if(event.isCancelled())
             return false;
@@ -233,7 +239,7 @@ public abstract class Arena {
     public boolean leave(PlayerData player) {
         // Call event
         PlayerLeaveArenaEvent event = new PlayerLeaveArenaEvent(player, this, player.getName() + " has left the arena " + name);
-        Libraries.getInstance().getServer().getPluginManager().callEvent(event);
+        Bukkit.getPluginManager().callEvent(event);
 
         if(event.isCancelled())
             return false;
@@ -256,7 +262,7 @@ public abstract class Arena {
     public boolean spectate(PlayerData player) {
         // Call event
         PlayerSpectateArenaEvent event = new PlayerSpectateArenaEvent(player, this, player.getName() + " is spectating the arena " + name);
-        Libraries.getInstance().getServer().getPluginManager().callEvent(event);
+        Bukkit.getPluginManager().callEvent(event);
 
         if(event.isCancelled())
             return false;
@@ -304,15 +310,6 @@ public abstract class Arena {
     public void broadcastMessage(String message) {
         for(PlayerData player : getAllPlayers())
             player.getBukkitPlayer().sendMessage(message);
-    }
-
-    /**
-     * Check if the arena contains a given player
-     * @param player player to be checked
-     * @return true if contains, false otherwise
-     */
-    public boolean containsPlayer(PlayerData player) {
-        return containsPlayer(player.getUuid());
     }
 
     /**

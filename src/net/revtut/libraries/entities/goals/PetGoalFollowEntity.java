@@ -2,8 +2,6 @@ package net.revtut.libraries.entities.goals;
 
 import net.minecraft.server.v1_8_R3.*;
 import net.revtut.libraries.entities.PetGoal;
-import org.bukkit.entity.Skeleton;
-import org.bukkit.entity.Slime;
 
 /**
  * Pet goal follow entity

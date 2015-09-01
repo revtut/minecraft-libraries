@@ -1,10 +1,10 @@
-package net.revtut.libraries.games.arena;
+package net.revtut.libraries.games;
 
-import net.revtut.libraries.Libraries;
+import net.revtut.libraries.games.arena.Arena;
 import net.revtut.libraries.games.events.player.PlayerCrossArenaBorderEvent;
 import net.revtut.libraries.games.player.PlayerData;
-import net.revtut.libraries.games.player.PlayerManager;
 import net.revtut.libraries.maths.AlgebraAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -13,9 +13,14 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.util.UUID;
 
 /**
- * Listener of the arena
+ * Listener of the games api
  */
-public class ArenaListener implements Listener {
+public class EventListener implements Listener {
+
+    /**
+     * Game API instance
+     */
+    private GameAPI gameAPI = GameAPI.getInstance();
 
     /**
      * Controls the quit event
@@ -25,16 +30,16 @@ public class ArenaListener implements Listener {
         UUID uuid = event.getPlayer().getUniqueId();
 
         // Get needed data
-        Arena arena = ArenaManager.getInstance().getArena(uuid);
+        Arena arena = gameAPI.getArena(uuid);
         if(arena == null)
             return;
-        PlayerData player = PlayerManager.getInstance().getPlayer(uuid);
+        PlayerData player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
         // Leave the arena
         arena.leave(player);
-        PlayerManager.getInstance().removePlayer(player);
+        GameAPI.getInstance().removePlayer(player);
     }
 
     /**
@@ -46,10 +51,10 @@ public class ArenaListener implements Listener {
         UUID uuid = event.getPlayer().getUniqueId();
 
         // Get needed data
-        Arena arena = ArenaManager.getInstance().getArena(uuid);
+        Arena arena = gameAPI.getArena(uuid);
         if(arena == null)
             return;
-        PlayerData player = PlayerManager.getInstance().getPlayer(uuid);
+        PlayerData player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -57,7 +62,7 @@ public class ArenaListener implements Listener {
         if(!AlgebraAPI.isInAABB(event.getTo(), arena.getCorners()[0], arena.getCorners()[1])) {
             // Call event
             PlayerCrossArenaBorderEvent crossArenaBorderEvent = new PlayerCrossArenaBorderEvent(player, arena);
-            Libraries.getInstance().getServer().getPluginManager().callEvent(crossArenaBorderEvent);
+            Bukkit.getPluginManager().callEvent(crossArenaBorderEvent);
 
             if(event.isCancelled()) {
                 event.setTo(event.getFrom());

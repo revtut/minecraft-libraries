@@ -1,22 +1,16 @@
 package net.revtut.libraries.games.arena.types;
 
-import net.revtut.libraries.Libraries;
 import net.revtut.libraries.games.arena.Arena;
 import net.revtut.libraries.games.arena.session.GameSession;
-import net.revtut.libraries.games.arena.session.GameState;
 import net.revtut.libraries.games.player.PlayerData;
-import net.revtut.libraries.games.player.Team;
-import net.revtut.libraries.utils.WorldAPI;
+import net.revtut.libraries.games.team.Team;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.logging.Level;
 
 /**
  * Arena Team Object.
@@ -41,11 +35,10 @@ public class ArenaTeam extends Arena {
 
     /**
      * Constructor of ArenaTeam
-     * @param plugin plugin owner of the arena
-     * @param worldsFolder folder where worlds are located
+     * @param name name of the arena
      */
-    public ArenaTeam(JavaPlugin plugin, File worldsFolder) {
-        super(plugin, worldsFolder);
+    public ArenaTeam(String name) {
+        super(name);
     }
 
     /**
@@ -60,8 +53,8 @@ public class ArenaTeam extends Arena {
      * @param teams teams of the arena
      * @param gameSession session of the arena
      */
-    public void init(World arenaWorld, Location lobbyLocation, Location spectatorLocation, Location[] corners, Map<Team, List<Location>> spawnLocations, Map<Team, Location> deathLocations, Map<Team, List<Location>> deathMatchLocations, List<Team> teams, GameSession gameSession) {
-        super.init(arenaWorld, lobbyLocation, spectatorLocation, corners, gameSession);
+    public void initialize(World arenaWorld, Location lobbyLocation, Location spectatorLocation, Location[] corners, Map<Team, List<Location>> spawnLocations, Map<Team, Location> deathLocations, Map<Team, List<Location>> deathMatchLocations, List<Team> teams, GameSession gameSession) {
+        super.initialize(arenaWorld, lobbyLocation, spectatorLocation, corners, gameSession);
         this.spawnLocations = spawnLocations;
         this.deathLocations = deathLocations;
         this.deathMatchLocations = deathMatchLocations;
@@ -219,43 +212,5 @@ public class ArenaTeam extends Arena {
         teams.get(0).spectate(player);
 
         return true;
-    }
-
-    /**
-     * Building the arena
-     */
-    public void build() {
-        // First time calling this method
-        if(getSession().getState() != GameState.BUILD) {
-            Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Started building!");
-
-            // Remove previous world
-            if(getWorld() != null) {
-                String worldName = getWorld().getName();
-
-                WorldAPI.unloadWorld(worldName);
-
-                File worldFolder = new File(System.getProperty("user.dir") + File.separator + worldName);
-                WorldAPI.removeDirectory(worldFolder);
-            }
-
-            // Copy world folder
-            String[] listWorlds = getWorldsFolder().list();
-            if (listWorlds == null)
-                throw new IllegalStateException("List of worlds is null.");
-
-            int posWorld = (int) (Math.random() * listWorlds.length);
-            final String sourcePath = new File(getWorldsFolder() + File.separator + listWorlds[posWorld]).getAbsolutePath();
-            final String mapName = getId() + "_" + listWorlds[posWorld];
-            final String targetPath = new File(System.getProperty("user.dir") + File.separator + mapName).getAbsolutePath();
-
-            WorldAPI.copyDirectory(new File(sourcePath), new File(targetPath));
-
-            // Load World
-            World world = WorldAPI.loadWorldAsync(mapName);
-            if(world == null)
-                throw new IllegalStateException("Loaded world is null.");
-            world.setAutoSave(false);
-        }
     }
 }

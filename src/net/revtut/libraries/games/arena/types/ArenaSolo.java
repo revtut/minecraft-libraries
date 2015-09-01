@@ -5,9 +5,7 @@ import net.revtut.libraries.games.arena.session.GameSession;
 import net.revtut.libraries.games.player.PlayerData;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -35,11 +33,10 @@ public class ArenaSolo extends Arena {
 
     /**
      * Constructor of ArenaTeam
-     * @param plugin plugin owner of the arena
-     * @param worldsFolder folder where worlds are located
+     * @param name name of the arena
      */
-    public ArenaSolo(JavaPlugin plugin, File worldsFolder) {
-        super(plugin, worldsFolder);
+    public ArenaSolo(String name) {
+        super(name);
 
         this.players = new ArrayList<>();
     }
@@ -55,8 +52,8 @@ public class ArenaSolo extends Arena {
      * @param deathMatchLocations locations for the death match
      * @param gameSession session of the arena
      */
-    public void init(World arenaWorld, Location lobbyLocation, Location spectatorLocation, Location[] corners, List<Location> spawnLocations, Location deathLocation, List<Location> deathMatchLocations, GameSession gameSession) {
-        super.init(arenaWorld, lobbyLocation, spectatorLocation, corners, gameSession);
+    public void initialize(World arenaWorld, Location lobbyLocation, Location spectatorLocation, Location[] corners, List<Location> spawnLocations, Location deathLocation, List<Location> deathMatchLocations, GameSession gameSession) {
+        super.initialize(arenaWorld, lobbyLocation, spectatorLocation, corners, gameSession);
         this.spawnLocations = spawnLocations;
         this.deathLocation = deathLocation;
         this.deathMatchLocations = deathMatchLocations;

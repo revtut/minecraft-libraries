@@ -1,10 +1,13 @@
-package net.revtut.libraries.games.player;
+package net.revtut.libraries.games.team;
 
 import net.revtut.libraries.Libraries;
 import net.revtut.libraries.games.events.player.PlayerJoinTeamEvent;
 import net.revtut.libraries.games.events.player.PlayerLeaveTeamEvent;
 import net.revtut.libraries.games.events.player.PlayerSpectateTeamEvent;
+import net.revtut.libraries.games.player.PlayerData;
+import net.revtut.libraries.games.player.PlayerState;
 import net.revtut.libraries.games.utils.Color;
+import net.revtut.libraries.games.utils.Winner;
 
 import java.util.ArrayList;
 import java.util.List;

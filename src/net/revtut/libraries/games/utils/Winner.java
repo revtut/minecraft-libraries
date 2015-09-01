@@ -1,4 +1,4 @@
-package net.revtut.libraries.games.player;
+package net.revtut.libraries.games.utils;
 
 /**
  * Winner Interface

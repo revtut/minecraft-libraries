@@ -1,6 +1,8 @@
 package net.revtut.libraries.games.player;
 
+import net.revtut.libraries.games.GameAPI;
 import net.revtut.libraries.games.arena.Arena;
+import net.revtut.libraries.games.utils.Winner;
 import net.revtut.libraries.text.Language;
 import net.revtut.libraries.text.LanguageAPI;
 import org.bukkit.Bukkit;
@@ -43,7 +45,7 @@ public class PlayerData implements Winner {
         this.state = PlayerState.ALIVE;
         this.statistics = statistics;
 
-        PlayerManager.getInstance().addPlayer(this);
+        GameAPI.getInstance().addPlayer(this);
     }
 
     /**
