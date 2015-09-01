@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Created by User on 30/08/2015.
+ * Color Enum
  */
 public enum Color {
 

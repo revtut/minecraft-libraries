@@ -1,9 +1,9 @@
 package net.revtut.libraries.games;
 
 import net.revtut.libraries.games.arena.Arena;
-import net.revtut.libraries.games.arena.ArenaType;
 import net.revtut.libraries.games.arena.types.ArenaSolo;
 import net.revtut.libraries.games.arena.types.ArenaTeam;
+import net.revtut.libraries.games.arena.types.ArenaType;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;

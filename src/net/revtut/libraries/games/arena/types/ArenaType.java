@@ -1,4 +1,4 @@
-package net.revtut.libraries.games.arena;
+package net.revtut.libraries.games.arena.types;
 
 /**
  * Types of Arena

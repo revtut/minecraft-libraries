@@ -13,8 +13,8 @@ public class SessionTickEvent extends SessionEvent {
     private int time;
 
     /**
-     * Constructor of SessionSwitchStateEvent
-     * @param gameSession Session where the event occurred
+     * Constructor of SessionTickEvent
+     * @param gameSession session where the event occurred
      * @param time time until game session change state
      */
     public SessionTickEvent(GameSession gameSession, int time) {

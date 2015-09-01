@@ -25,7 +25,7 @@ public class SessionSwitchStateEvent extends SessionEvent {
 
     /**
      * Constructor of SessionSwitchStateEvent
-     * @param gameSession Session where the event occurred
+     * @param gameSession session where the event occurred
      * @param previousState state before the switch
      * @param nextState state after the switch
      */

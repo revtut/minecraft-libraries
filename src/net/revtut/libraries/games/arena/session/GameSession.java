@@ -1,8 +1,7 @@
 package net.revtut.libraries.games.arena.session;
 
 import net.revtut.libraries.games.arena.Arena;
-import net.revtut.libraries.games.events.session.SessionSwitchStateEvent;
-import net.revtut.libraries.games.events.session.SessionTickEvent;
+import net.revtut.libraries.games.events.session.*;
 import org.bukkit.Bukkit;
 
 /**
@@ -92,11 +91,31 @@ public class GameSession {
      */
     public void updateState(GameState state, int duration) {
         // Call event
-        SessionSwitchStateEvent event = new SessionSwitchStateEvent(this, this.state, state, duration);
+        SessionEvent event = new SessionSwitchStateEvent(this, this.state, state, duration);
         Bukkit.getPluginManager().callEvent(event);
 
         if(event.isCancelled())
             return;
+
+        // Call start event
+        if(state == GameState.START) {
+            // Call event
+            event = new SessionStartEvent(this);
+            Bukkit.getPluginManager().callEvent(event);
+
+            if(event.isCancelled())
+                return;
+        }
+
+        // Call finish event
+        if(state == GameState.FINISH) {
+            // Call event
+            event = new SessionFinishEvent(this);
+            Bukkit.getPluginManager().callEvent(event);
+
+            if(event.isCancelled())
+                return;
+        }
 
         // Update state
         this.state = state;
@@ -115,6 +134,10 @@ public class GameSession {
      * Tick the game session
      */
     public void tick() {
+        // Reset if negative timer
+        if(currentTimer < 0)
+            resetTimer();
+
         // Call event
         SessionTickEvent event = new SessionTickEvent(this, --currentTimer);
         Bukkit.getPluginManager().callEvent(event);

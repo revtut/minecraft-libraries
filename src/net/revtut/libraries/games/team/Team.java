@@ -204,6 +204,10 @@ public class Team implements Winner {
         return target.getName().equals(name);
     }
 
+    /**
+     * Convert Team to string
+     * @return converted string
+     */
     @Override
     public String toString() {
         return name;
