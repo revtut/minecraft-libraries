@@ -134,16 +134,22 @@ public class GameSession {
      * Tick the game session
      */
     public void tick() {
-        // Reset if negative timer
-        if(currentTimer < 0)
-            resetTimer();
-
         // Call event
-        SessionTickEvent event = new SessionTickEvent(this, --currentTimer);
+        SessionEvent event = new SessionTimerTickEvent(this, --currentTimer);
         Bukkit.getPluginManager().callEvent(event);
 
         if(event.isCancelled())
             ++currentTimer;
+
+        // Timer has expired
+        if(currentTimer == -1) {
+            // Call event
+            event = new SessionTimerExpireEvent(this);
+            Bukkit.getPluginManager().callEvent(event);
+
+            if(event.isCancelled())
+                resetTimer();
+        }
     }
 
     /**

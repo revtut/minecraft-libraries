@@ -3,28 +3,28 @@ package net.revtut.libraries.games.events.session;
 import net.revtut.libraries.games.arena.session.GameSession;
 
 /**
- * Session Tick Event
+ * Session Timer Tick Event
  */
-public class SessionTickEvent extends SessionEvent {
+public class SessionTimerTickEvent extends SessionEvent {
 
     /**
-     * Time until change state
+     * Time until timer expire
      */
     private int time;
 
     /**
-     * Constructor of SessionTickEvent
+     * Constructor of SessionTimerTickEvent
      * @param gameSession session where the event occurred
      * @param time time until game session change state
      */
-    public SessionTickEvent(GameSession gameSession, int time) {
+    public SessionTimerTickEvent(GameSession gameSession, int time) {
         super(gameSession);
         this.time = time;
     }
 
     /**
-     * Get the time until game session change state
-     * @return duration of the next state
+     * Get the time until the timer expire
+     * @return timer until the timer expire
      */
     public int getTime() { return time; }
 }

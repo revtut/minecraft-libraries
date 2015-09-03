@@ -38,7 +38,12 @@ public class GameAPI {
         this.players = new ArrayList<>();
         this.games = new ArrayList<>();
 
-        Bukkit.getPluginManager().registerEvents(new EventListener(), Libraries.getInstance());
+        // Run the tick task
+        Bukkit.getScheduler().runTaskTimer(Libraries.getInstance(), () -> {
+            for(GameController gameController : games)
+                for(Arena arena : gameController.getArenas())
+                    arena.getSession().tick();
+        }, 20L, 20L);
     }
 
     /**
@@ -110,10 +115,10 @@ public class GameAPI {
      * @param uuid uuid of the player
      * @return arena of the player
      */
-    public Arena getArena(UUID uuid) {
+    public Arena getPlayerArena(UUID uuid) {
         Arena arena = null;
         for(GameController gameController : games) {
-            arena = gameController.getArena(uuid);
+            arena = gameController.getPlayerArena(uuid);
             if(arena != null)
                 break;
         }

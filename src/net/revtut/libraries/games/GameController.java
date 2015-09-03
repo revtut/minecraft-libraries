@@ -70,7 +70,7 @@ public class GameController {
      * @param uuid uuid of the player to get the arena
      * @return arena of the player
      */
-    public Arena getArena(UUID uuid) {
+    public Arena getPlayerArena(UUID uuid) {
         for(Arena arena : arenas)
             if(arena.containsPlayer(uuid))
                 return arena;
