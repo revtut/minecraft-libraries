@@ -2,8 +2,6 @@ package net.revtut.libraries.games.arena.session;
 
 import net.revtut.libraries.games.arena.Arena;
 import net.revtut.libraries.games.events.session.*;
-import net.revtut.libraries.games.player.PlayerData;
-import net.revtut.libraries.games.player.PlayerStatistic;
 import org.bukkit.Bukkit;
 
 /**
@@ -107,10 +105,6 @@ public class GameSession {
 
             if(event.isCancelled())
                 return;
-
-            // Increment statistic
-            for(PlayerData player : getArena().getAllPlayers())
-                player.incrementStatistic(PlayerStatistic.GAMES_PLAYED);
         }
 
         // Call finish event

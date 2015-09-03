@@ -8,13 +8,11 @@ import net.revtut.libraries.games.events.player.PlayerLeaveArenaEvent;
 import net.revtut.libraries.games.events.player.PlayerSpectateArenaEvent;
 import net.revtut.libraries.games.player.PlayerData;
 import net.revtut.libraries.games.player.PlayerState;
-import net.revtut.libraries.games.player.PlayerStatistic;
 import net.revtut.libraries.utils.WorldAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -252,11 +250,6 @@ public abstract class Arena {
         player.updateState(PlayerState.NOT_ASSIGNED);
         player.setCurrentArena(null);
         player.getBukkitPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
-
-        // Statistics
-        if(!canJoin(player))
-            player.incrementStatistic(PlayerStatistic.GAMES_LOST);
-        player.incrementStatistic(PlayerStatistic.GAME_PLAY_TIME, new Date().getTime() - player.getLastLogin().getTime());
 
         return true;
     }

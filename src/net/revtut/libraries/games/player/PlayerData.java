@@ -2,6 +2,7 @@ package net.revtut.libraries.games.player;
 
 import net.revtut.libraries.games.GameAPI;
 import net.revtut.libraries.games.arena.Arena;
+import net.revtut.libraries.games.statistics.Statistic;
 import net.revtut.libraries.games.utils.Winner;
 import net.revtut.libraries.text.Language;
 import net.revtut.libraries.text.LanguageAPI;
@@ -41,7 +42,7 @@ public class PlayerData implements Winner {
     /**
      * Statistics of the player
      */
-    private Map<PlayerStatistic, Long> statistics;
+    private Map<Statistic, Long> statistics;
 
     /**
      * Constructor of PlayerData
@@ -115,7 +116,7 @@ public class PlayerData implements Winner {
      * @param statistic statistic to get
      * @return value of the statistic
      */
-    public long getStatistic(PlayerStatistic statistic) {
+    public long getStatistic(Statistic statistic) {
         if(!statistics.containsKey(statistic))
             return 0;
         return statistics.get(statistic);
@@ -141,7 +142,7 @@ public class PlayerData implements Winner {
      * Increment a statistic of the player
      * @param statistic statistic to be incremented
      */
-    public void incrementStatistic(PlayerStatistic statistic) {
+    public void incrementStatistic(Statistic statistic) {
         incrementStatistic(statistic, 1);
     }
 
@@ -150,7 +151,7 @@ public class PlayerData implements Winner {
      * @param statistic statistic to be decremented
      * @param value value to be decremented
      */
-    public void incrementStatistic(PlayerStatistic statistic, long value) {
+    public void incrementStatistic(Statistic statistic, long value) {
         statistics.put(statistic, getStatistic(statistic) + value);
     }
 
