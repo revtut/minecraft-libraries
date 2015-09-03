@@ -8,7 +8,7 @@ import net.revtut.libraries.games.arena.session.GameSession;
 public class SessionTimerExpireEvent extends SessionEvent {
 
     /**
-     * Constructor of SessionTimerTickEvent
+     * Constructor of SessionTimerExpireEvent
      * @param gameSession session where the event occurred
      */
     public SessionTimerExpireEvent(GameSession gameSession) {
