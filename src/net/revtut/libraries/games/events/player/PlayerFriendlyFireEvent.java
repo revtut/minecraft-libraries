@@ -6,9 +6,9 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Player Damage By Player Event
+ * Player Friendly Fire Event
  */
-public class PlayerDamageByPlayerEvent extends PlayerEvent {
+public class PlayerFriendlyFireEvent extends PlayerEvent {
 
     /**
      * Damager of the target
@@ -26,14 +26,14 @@ public class PlayerDamageByPlayerEvent extends PlayerEvent {
     private double damage;
 
     /**
-     * Constructor of PlayerDamageByPlayerEvent
+     * Constructor of PlayerFriendlyFireEvent
      * @param player player that was damaged in the arena
      * @param damager player that damaged the target
      * @param itemUsed item used when attacked the player
      * @param damage damage caused by the attack
      * @param arena arena where the event occurred
      */
-    public PlayerDamageByPlayerEvent(PlayerData player, PlayerData damager, ItemStack itemUsed, double damage, Arena arena) {
+    public PlayerFriendlyFireEvent(PlayerData player, PlayerData damager, ItemStack itemUsed, double damage, Arena arena) {
         super(player, arena);
         this.damager = damager;
         this.itemUsed = itemUsed;

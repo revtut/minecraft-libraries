@@ -4,15 +4,13 @@ import net.revtut.libraries.games.arena.Arena;
 import net.revtut.libraries.games.arena.session.GameState;
 import net.revtut.libraries.games.arena.types.ArenaSolo;
 import net.revtut.libraries.games.arena.types.ArenaTeam;
-import net.revtut.libraries.games.events.player.PlayerCrossArenaBorderEvent;
-import net.revtut.libraries.games.events.player.PlayerDamageByPlayerEvent;
-import net.revtut.libraries.games.events.player.PlayerDamageEvent;
-import net.revtut.libraries.games.events.player.PlayerTalkEvent;
+import net.revtut.libraries.games.events.player.*;
 import net.revtut.libraries.games.player.PlayerData;
 import net.revtut.libraries.games.player.PlayerState;
 import net.revtut.libraries.maths.AlgebraAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -119,38 +117,73 @@ public abstract class GameListener implements Listener {
      * @param event entity damage by entity event
      */
     public void onDamageByEntity(EntityDamageByEntityEvent event) {
-        if(!(event.getDamager() instanceof Player))
+        if (!(event.getEntity() instanceof Player))
             return;
 
-        if(!(event.getEntity() instanceof Player))
+        if (!(event.getDamager() instanceof Player) && !(event.getDamager() instanceof Projectile))
             return;
+
+        // Get the UUID of the damager
+        UUID damagerUUID;
+        if(event.getDamager() instanceof Player) {
+            damagerUUID = event.getDamager().getUniqueId();
+        } else {
+            Projectile projectile = (Projectile) event.getDamager();
+            if(!(projectile.getShooter() instanceof Player))
+                return;
+
+            damagerUUID = ((Player) projectile.getShooter()).getUniqueId();
+        }
 
         // Get needed data
         Arena arenaTarget = gameAPI.getPlayerArena(event.getEntity().getUniqueId());
-        if(arenaTarget == null)
+        if (arenaTarget == null)
             return;
-        Arena arenaDamager = gameAPI.getPlayerArena(event.getDamager().getUniqueId());
-        if(arenaDamager == null)
+        Arena arenaDamager = gameAPI.getPlayerArena(damagerUUID);
+        if (arenaDamager == null)
+            return;
+        PlayerData target = gameAPI.getPlayer(event.getEntity().getUniqueId());
+        if (target == null)
+            return;
+        PlayerData damager = gameAPI.getPlayer(damagerUUID);
+        if (damager == null)
             return;
 
+
         // Check if they are on the same arena
-        if(arenaTarget != arenaDamager) {
+        if (arenaTarget != arenaDamager) {
             event.setCancelled(true);
             return;
         }
 
-        PlayerData target = gameAPI.getPlayer(event.getEntity().getUniqueId());
-        if(target == null)
-            return;
-        PlayerData damager = gameAPI.getPlayer(event.getDamager().getUniqueId());
-        if(damager == null)
-            return;
+        // Check friendly fire
+        if(arenaDamager instanceof ArenaTeam) {
+            ArenaTeam arena = (ArenaTeam) arenaDamager;
+
+            if(arena.sameTeam(damager, target)) {
+                PlayerFriendlyFireEvent playerFriendlyFireEvent = new PlayerFriendlyFireEvent(target, damager, damager.getBukkitPlayer().getItemInHand(), event.getDamage(), arenaDamager);
+                Bukkit.getPluginManager().callEvent(playerFriendlyFireEvent);
+
+                if (playerFriendlyFireEvent.isCancelled()) {
+                    event.setCancelled(true);
+                    return;
+                }
+
+                event.setDamage(playerFriendlyFireEvent.getDamage());
+                return;
+            }
+        }
 
         // Call event
-        PlayerDamageByPlayerEvent playerDamageByPlayerEvent = new PlayerDamageByPlayerEvent(target, damager, arenaDamager);
+        PlayerDamageByPlayerEvent playerDamageByPlayerEvent = new PlayerDamageByPlayerEvent(target, damager, damager.getBukkitPlayer().getItemInHand(), event.getDamage(), arenaDamager);
         Bukkit.getPluginManager().callEvent(playerDamageByPlayerEvent);
 
-        event.setCancelled(playerDamageByPlayerEvent.isCancelled());
+        if (playerDamageByPlayerEvent.isCancelled()) {
+            event.setCancelled(true);
+            return;
+        }
+
+        event.setDamage(playerDamageByPlayerEvent.getDamage());
     }
 
     /**

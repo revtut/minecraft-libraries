@@ -150,6 +150,16 @@ public class ArenaTeam extends Arena {
     }
 
     /**
+     * Check if two players are on the same team
+     * @param player player one
+     * @param target player two
+     * @return true if they are on the same team, false otherwise
+     */
+    public boolean sameTeam(PlayerData player, PlayerData target) {
+        return getTeam(player).equals(getTeam(target));
+    }
+
+    /**
      * Make a player join the arena
      * @param player player to join
      */
