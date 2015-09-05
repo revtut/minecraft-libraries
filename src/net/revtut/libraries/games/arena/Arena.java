@@ -2,6 +2,7 @@ package net.revtut.libraries.games.arena;
 
 import net.revtut.libraries.games.arena.session.GameSession;
 import net.revtut.libraries.games.arena.session.GameState;
+import net.revtut.libraries.games.arena.types.ArenaType;
 import net.revtut.libraries.games.events.arena.ArenaLoadEvent;
 import net.revtut.libraries.games.events.player.PlayerJoinArenaEvent;
 import net.revtut.libraries.games.events.player.PlayerLeaveArenaEvent;
@@ -10,10 +11,13 @@ import net.revtut.libraries.games.player.PlayerData;
 import net.revtut.libraries.games.player.PlayerState;
 import net.revtut.libraries.utils.WorldAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -49,6 +53,8 @@ public abstract class Arena {
 
     /**
      * Corners of the arena
+     * corner[0] - lowest corner
+     * corner[1] - highest corner
      */
     private Location[] corners;
 
@@ -56,6 +62,11 @@ public abstract class Arena {
      * Current session of the arena
      */
     private GameSession currentSession;
+
+    /**
+     * Flags of the arena
+     */
+    private Map<ArenaFlag, Boolean> flags;
 
     /**
      * Constructor of the Arena
@@ -70,6 +81,7 @@ public abstract class Arena {
 
         this.id = currentID++;
         this.name = this.id + "_" + name;
+        this.flags = new HashMap<>();
     }
 
     /**
@@ -196,6 +208,24 @@ public abstract class Arena {
     }
 
     /**
+     * Get a flag value
+     * @param flag flag to get the value
+     * @return value of the flag
+     */
+    public boolean getFlag(ArenaFlag flag) {
+        return flags.containsKey(flag) ? flags.get(flag) : true;
+    }
+
+    /**
+     * Update / Add a flag to the arena
+     * @param flag flag to be updated / added
+     * @param value value of the flag
+     */
+    public void updateFlag(ArenaFlag flag, boolean value) {
+        flags.put(flag, value);
+    }
+
+    /**
      * Make a player join the arena
      * @param player player to join
      * @return true if has joined, false otherwise
@@ -217,6 +247,7 @@ public abstract class Arena {
         player.updateState(PlayerState.ALIVE);
         player.setCurrentArena(this);
         player.getBukkitPlayer().teleport(lobbyLocation);
+        player.getBukkitPlayer().setGameMode(Bukkit.getDefaultGameMode());
 
         // Visibility configuration
         for(PlayerData target : getAllPlayers()) {
@@ -250,6 +281,7 @@ public abstract class Arena {
         player.updateState(PlayerState.NOT_ASSIGNED);
         player.setCurrentArena(null);
         player.getBukkitPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+        player.getBukkitPlayer().setGameMode(Bukkit.getDefaultGameMode());
 
         return true;
     }
@@ -273,6 +305,7 @@ public abstract class Arena {
         player.updateState(PlayerState.SPECTATOR);
         player.setCurrentArena(this);
         player.getBukkitPlayer().teleport(spectatorLocation);
+        player.getBukkitPlayer().setGameMode(GameMode.SPECTATOR);
 
         // Hide to players ingame except spectators
         for(PlayerData target : getAllPlayers())
@@ -317,6 +350,12 @@ public abstract class Arena {
      * @return players on the arena
      */
     public abstract List<PlayerData> getAllPlayers();
+
+    /**
+     * Get the type of the arena
+     * @return type of the arena
+     */
+    public abstract ArenaType getType();
 
     /**
      * Check if the arena contains a given player by its UUID

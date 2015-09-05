@@ -1,9 +1,11 @@
 package net.revtut.libraries.games;
 
 import net.revtut.libraries.games.arena.Arena;
+import net.revtut.libraries.games.arena.ArenaFlag;
 import net.revtut.libraries.games.arena.session.GameState;
 import net.revtut.libraries.games.arena.types.ArenaSolo;
 import net.revtut.libraries.games.arena.types.ArenaTeam;
+import net.revtut.libraries.games.arena.types.ArenaType;
 import net.revtut.libraries.games.events.player.*;
 import net.revtut.libraries.games.player.PlayerData;
 import net.revtut.libraries.games.player.PlayerState;
@@ -24,7 +26,7 @@ import java.util.UUID;
 /**
  * Listener of the games api
  */
-public abstract class GameListener implements Listener {
+public class GameListener implements Listener {
 
     /**
      * Game API instance
@@ -45,6 +47,12 @@ public abstract class GameListener implements Listener {
         PlayerData player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
+
+        // Check flag
+        if(!arena.getFlag(ArenaFlag.CHAT)) {
+            event.setCancelled(true);
+            return;
+        }
 
         // Cancel the event to use our own methods
         event.setCancelled(true);
@@ -79,6 +87,12 @@ public abstract class GameListener implements Listener {
         if(target == null)
             return;
 
+        // Check flag
+        if(!arena.getFlag(ArenaFlag.DAMAGE)) {
+            event.setCancelled(true);
+            return;
+        }
+
         // Falling in void
         if(event.getCause() == EntityDamageEvent.DamageCause.VOID) {
             if(arena.getSession().getState() == GameState.LOBBY) {
@@ -92,11 +106,11 @@ public abstract class GameListener implements Listener {
                     return;
                 } else if (target.getState() == PlayerState.DEAD) {
                     event.setCancelled(true);
-                    if(arena instanceof ArenaSolo) {
+                    if(arena.getType() == ArenaType.SOLO) {
                         ArenaSolo arenaSolo = (ArenaSolo) arena;
                         target.getBukkitPlayer().teleport(arenaSolo.getDeathLocation());
                         return;
-                    } else if (arena instanceof ArenaTeam) {
+                    } else if (arena.getType() == ArenaType.TEAM) {
                         ArenaTeam arenaTeam = (ArenaTeam) arena;
                         target.getBukkitPlayer().teleport(arenaTeam.getDeathLocation(arenaTeam.getTeam(target)));
                         return;
@@ -149,6 +163,12 @@ public abstract class GameListener implements Listener {
         if (damager == null)
             return;
 
+        // Check flag
+        if(!arenaTarget.getFlag(ArenaFlag.DAMAGE)) {
+            event.setCancelled(true);
+            return;
+        }
+
 
         // Check if they are on the same arena
         if (arenaTarget != arenaDamager) {
@@ -157,7 +177,7 @@ public abstract class GameListener implements Listener {
         }
 
         // Check friendly fire
-        if(arenaDamager instanceof ArenaTeam) {
+        if(arenaDamager.getType() == ArenaType.TEAM) {
             ArenaTeam arena = (ArenaTeam) arenaDamager;
 
             if(arena.sameTeam(damager, target)) {
@@ -219,8 +239,14 @@ public abstract class GameListener implements Listener {
         if(arena == null)
             return;
         PlayerData player = gameAPI.getPlayer(uuid);
-        if(player == null)
+        if (player == null)
             return;
+
+        // Check flag
+        if(!arena.getFlag(ArenaFlag.MOVE)) {
+            event.setTo(event.getFrom());
+            return;
+        }
 
         // Crossing borders
         if(!AlgebraAPI.isInAABB(event.getTo(), arena.getCorners()[0], arena.getCorners()[1])) {

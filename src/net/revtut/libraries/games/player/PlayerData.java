@@ -1,6 +1,7 @@
 package net.revtut.libraries.games.player;
 
 import net.revtut.libraries.games.GameAPI;
+import net.revtut.libraries.games.achievement.Achievement;
 import net.revtut.libraries.games.arena.Arena;
 import net.revtut.libraries.games.statistics.Statistic;
 import net.revtut.libraries.games.utils.Winner;
@@ -9,10 +10,7 @@ import net.revtut.libraries.text.LanguageAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * PlayerData Object
@@ -45,14 +43,21 @@ public class PlayerData implements Winner {
     private Map<Statistic, Long> statistics;
 
     /**
+     * Achievements of the the player
+     */
+    private List<Achievement> achievements;
+
+    /**
      * Constructor of PlayerData
      * @param uuid uuid of the owner player
      */
     public PlayerData(UUID uuid) {
         this.uuid = uuid;
         this.lastLogin = new Date();
-        this.state = PlayerState.ALIVE;
+        this.currentArena = null;
+        this.state = PlayerState.NOT_ASSIGNED;
         this.statistics = new HashMap<>();
+        this.achievements = new ArrayList<>();
 
         GameAPI.getInstance().addPlayer(this);
     }
@@ -123,6 +128,14 @@ public class PlayerData implements Winner {
     }
 
     /**
+     * Get all the achievements of the player
+     * @return achievements of the player
+     */
+    public List<Achievement> getAchievements() {
+        return achievements;
+    }
+
+    /**
      * Set the current arena of the player
      * @param arena current arena of the player
      */
@@ -136,6 +149,23 @@ public class PlayerData implements Winner {
      */
     public void updateState(PlayerState state) {
         this.state = state;
+    }
+
+    /**
+     * Add a statistic to the player
+     * @param statistic statistic to add
+     * @param value value of the statistic
+     */
+    public void addStatistic(Statistic statistic, long value) {
+        statistics.put(statistic, value);
+    }
+
+    /**
+     * Add a achievement to the player
+     * @param achievement achievement to be added
+     */
+    public void addAchievement(Achievement achievement) {
+        achievements.add(achievement);
     }
 
     /**

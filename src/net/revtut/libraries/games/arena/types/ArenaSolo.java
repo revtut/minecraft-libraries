@@ -60,6 +60,14 @@ public class ArenaSolo extends Arena {
     }
 
     /**
+     * Get the type of the arena
+     * @return type of the arena
+     */
+    public ArenaType getType() {
+        return ArenaType.SOLO;
+    }
+
+    /**
      * Get the spawn locations
      * @return spawn locations
      */

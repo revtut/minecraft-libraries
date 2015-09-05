@@ -42,7 +42,8 @@ public class GameAPI {
         Bukkit.getScheduler().runTaskTimer(Libraries.getInstance(), () -> {
             for(GameController gameController : games)
                 for(Arena arena : gameController.getArenas())
-                    arena.getSession().tick();
+                    if(arena.getSession() != null)
+                        arena.getSession().tick();
         }, 20L, 20L);
     }
 
@@ -144,39 +145,21 @@ public class GameAPI {
 
     /**
      * Building the arena
-    public void build() {
-        // First time calling this method
-        if(getSession().getState() != GameState.BUILD) {
-            Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Started building!");
+     public void build() {
+     // First time calling this method
+     if(getSession().getState() != GameState.BUILD) {
+     Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Started building!");
 
-            // Remove previous world
-            if(getWorld() != null) {
-                String worldName = getWorld().getName();
+     // Remove previous world
+     if(getWorld() != null) {
+     String worldName = getWorld().getName();
 
-                WorldAPI.unloadWorld(worldName);
+     WorldAPI.unloadWorld(worldName);
 
-                File worldFolder = new File(System.getProperty("user.dir") + File.separator + worldName);
-                WorldAPI.removeDirectory(worldFolder);
-            }
-
-            // Copy world folder
-            String[] listWorlds = getWorldsFolder().list();
-            if (listWorlds == null)
-                throw new IllegalStateException("List of worlds is null.");
-
-            int posWorld = (int) (Math.random() * listWorlds.length);
-            final String sourcePath = new File(getWorldsFolder() + File.separator + listWorlds[posWorld]).getAbsolutePath();
-            final String mapName = getName() + "_" + listWorlds[posWorld];
-            final String targetPath = new File(System.getProperty("user.dir") + File.separator + mapName).getAbsolutePath();
-
-            WorldAPI.copyDirectory(new File(sourcePath), new File(targetPath));
-
-            // Load World
-            World world = WorldAPI.loadWorldAsync(mapName);
-            if(world == null)
-                throw new IllegalStateException("Loaded world is null.");
-            world.setAutoSave(false);
-        }
-    }
+     File worldFolder = new File(System.getProperty("user.dir") + File.separator + worldName);
+     WorldAPI.removeDirectory(worldFolder);
+     }
+     }
+     }
      */
 }

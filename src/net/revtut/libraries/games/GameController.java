@@ -4,6 +4,8 @@ import net.revtut.libraries.games.arena.Arena;
 import net.revtut.libraries.games.arena.types.ArenaSolo;
 import net.revtut.libraries.games.arena.types.ArenaTeam;
 import net.revtut.libraries.games.arena.types.ArenaType;
+import net.revtut.libraries.utils.WorldAPI;
+import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -92,7 +94,7 @@ public class GameController {
      * @return created arena
      */
     public Arena createArena(ArenaType type) {
-        Arena arena = null;
+        Arena arena;
         switch (type) {
             case SOLO:
                 arena = new ArenaSolo(plugin.getName());
@@ -100,6 +102,8 @@ public class GameController {
             case TEAM:
                 arena = new ArenaTeam(plugin.getName());
                 break;
+            default:
+                return null;
         }
 
         arenas.add(arena);
@@ -113,5 +117,31 @@ public class GameController {
     public void removeArena(Arena arena) {
         arena.close();
         arenas.remove(arena);
+    }
+
+    /**
+     * Load a random world
+     * @param prefix prefix of the world name
+     * @return loaded world
+     */
+    public World loadRandomWorld(String prefix) {
+        // Copy world folder
+        String[] listWorlds = getWorldsFolder().list();
+        if (listWorlds == null)
+            throw new IllegalStateException("List of worlds is null.");
+
+        int posWorld = (int) (Math.random() * listWorlds.length);
+        final String sourcePath = new File(getWorldsFolder() + File.separator + listWorlds[posWorld]).getAbsolutePath();
+        final String mapName = prefix + "_" + listWorlds[posWorld];
+        final String targetPath = new File(System.getProperty("user.dir") + File.separator + mapName).getAbsolutePath();
+
+        WorldAPI.copyDirectory(new File(sourcePath), new File(targetPath));
+
+        // Load World
+        World world = WorldAPI.loadWorldAsync(mapName);
+        if(world == null)
+            throw new IllegalStateException("Loaded world is null.");
+        world.setAutoSave(false);
+        return world;
     }
 }
