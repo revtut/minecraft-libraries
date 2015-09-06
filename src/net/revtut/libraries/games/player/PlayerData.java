@@ -1,8 +1,9 @@
 package net.revtut.libraries.games.player;
 
 import net.revtut.libraries.games.GameAPI;
-import net.revtut.libraries.games.achievement.Achievement;
+import net.revtut.libraries.games.achievements.Achievement;
 import net.revtut.libraries.games.arena.Arena;
+import net.revtut.libraries.games.classes.GameClass;
 import net.revtut.libraries.games.statistics.Statistic;
 import net.revtut.libraries.games.utils.Winner;
 import net.revtut.libraries.text.Language;
@@ -38,6 +39,11 @@ public class PlayerData implements Winner {
     private PlayerState state;
 
     /**
+     * Game class of the player
+     */
+    private GameClass gameClass;
+
+    /**
      * Statistics of the player
      */
     private Map<Statistic, Long> statistics;
@@ -56,6 +62,7 @@ public class PlayerData implements Winner {
         this.lastLogin = new Date();
         this.currentArena = null;
         this.state = PlayerState.NOT_ASSIGNED;
+        this.gameClass = null;
         this.statistics = new HashMap<>();
         this.achievements = new ArrayList<>();
 
@@ -117,6 +124,14 @@ public class PlayerData implements Winner {
     }
 
     /**
+     * Get the game class of the player
+     * @return game class of the player
+     */
+    public GameClass getGameClass() {
+        return gameClass;
+    }
+
+    /**
      * Get a statistic from player
      * @param statistic statistic to get
      * @return value of the statistic
@@ -152,6 +167,14 @@ public class PlayerData implements Winner {
     }
 
     /**
+     * Set the game class of the player
+     * @param gameClass game class of the player
+     */
+    public void setGameClass(GameClass gameClass) {
+        this.gameClass = gameClass;
+    }
+
+    /**
      * Add a statistic to the player
      * @param statistic statistic to add
      * @param value value of the statistic
@@ -161,8 +184,8 @@ public class PlayerData implements Winner {
     }
 
     /**
-     * Add a achievement to the player
-     * @param achievement achievement to be added
+     * Add a achievements to the player
+     * @param achievement achievements to be added
      */
     public void addAchievement(Achievement achievement) {
         achievements.add(achievement);

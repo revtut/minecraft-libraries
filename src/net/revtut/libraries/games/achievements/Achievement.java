@@ -1,4 +1,4 @@
-package net.revtut.libraries.games.achievement;
+package net.revtut.libraries.games.achievements;
 
 import net.revtut.libraries.games.player.PlayerData;
 
