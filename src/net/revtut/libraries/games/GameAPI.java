@@ -142,24 +142,4 @@ public class GameAPI {
     public void removePlayer(PlayerData player) {
         players.remove(player);
     }
-
-    /**
-     * Building the arena
-     public void build() {
-     // First time calling this method
-     if(getSession().getState() != GameState.BUILD) {
-     Libraries.getInstance().getLogger().log(Level.INFO, "[" + getName() + "] Started building!");
-
-     // Remove previous world
-     if(getWorld() != null) {
-     String worldName = getWorld().getName();
-
-     WorldAPI.unloadWorld(worldName);
-
-     File worldFolder = new File(System.getProperty("user.dir") + File.separator + worldName);
-     WorldAPI.removeDirectory(worldFolder);
-     }
-     }
-     }
-     */
 }

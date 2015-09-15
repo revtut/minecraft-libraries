@@ -120,10 +120,15 @@ public class GameListener implements Listener {
         }
 
         // Call event
-        PlayerDamageEvent playerDamageEvent = new PlayerDamageEvent(target, arena);
+        PlayerDamageEvent playerDamageEvent = new PlayerDamageEvent(target, arena, event.getDamage());
         Bukkit.getPluginManager().callEvent(playerDamageEvent);
 
-        event.setCancelled(playerDamageEvent.isCancelled());
+        if (playerDamageEvent.isCancelled()) {
+            event.setCancelled(true);
+            return;
+        }
+
+        event.setDamage(playerDamageEvent.getDamage());
     }
 
     /**
