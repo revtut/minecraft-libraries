@@ -9,6 +9,7 @@ import net.revtut.libraries.games.events.player.PlayerLeaveArenaEvent;
 import net.revtut.libraries.games.events.player.PlayerSpectateArenaEvent;
 import net.revtut.libraries.games.player.PlayerData;
 import net.revtut.libraries.games.player.PlayerState;
+import net.revtut.libraries.utils.FilesAPI;
 import net.revtut.libraries.utils.WorldAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -131,7 +132,7 @@ public abstract class Arena {
             return;
 
         WorldAPI.unloadWorld(arenaWorld.getName());
-        WorldAPI.removeDirectory(arenaWorld.getWorldFolder());
+        FilesAPI.removeDirectory(arenaWorld.getWorldFolder());
     }
 
     /**

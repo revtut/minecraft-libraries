@@ -4,6 +4,7 @@ import net.revtut.libraries.games.arena.Arena;
 import net.revtut.libraries.games.arena.types.ArenaSolo;
 import net.revtut.libraries.games.arena.types.ArenaTeam;
 import net.revtut.libraries.games.arena.types.ArenaType;
+import net.revtut.libraries.utils.FilesAPI;
 import net.revtut.libraries.utils.WorldAPI;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
@@ -135,7 +136,7 @@ public class GameController {
         final String mapName = prefix + "_" + listWorlds[posWorld];
         final String targetPath = new File(System.getProperty("user.dir") + File.separator + mapName).getAbsolutePath();
 
-        WorldAPI.copyDirectory(new File(sourcePath), new File(targetPath));
+        FilesAPI.copyDirectory(new File(sourcePath), new File(targetPath));
 
         // Load World
         World world = WorldAPI.loadWorldAsync(mapName);

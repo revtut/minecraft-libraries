@@ -1,16 +1,7 @@
 package net.revtut.libraries.games.guns;
 
-import net.revtut.libraries.Libraries;
-import net.revtut.libraries.games.events.gun.GunFireEvent;
-import net.revtut.libraries.games.events.gun.GunHitEvent;
-import net.revtut.libraries.games.events.gun.GunReloadEvent;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.entity.Damageable;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
-import org.bukkit.util.Vector;
 
 import java.util.*;
 
@@ -151,8 +142,8 @@ public class GunManager {
 
     /**
      * Check if a projectile is a bullet
-     * @param projectile
-     * @return
+     * @param projectile projectile to check
+     * @return true if contains, false otherwise
      */
     public boolean isBullet(Projectile projectile) {
         return projectiles.containsKey(projectile);

@@ -21,12 +21,9 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * World Library.
@@ -596,73 +593,5 @@ public final class WorldAPI {
             e.printStackTrace();
             return false;
         }
-    }
-
-    /**
-     * Copy existing directory to new location.
-     *
-     * @param srcDir source of the folder to copy
-     * @param trgDir target of the folder
-     * @return true if successfull
-     */
-    public static boolean copyDirectory(final File srcDir, final File trgDir) {
-        try {
-            if (srcDir.isDirectory()) {
-                // Check if target folder exists
-                if (!trgDir.exists())
-                    if(!trgDir.mkdirs())
-                        return false;
-                // List of files inside source directory
-                String[] fList = srcDir.list();
-                for (String aFList : fList) {
-                    File dest = new File(trgDir, aFList);
-                    File source = new File(srcDir, aFList);
-
-                    // Copy that file / directory
-                    copyDirectory(source, dest);
-                }
-            } else {
-                // Copy the file
-                // Open a file for read and write (copy)
-                FileInputStream fInStream = new FileInputStream(srcDir);
-                FileOutputStream fOutStream = new FileOutputStream(trgDir);
-                // Read 2K at a time from the file
-                byte[] buffer = new byte[2048];
-                int iBytesReads;
-                // In each successful read, write back to the source
-                while ((iBytesReads = fInStream.read(buffer)) >= 0) {
-                    fOutStream.write(buffer, 0, iBytesReads);
-                }
-                // Safe exit
-                fInStream.close();
-                fOutStream.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Delete directory. Sub-files and sub-directories will be deleted to.
-     *
-     * @param dir folder to remove
-     * @return true it successfull when removing directory
-     */
-    public static boolean removeDirectory(final File dir) {
-        try {
-            if (dir.isDirectory()) {
-                if (dir.listFiles() != null)
-                    for (File c : dir.listFiles())
-                        removeDirectory(c);
-            }
-            if(!dir.delete())
-                Logger.getLogger("Minecraft").log(Level.WARNING, "Error while trying to delete " + dir.getName() + ".");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
     }
 }
