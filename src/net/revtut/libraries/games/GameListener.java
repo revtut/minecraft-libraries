@@ -17,12 +17,13 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
@@ -36,6 +37,98 @@ public class GameListener implements Listener {
      * Game API instance
      */
     private GameAPI gameAPI = GameAPI.getInstance();
+
+    /**
+     * Controls the block break event
+     * @param event block break event
+     */
+    @EventHandler
+    public void onBlockBreak(BlockBreakEvent event) {
+        UUID uuid = event.getPlayer().getUniqueId();
+
+        // Get needed data
+        Arena arena = gameAPI.getPlayerArena(uuid);
+        if(arena == null)
+            return;
+        PlayerData player = gameAPI.getPlayer(uuid);
+        if(player == null)
+            return;
+
+        // Check flag
+        if(!arena.getFlag(ArenaFlag.BLOCK_BREAK)) {
+            event.setCancelled(true);
+            return;
+        }
+    }
+
+    /**
+     * Controls the block place event
+     * @param event block place event
+     */
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent event) {
+        UUID uuid = event.getPlayer().getUniqueId();
+
+        // Get needed data
+        Arena arena = gameAPI.getPlayerArena(uuid);
+        if(arena == null)
+            return;
+        PlayerData player = gameAPI.getPlayer(uuid);
+        if(player == null)
+            return;
+
+        // Check flag
+        if(!arena.getFlag(ArenaFlag.BLOCK_PLACE)) {
+            event.setCancelled(true);
+            return;
+        }
+    }
+
+    /**
+     * Controls the player bucket empty event
+     * @param event player bucket empty event
+     */
+    @EventHandler
+    public void onBucketEmpty(PlayerBucketEmptyEvent event) {
+        UUID uuid = event.getPlayer().getUniqueId();
+
+        // Get needed data
+        Arena arena = gameAPI.getPlayerArena(uuid);
+        if(arena == null)
+            return;
+        PlayerData player = gameAPI.getPlayer(uuid);
+        if(player == null)
+            return;
+
+        // Check flag
+        if(!arena.getFlag(ArenaFlag.BUCKET_EMPTY)) {
+            event.setCancelled(true);
+            return;
+        }
+    }
+
+    /**
+     * Controls the player bucket fill event
+     * @param event player bucket fill event
+     */
+    @EventHandler
+    public void onBucketFill(PlayerBucketFillEvent event) {
+        UUID uuid = event.getPlayer().getUniqueId();
+
+        // Get needed data
+        Arena arena = gameAPI.getPlayerArena(uuid);
+        if(arena == null)
+            return;
+        PlayerData player = gameAPI.getPlayer(uuid);
+        if(player == null)
+            return;
+
+        // Check flag
+        if(!arena.getFlag(ArenaFlag.BUCKET_FILL)) {
+            event.setCancelled(true);
+            return;
+        }
+    }
 
     /**
      * Controls the player chat event
@@ -219,6 +312,52 @@ public class GameListener implements Listener {
     }
 
     /**
+     * Controls the player drop item event
+     * @param event player drop item event
+     */
+    @EventHandler
+    public void onDropItem(PlayerDropItemEvent event) {
+        UUID uuid = event.getPlayer().getUniqueId();
+
+        // Get needed data
+        Arena arena = gameAPI.getPlayerArena(uuid);
+        if(arena == null)
+            return;
+        PlayerData player = gameAPI.getPlayer(uuid);
+        if(player == null)
+            return;
+
+        // Check flag
+        if(!arena.getFlag(ArenaFlag.DROP_ITEM)) {
+            event.setCancelled(true);
+            return;
+        }
+    }
+
+    /**
+     * Controls the food level change event
+     * @param event food level change event
+     */
+    @EventHandler
+    public void onFoodLevelChange(FoodLevelChangeEvent event) {
+        UUID uuid = event.getEntity().getUniqueId();
+
+        // Get needed data
+        Arena arena = gameAPI.getPlayerArena(uuid);
+        if(arena == null)
+            return;
+        PlayerData player = gameAPI.getPlayer(uuid);
+        if(player == null)
+            return;
+
+        // Check flag
+        if(!arena.getFlag(ArenaFlag.HUNGER)) {
+            event.setCancelled(true);
+            return;
+        }
+    }
+
+    /**
      * Controls the player interact event
      * @param event player interact event
      */
@@ -235,6 +374,12 @@ public class GameListener implements Listener {
         if(player == null)
             return;
 
+        // Check flag
+        if(!arena.getFlag(ArenaFlag.INTERACT)) {
+            event.setCancelled(true);
+            return;
+        }
+
         if(bukkitPlayer.getItemInHand() == null)
             return;
 
@@ -248,6 +393,29 @@ public class GameListener implements Listener {
             gun.shoot(bukkitPlayer);
         else if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
             gun.reload(bukkitPlayer);
+    }
+
+    /**
+     * Controls the inventory click event
+     * @param event inventory click event
+     */
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        UUID uuid = event.getWhoClicked().getUniqueId();
+
+        // Get needed data
+        Arena arena = gameAPI.getPlayerArena(uuid);
+        if(arena == null)
+            return;
+        PlayerData player = gameAPI.getPlayer(uuid);
+        if(player == null)
+            return;
+
+        // Check flag
+        if(!arena.getFlag(ArenaFlag.INVENTORY_CLICK)) {
+            event.setCancelled(true);
+            return;
+        }
     }
 
     /**
@@ -282,6 +450,29 @@ public class GameListener implements Listener {
                 event.setTo(event.getFrom());
                 return;
             }
+        }
+    }
+
+    /**
+     * Controls the player pickup item event
+     * @param event player pickup item event
+     */
+    @EventHandler
+    public void onPickupItem(PlayerPickupItemEvent event) {
+        UUID uuid = event.getPlayer().getUniqueId();
+
+        // Get needed data
+        Arena arena = gameAPI.getPlayerArena(uuid);
+        if(arena == null)
+            return;
+        PlayerData player = gameAPI.getPlayer(uuid);
+        if(player == null)
+            return;
+
+        // Check flag
+        if(!arena.getFlag(ArenaFlag.PICKUP_ITEM)) {
+            event.setCancelled(true);
+            return;
         }
     }
 
