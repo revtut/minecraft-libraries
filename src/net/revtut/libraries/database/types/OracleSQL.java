@@ -15,7 +15,7 @@ public class OracleSQL extends Database {
      * @param username username of the OracleSQL
      * @param password password of the OracleSQL
      */
-    public OracleSQL(String hostname, String port, String database, String username, String password) {
+    public OracleSQL(String hostname, int port, String database, String username, String password) {
         super("oracle.jdbc.driver.OracleDriver", "jdbc:oracle:thin:@" + hostname + ":" + port + ":" + database, username, password);
     }
 }

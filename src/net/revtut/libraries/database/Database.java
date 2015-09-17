@@ -1,5 +1,10 @@
 package net.revtut.libraries.database;
 
+import net.revtut.libraries.database.types.DatabaseType;
+import net.revtut.libraries.database.types.MySQL;
+import net.revtut.libraries.database.types.OracleSQL;
+import net.revtut.libraries.database.types.PostgreSQL;
+
 import java.sql.*;
 import java.util.List;
 
@@ -45,6 +50,24 @@ public abstract class Database {
         this.url = url;
         this.username = username;
         this.password = password;
+    }
+
+    /**
+     * Create a database
+     * @param type type of the database
+     * @return created database
+     */
+    public static Database createDatabase(DatabaseType type, String hostname, int port, String database, String username, String password) {
+        switch (type) {
+            case MYSQL:
+                return new MySQL(hostname, port, database, username, password);
+            case ORACLE:
+                return new OracleSQL(hostname, port, database, username, password);
+            case POSTGRE:
+                return new PostgreSQL(hostname, port, database, username, password);
+            default:
+                return null;
+        }
     }
 
     /**
