@@ -1,6 +1,5 @@
 package net.revtut.libraries.appearance;
 
-import net.revtut.permissions.api.PermissionsAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -60,51 +59,51 @@ public final class NameTagAPI implements Listener {
     /**
      * Change the nametag of a player.
      *
+     * @param tagId id of the name tag
+     * @param prefix prefix to add
+     * @param suffix suffix to add
      * @param board scoreBoard of the Teams
-     * @param p   player to show the NameTag
+     * @param player   player to show the NameTag
      * @param perPlayerScoreBoard if multiple ScoreBoards
      */
-    public static void setNameTag(Scoreboard board, Player p, boolean perPlayerScoreBoard) {
+    public static void setNameTag(String tagId, String prefix, String suffix, Scoreboard board, Player player, boolean perPlayerScoreBoard) {
         if(!perPlayerScoreBoard) {
-            setNameTag(board, p); // Only one ScoreBoard is in use
+            setNameTag(tagId, prefix, suffix, board, player); // Only one ScoreBoard is in use
             return;
         }
 
-        Scoreboard alvoBoard;
-        for (Player alvo : Bukkit.getOnlinePlayers()) {
-            alvoBoard = alvo.getScoreboard();
-            if (alvoBoard != null)
-                setNameTag(alvoBoard, p); // Adicionar "Player" a ScoreBoard do Alvo
-            setNameTag(board, alvo); // Adicionar "Alvo" a ScoreBoard do Player
+        Scoreboard targetBoard;
+        for (Player target : Bukkit.getOnlinePlayers()) {
+            targetBoard = target.getScoreboard();
+            if (targetBoard != null)
+                setNameTag(tagId, prefix, suffix, targetBoard, player); // Add "Player" to target Board
+            setNameTag(tagId, prefix, suffix, board, target); // Add "Target" to player board
         }
     }
 
     /**
-     * Change the nametag of a player.
+     * Change the name tag of a player.
      *
-     * @param board  scoreBoard of the Teams
-     * @param p player to set the name tag
+     * @param tagId id of the name tag
+     * @param prefix prefix to add
+     * @param suffix suffix to add
+     * @param board scoreBoard of the Teams
+     * @param player player to set the name tag
      */
-    private static void setNameTag(Scoreboard board, Player p) {
-        String id = PermissionsAPI.getGroupName(p);
-        String prefix = PermissionsAPI.getGroupTag(p);
-        if(prefix.length() > 0)
-            prefix += " ";
-        String sufix = "";
-
-        Team team = board.getTeam(id);
+    private static void setNameTag(String tagId, String prefix, String suffix, Scoreboard board, Player player) {
+        Team team = board.getTeam(tagId);
         if (team == null) {
-            team = board.registerNewTeam(id);
+            team = board.registerNewTeam(tagId);
             team.setPrefix(prefix);
-            team.setSuffix(sufix);
+            team.setSuffix(suffix);
             team.setAllowFriendlyFire(true);
             team.setCanSeeFriendlyInvisibles(false);
         }
-        team.addPlayer(p);
+        team.addEntry(player.getName());
 
         // Display name
-        String name = prefix + p.getName();
-        if (!p.getDisplayName().equals(name))
-            p.setDisplayName(name);
+        String name = prefix + player.getName() + suffix;
+        if (!player.getDisplayName().equals(name))
+            player.setDisplayName(name);
     }
 }
