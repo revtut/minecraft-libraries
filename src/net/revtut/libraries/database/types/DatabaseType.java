@@ -24,7 +24,7 @@ public enum DatabaseType {
      * @param name name of the type
      * @return database type
      */
-    public DatabaseType getByName(String name) {
+    public static DatabaseType getByName(String name) {
         for(DatabaseType type : values())
             if(type.toString().equalsIgnoreCase(name))
                 return type;
