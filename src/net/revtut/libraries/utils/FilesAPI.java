@@ -28,7 +28,22 @@ public final class FilesAPI {
      */
     public static boolean copyFile(final File inFile, final File outFile) {
         try {
-            InputStream inputStream = new FileInputStream(inFile);
+            return copyFile(new FileInputStream(inFile), outFile);
+        } catch (final Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * Copy from a file to another one
+     *
+     * @param inputStream file input stream
+     * @param outFile file to copy to
+     * @return true if successfull
+     */
+    public static boolean copyFile(final InputStream inputStream, final File outFile) {
+        try {
             OutputStream outputStream = new FileOutputStream(outFile);
             final byte[] buf = new byte[1024];
             int len;
