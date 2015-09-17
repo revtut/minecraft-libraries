@@ -159,19 +159,19 @@ public class PlayerData implements Winner {
     }
 
     /**
-     * Update the state of the player
-     * @param state new state of the player
-     */
-    public void updateState(PlayerState state) {
-        this.state = state;
-    }
-
-    /**
      * Set the game class of the player
      * @param gameClass game class of the player
      */
     public void setGameClass(GameClass gameClass) {
         this.gameClass = gameClass;
+    }
+
+    /**
+     * Update the state of the player
+     * @param state new state of the player
+     */
+    public void updateState(PlayerState state) {
+        this.state = state;
     }
 
     /**

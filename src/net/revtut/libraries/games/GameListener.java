@@ -7,6 +7,7 @@ import net.revtut.libraries.games.arena.types.ArenaSolo;
 import net.revtut.libraries.games.arena.types.ArenaTeam;
 import net.revtut.libraries.games.arena.types.ArenaType;
 import net.revtut.libraries.games.events.player.*;
+import net.revtut.libraries.games.guns.Gun;
 import net.revtut.libraries.games.player.PlayerData;
 import net.revtut.libraries.games.player.PlayerState;
 import net.revtut.libraries.maths.AlgebraAPI;
@@ -15,11 +16,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
@@ -37,6 +41,7 @@ public class GameListener implements Listener {
      * Controls the player chat event
      * @param event async player chat event
      */
+    @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         UUID uuid = event.getPlayer().getUniqueId();
 
@@ -72,6 +77,7 @@ public class GameListener implements Listener {
      * Controls the entity damage event
      * @param event entity damage event
      */
+    @EventHandler
     public void onDamage(EntityDamageEvent event) {
         if(!(event.getEntity() instanceof Player))
             return;
@@ -135,6 +141,7 @@ public class GameListener implements Listener {
      * Controls the entity damage by entity event
      * @param event entity damage by entity event
      */
+    @EventHandler
     public void onDamageByEntity(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof Player))
             return;
@@ -212,11 +219,13 @@ public class GameListener implements Listener {
     }
 
     /**
-     * Controls the player quit event
-     * @param event player quit event
+     * Controls the player interact event
+     * @param event player interact event
      */
-    public void onQuit(PlayerQuitEvent event) {
-        UUID uuid = event.getPlayer().getUniqueId();
+    @EventHandler
+    public void onInteract(PlayerInteractEvent event) {
+        Player bukkitPlayer = event.getPlayer();
+        UUID uuid = bukkitPlayer.getUniqueId();
 
         // Get needed data
         Arena arena = gameAPI.getPlayerArena(uuid);
@@ -226,9 +235,19 @@ public class GameListener implements Listener {
         if(player == null)
             return;
 
-        // Leave the arena
-        arena.leave(player);
-        GameAPI.getInstance().removePlayer(player);
+        if(bukkitPlayer.getItemInHand() == null)
+            return;
+
+        // Check guns
+        ItemStack itemInHand = bukkitPlayer.getItemInHand();
+        if(!(itemInHand instanceof Gun))
+            return;
+
+        Gun gun = (Gun) itemInHand;
+        if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
+            gun.shoot(bukkitPlayer);
+        else if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+            gun.reload(bukkitPlayer);
     }
 
     /**
@@ -264,5 +283,26 @@ public class GameListener implements Listener {
                 return;
             }
         }
+    }
+
+    /**
+     * Controls the player quit event
+     * @param event player quit event
+     */
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        UUID uuid = event.getPlayer().getUniqueId();
+
+        // Get needed data
+        Arena arena = gameAPI.getPlayerArena(uuid);
+        if(arena == null)
+            return;
+        PlayerData player = gameAPI.getPlayer(uuid);
+        if(player == null)
+            return;
+
+        // Leave the arena
+        arena.leave(player);
+        GameAPI.getInstance().removePlayer(player);
     }
 }

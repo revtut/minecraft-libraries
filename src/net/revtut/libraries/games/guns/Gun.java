@@ -174,6 +174,101 @@ public abstract class Gun extends ItemStack {
     }
 
     /**
+     * Shoot the gun
+     * @param shooter player to shoot from
+     */
+    public void shoot(Player shooter) {
+        GunManager gunManager = GunManager.getInstance();
+
+        // Check if player can shoot
+        long lastShot = gunManager.getLastShot(shooter);
+        if(lastShot != -1) {
+            long currentTime = System.nanoTime();
+            long delayPerShot = getFireRate() / 60000000000l; // Delay between each shot in nanoseconds
+
+            if(currentTime - lastShot < delayPerShot)
+                return;
+        }
+        int currentSizeMagazine = gunManager.getCurrentMagSize(shooter);
+        if(currentSizeMagazine != -1) {
+            if(currentSizeMagazine <= 0)
+                return;
+        } else
+            currentSizeMagazine = getMagazineSize();
+
+        // Call event
+        GunFireEvent event = new GunFireEvent(shooter, this);
+        Bukkit.getPluginManager().callEvent(event);
+
+        if(event.isCancelled())
+            return;
+
+        // Shoot the gun
+        for(int i = 0; i < getBulletsPerShot(); i++) {
+            Vector direction = shooter.getEyeLocation().getDirection();
+            direction.add(new Vector(Math.random() * getAccuracy() - getAccuracy(), Math.random() * getAccuracy() - getAccuracy(), Math.random() * getAccuracy() - getAccuracy()));
+
+            Projectile projectile = shooter.launchProjectile(getBullet().getProjectile(), direction.multiply(getMuzzleVelocity()));
+            projectile.setCustomName(getBullet().getName());
+            projectile.setCustomNameVisible(false);
+            GunManager.getInstance().addProjectile(projectile, shooter);
+        }
+
+        // Apply recoil
+        Location location = shooter.getLocation();
+        location.setPitch(location.getPitch() * getRecoil());
+        shooter.teleport(location);
+
+        // Add to maps
+        gunManager.setCurrentMagSize(shooter, --currentSizeMagazine);
+        gunManager.setLastShot(shooter, System.nanoTime());
+    }
+
+    /**
+     * On hit by a bullet
+     * @param shooter player that shot the gun
+     * @param entity entity that was hit
+     * @param projectile projectile that hit
+     */
+    public void onHit(Player shooter, Entity entity, Projectile projectile) {
+        GunManager.getInstance().removeProjectile(projectile);
+
+        // Call event
+        GunHitEvent event = new GunHitEvent(shooter, entity, this);
+        Bukkit.getPluginManager().callEvent(event);
+
+        if(event.isCancelled())
+            return;
+
+        // Knockback
+        entity.setVelocity(entity.getLocation().getDirection().multiply(-1 * getBullet().getKnockback()));
+
+        // Apply damage
+        if(!(entity instanceof Damageable))
+            return;
+        Damageable entityDamageable = (Damageable) entity;
+        entityDamageable.damage(Math.random() * (getBullet().getMaxDamage() - getBullet().getMinDamage()) + getBullet().getMinDamage());
+    }
+
+    /**
+     * Reload the gun
+     * @param player player that is reloading the gun
+     */
+    public void reload(Player player) {
+        // Call event
+        GunReloadEvent event = new GunReloadEvent(player, this);
+        Bukkit.getPluginManager().callEvent(event);
+
+        if(event.isCancelled())
+            return;
+
+        GunManager.getInstance().setCurrentMagSize(player, 0); // Prevent shoot when gun is reloading
+        Bukkit.getScheduler().runTaskLater(Libraries.getInstance(), () -> {
+            GunManager.getInstance().setCurrentMagSize(player, getMagazineSize());
+        }, getReloadTime());
+    }
+
+    /**
      * Convert a gun to string
      * @return converted string
      */

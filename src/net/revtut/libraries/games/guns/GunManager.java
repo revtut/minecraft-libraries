@@ -77,6 +77,46 @@ public class GunManager {
     }
 
     /**
+     * Get the time of the last shot of a player
+     * @param player player to get the last shot
+     * @return last shot of the player
+     */
+    public long getLastShot(Player player) {
+        if(!lastShot.containsKey(player.getUniqueId()))
+            return -1;
+        return lastShot.get(player.getUniqueId());
+    }
+
+    /**
+     * Get the current magazine size of the gun
+     * @param player player to get
+     * @return current magazine size
+     */
+    public int getCurrentMagSize(Player player) {
+        if(!currentMagSize.containsKey(player.getUniqueId()))
+            return -1;
+        return currentMagSize.get(player.getUniqueId());
+    }
+
+    /**
+     * Set the time of the last shot of the player
+     * @param player player to be set
+     * @param time time of the shot
+     */
+    public void setLastShot(Player player, long time) {
+        lastShot.put(player.getUniqueId(), time);
+    }
+
+    /**
+     * Set the current magazine size of the player
+     * @param player player to be set
+     * @param magSize size of the magazine
+     */
+    public void setCurrentMagSize(Player player, int magSize) {
+        currentMagSize.put(player.getUniqueId(), magSize);
+    }
+
+    /**
      * Add a gun to the list
      * @param gun gun to be added
      */
@@ -93,95 +133,20 @@ public class GunManager {
     }
 
     /**
-     * Shoot the gun
-     * @param gun gun to shoot the bullet
-     * @param shooter player to shoot from
+     * Add a projectile to the map
+     * @param projectile projectile to be added
+     * @param player player who shot the projectile
      */
-    public void shoot(Gun gun, Player shooter) {
-        // Check if player can shoot
-        if(lastShot.containsKey(shooter.getUniqueId())) {
-            long currentTime = System.nanoTime();
-            long lastTime = lastShot.get(shooter.getUniqueId());
-            long delayPerShot = gun.getFireRate() / 60000000000l; // Delay between each shot in nanoseconds
-
-            if(currentTime - lastTime < delayPerShot)
-                return;
-        }
-        int currentSizeMagazine = gun.getMagazineSize();
-        if(currentMagSize.containsKey(shooter.getUniqueId())) {
-            currentSizeMagazine = currentMagSize.get(shooter.getUniqueId());
-            if(currentSizeMagazine <= 0)
-                return;
-        }
-
-        // Call event
-        GunFireEvent event = new GunFireEvent(shooter, gun);
-        Bukkit.getPluginManager().callEvent(event);
-
-        if(event.isCancelled())
-            return;
-
-        // Shoot the gun
-        for(int i = 0; i < gun.getBulletsPerShot(); i++) {
-            Vector direction = shooter.getEyeLocation().getDirection();
-            direction.add(new Vector(Math.random() * gun.getAccuracy() - gun.getAccuracy(), Math.random() * gun.getAccuracy() - gun.getAccuracy(), Math.random() * gun.getAccuracy() - gun.getAccuracy()));
-
-            Projectile projectile = shooter.launchProjectile(gun.getBullet().getProjectile(), direction.multiply(gun.getMuzzleVelocity()));
-            projectile.setCustomName(gun.getBullet().getName());
-            projectile.setCustomNameVisible(false);
-            projectiles.put(projectile.getUniqueId(), shooter.getUniqueId());
-        }
-
-        // Apply recoil
-        Location location = shooter.getLocation();
-        location.setPitch(location.getPitch() * gun.getRecoil());
-        shooter.teleport(location);
-
-        // Add to maps
-        currentMagSize.put(shooter.getUniqueId(), --currentSizeMagazine);
-        lastShot.put(shooter.getUniqueId(), System.nanoTime());
+    public void addProjectile(Projectile projectile, Player player){
+        projectiles.put(projectile.getUniqueId(), player.getUniqueId());
     }
 
     /**
-     * On hit by a bullet
-     * @param gun gun where the bullet came from
-     * @param shooter player that shot the gun
-     * @param entity entity that was hit
+     * Remove a projectile from the map
+     * @param projectile projectile to be removed
      */
-    public void onHit(Gun gun, Player shooter, Entity entity) {
-        // Call event
-        GunHitEvent event = new GunHitEvent(shooter, entity, gun);
-        Bukkit.getPluginManager().callEvent(event);
-
-        if(event.isCancelled())
-            return;
-
-        // Knockback
-        entity.setVelocity(entity.getLocation().getDirection().multiply(-1 * gun.getBullet().getKnockback()));
-
-        // Apply damage
-        if(!(entity instanceof Damageable))
-            return;
-        Damageable entityDamageable = (Damageable) entity;
-        entityDamageable.damage(Math.random() * (gun.getBullet().getMaxDamage() - gun.getBullet().getMinDamage()) + gun.getBullet().getMinDamage());
-    }
-
-    /**
-     * Reload the gun
-     * @param gun gun to be reloaded
-     * @param player player that is reloading the gun
-     */
-    public void reload(Gun gun, Player player) {
-        // Call event
-        GunReloadEvent event = new GunReloadEvent(player, gun);
-        Bukkit.getPluginManager().callEvent(event);
-
-        if(event.isCancelled())
-            return;
-
-        Bukkit.getScheduler().runTaskLater(Libraries.getInstance(), () -> {
-            currentMagSize.put(player.getUniqueId(), gun.getMagazineSize());
-        }, gun.getReloadTime());
+    public void removeProjectile(Projectile projectile) {
+        projectiles.remove(projectile.getUniqueId());
     }
 
     /**
