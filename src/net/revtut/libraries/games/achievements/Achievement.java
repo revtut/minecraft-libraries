@@ -1,11 +1,14 @@
 package net.revtut.libraries.games.achievements;
 
-import net.revtut.libraries.games.player.PlayerData;
+import net.revtut.libraries.Libraries;
+import org.bukkit.Bukkit;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 
 /**
  * Achievement Object
  */
-public abstract class Achievement {
+public abstract class Achievement implements Listener {
 
     /**
      * Name of the achievement
@@ -29,10 +32,16 @@ public abstract class Achievement {
     }
 
     /**
-     * Check if a player has achieved this
-     * @param player player to check if achieved
-     * @param object objects that may be needed to check if achieved
-     * @return true if achieved, false otherwise
+     * Register events of the class
      */
-    public abstract boolean hasAchieved(PlayerData player, Object... object);
+    public void registerEvents() {
+        Bukkit.getPluginManager().registerEvents(this, Libraries.getInstance());
+    }
+
+    /**
+     * Unregister all the events of the class
+     */
+    public void unregisterEvents() {
+        HandlerList.unregisterAll(this);
+    }
 }
