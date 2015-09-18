@@ -190,7 +190,7 @@ public abstract class Database {
      * @return number of rows updated
      */
     public int executeUpdate(String sql, List<Object> parameters) {
-        int numberRowsUpdated = 0;
+        int numberRowsUpdated = -1;
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(sql);
