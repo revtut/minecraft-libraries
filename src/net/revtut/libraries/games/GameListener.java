@@ -2,6 +2,7 @@ package net.revtut.libraries.games;
 
 import net.revtut.libraries.games.arena.Arena;
 import net.revtut.libraries.games.arena.ArenaFlag;
+import net.revtut.libraries.games.arena.ArenaPreference;
 import net.revtut.libraries.games.arena.session.GameState;
 import net.revtut.libraries.games.arena.types.ArenaSolo;
 import net.revtut.libraries.games.arena.types.ArenaTeam;
@@ -416,6 +417,27 @@ public class GameListener implements Listener {
             event.setCancelled(true);
             return;
         }
+    }
+
+    /**
+     * Controls the player join event
+     * @param event player join event
+     */
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        UUID uuid = event.getPlayer().getUniqueId();
+
+        // Get needed data
+        PlayerData player = gameAPI.getPlayer(uuid);
+        if(player == null)
+            return;
+
+        // Join random game
+        GameController gameController = gameAPI.getRandomGame();
+        Arena arena = gameController.getJoinableArena(ArenaPreference.MORE_PLAYERS);
+
+        if(arena != null)
+            arena.join(player);
     }
 
     /**

@@ -82,6 +82,14 @@ public class GameAPI {
     }
 
     /**
+     * Get all the game controllers
+     * @return game controllers
+     */
+    public List<GameController> getGameControllers() {
+        return games;
+    }
+
+    /**
      * Get the game controller of a plugin
      * @param plugin plugin to get the game controller
      * @return game controller of the plugin
@@ -91,6 +99,14 @@ public class GameAPI {
             if(gameController.getPlugin().equals(plugin))
                 return gameController;
         return null;
+    }
+
+    /**
+     * Get a random game controller
+     * @return game controller
+     */
+    public GameController getRandomGame() {
+        return games.get((int) (Math.random() * (games.size() - 1)));
     }
 
     /**
