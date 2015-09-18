@@ -23,6 +23,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
@@ -313,6 +314,36 @@ public class GameListener implements Listener {
     }
 
     /**
+     * Controls the player death event
+     * @param event player death event
+     */
+    @EventHandler
+    public void onDeath(PlayerDeathEvent event) {
+        UUID uuid = event.getEntity().getUniqueId();
+
+        // Get needed data
+        Arena arena = gameAPI.getPlayerArena(uuid);
+        if(arena == null)
+            return;
+        PlayerData player = gameAPI.getPlayer(uuid);
+        if(player == null)
+            return;
+        PlayerData killer = null;
+        if(event.getEntity().getKiller() != null) {
+            killer = gameAPI.getPlayer(event.getEntity().getKiller().getUniqueId());
+            if (killer == null)
+                return;
+        }
+
+        // Call event
+        PlayerDieEvent playerDieEvent = new PlayerDieEvent(player, killer, arena, "<" + player.getName() + "> has died.");
+        Bukkit.getPluginManager().callEvent(playerDieEvent);
+
+        arena.broadcastMessage(playerDieEvent.getDeathMessage());
+        event.setDeathMessage(null);
+    }
+
+    /**
      * Controls the player drop item event
      * @param event player drop item event
      */
@@ -438,6 +469,8 @@ public class GameListener implements Listener {
 
         if(arena != null)
             arena.join(player);
+
+        event.setJoinMessage(null);
     }
 
     /**
@@ -507,15 +540,15 @@ public class GameListener implements Listener {
         UUID uuid = event.getPlayer().getUniqueId();
 
         // Get needed data
-        Arena arena = gameAPI.getPlayerArena(uuid);
-        if(arena == null)
-            return;
         PlayerData player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
+        Arena arena = gameAPI.getPlayerArena(uuid);
+        if(arena != null)
+            arena.leave(player);
 
-        // Leave the arena
-        arena.leave(player);
         GameAPI.getInstance().removePlayer(player);
+
+        event.setQuitMessage(null);
     }
 }
