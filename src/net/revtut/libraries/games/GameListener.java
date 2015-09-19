@@ -188,12 +188,6 @@ public class GameListener implements Listener {
         if(target == null)
             return;
 
-        // Check flag
-        if(!arena.getFlag(ArenaFlag.DAMAGE)) {
-            event.setCancelled(true);
-            return;
-        }
-
         // Falling in void
         if(event.getCause() == EntityDamageEvent.DamageCause.VOID) {
             if(arena.getSession().getState() == GameState.LOBBY) {
@@ -218,6 +212,12 @@ public class GameListener implements Listener {
                     }
                 }
             }
+        }
+
+        // Check flag
+        if(!arena.getFlag(ArenaFlag.DAMAGE)) {
+            event.setCancelled(true);
+            return;
         }
 
         // Call event
