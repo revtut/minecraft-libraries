@@ -66,6 +66,9 @@ public class GameAPI {
      * @return controller of the game
      */
     public GameController registerGame(Plugin plugin, File worldsFolder) {
+        if(getGameController(plugin) != null) // Avoid registering multiple times the same game
+            return null;
+
         GameController gameController = new GameController(plugin, worldsFolder);
         games.add(gameController);
         return gameController;
