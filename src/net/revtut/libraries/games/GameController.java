@@ -5,6 +5,7 @@ import net.revtut.libraries.games.arena.ArenaPreference;
 import net.revtut.libraries.games.arena.types.ArenaSolo;
 import net.revtut.libraries.games.arena.types.ArenaTeam;
 import net.revtut.libraries.games.arena.types.ArenaType;
+import net.revtut.libraries.games.player.PlayerData;
 import net.revtut.libraries.utils.FilesAPI;
 import net.revtut.libraries.utils.WorldAPI;
 import org.bukkit.World;
@@ -67,6 +68,17 @@ public class GameController {
      */
     public List<Arena> getArenas() {
         return arenas;
+    }
+
+    /**
+     * Get all the online players on the game
+     * @return online players on the game
+     */
+    public List<PlayerData> getOnlinePlayers() {
+        List<PlayerData> players = new ArrayList<>();
+        for(Arena arena : arenas)
+            players.addAll(arena.getAllPlayers());
+        return players;
     }
 
     /**

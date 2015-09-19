@@ -467,8 +467,10 @@ public class GameListener implements Listener {
         GameController gameController = gameAPI.getRandomGame();
         Arena arena = gameController.getAvailableArena(ArenaPreference.MORE_PLAYERS);
 
-        if(arena != null)
-            arena.join(player);
+        // No arena available or not allowed to join the arena
+        if(arena == null || !arena.join(player)) {
+            // TODO take care when player can not join an arena
+        }
 
         event.setJoinMessage(null);
     }
