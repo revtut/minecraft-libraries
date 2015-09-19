@@ -1,6 +1,8 @@
 package net.revtut.libraries.utils;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,6 +20,39 @@ public final class FilesAPI {
      * Constructor of FilesAPI
      */
     private FilesAPI() {}
+
+    /**
+     * Get all the lines of a file
+     * @param file file to get all the lines
+     * @return all lines of the file
+     */
+    public static List<String> getLines(final File file) {
+        try {
+            return getLines(new FileInputStream(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * Get all the lines of a input stream
+     * @param inputStream input stream to get all lines
+     * @return all lines of the input stream
+     */
+    public static List<String> getLines(final InputStream inputStream) {
+        List<String> lines = new ArrayList<>();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        String line;
+        try {
+            while ((line = reader.readLine()) != null)
+                lines.add(line);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return lines;
+    }
 
     /**
      * Copy from a file to another one

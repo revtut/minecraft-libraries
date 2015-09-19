@@ -157,6 +157,8 @@ public class GameListener implements Listener {
         // Cancel the event to use our own methods
         event.setCancelled(true);
 
+        // Filter bad words
+
         // Call event
         PlayerTalkEvent playerTalkEvent = new PlayerTalkEvent(player, arena, "<" + player.getName() + "> " + event.getMessage());
         Bukkit.getPluginManager().callEvent(playerTalkEvent);
