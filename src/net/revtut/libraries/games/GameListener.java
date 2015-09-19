@@ -465,7 +465,7 @@ public class GameListener implements Listener {
 
         // Join random game
         GameController gameController = gameAPI.getRandomGame();
-        Arena arena = gameController.getJoinableArena(ArenaPreference.MORE_PLAYERS);
+        Arena arena = gameController.getAvailableArena(ArenaPreference.MORE_PLAYERS);
 
         if(arena != null)
             arena.join(player);

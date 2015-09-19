@@ -70,11 +70,27 @@ public class GameController {
     }
 
     /**
+     * Get a list with all available arenas
+     * @return list with all available arenas
+     */
+    public List<Arena> getAvailableArenas() {
+        List<Arena> joinableArenas = new ArrayList<>();
+        for(Arena arena : arenas) {
+            if(!arena.canJoin(null))
+                continue;
+
+            joinableArenas.add(arena);
+        }
+
+        return joinableArenas;
+    }
+
+    /**
      * Get the best arena given the preference
      * @param preference preference for the arena
      * @return arena that best suits the preference
      */
-    public Arena getJoinableArena(ArenaPreference preference) {
+    public Arena getAvailableArena(ArenaPreference preference) {
         Arena arena = null;
         int comparator;
 
