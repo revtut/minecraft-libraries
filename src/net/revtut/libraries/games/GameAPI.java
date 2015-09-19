@@ -4,6 +4,7 @@ import net.revtut.libraries.Libraries;
 import net.revtut.libraries.games.arena.Arena;
 import net.revtut.libraries.games.player.PlayerData;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
@@ -162,5 +163,16 @@ public class GameAPI {
      */
     public void removePlayer(PlayerData player) {
         players.remove(player);
+    }
+
+    /**
+     * Hide all server to a player and hide that player to the server
+     * @param player player to execute that action
+     */
+    public void hideServer(Player player) {
+        for(Player target : Bukkit.getOnlinePlayers()) {
+            target.hidePlayer(player);
+            player.hidePlayer(target);
+        }
     }
 }

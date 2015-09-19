@@ -86,15 +86,15 @@ public class GameController {
      * @return list with all available arenas
      */
     public List<Arena> getAvailableArenas() {
-        List<Arena> joinableArenas = new ArrayList<>();
+        List<Arena> availableArenas = new ArrayList<>();
         for(Arena arena : arenas) {
             if(!arena.canJoin(null))
                 continue;
 
-            joinableArenas.add(arena);
+            availableArenas.add(arena);
         }
 
-        return joinableArenas;
+        return availableArenas;
     }
 
     /**

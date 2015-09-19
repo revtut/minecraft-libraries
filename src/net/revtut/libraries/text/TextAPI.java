@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 public class TextAPI {
 
     /**
-     * List with all the badwords
+     * List with all the bad words
      */
     private static List<String> badWords;
 

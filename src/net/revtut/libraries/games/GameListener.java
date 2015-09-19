@@ -466,6 +466,9 @@ public class GameListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         UUID uuid = event.getPlayer().getUniqueId();
 
+        // Hide every player
+        gameAPI.hideServer(event.getPlayer());
+
         // Get needed data
         PlayerData player = gameAPI.getPlayer(uuid);
         if(player == null)
