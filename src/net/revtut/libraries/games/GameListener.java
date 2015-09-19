@@ -12,6 +12,7 @@ import net.revtut.libraries.games.guns.Gun;
 import net.revtut.libraries.games.player.PlayerData;
 import net.revtut.libraries.games.player.PlayerState;
 import net.revtut.libraries.maths.AlgebraAPI;
+import net.revtut.libraries.text.TextAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -158,9 +159,14 @@ public class GameListener implements Listener {
         event.setCancelled(true);
 
         // Filter bad words
+        String message = event.getMessage();
+        message = TextAPI.replaceBadWords(message);
+
+        // Filter advertisements
+        message = TextAPI.replaceAdvertisement(message, "mc.revtut.net", "https://www.revtut.net");
 
         // Call event
-        PlayerTalkEvent playerTalkEvent = new PlayerTalkEvent(player, arena, "<" + player.getName() + "> " + event.getMessage());
+        PlayerTalkEvent playerTalkEvent = new PlayerTalkEvent(player, arena, "<" + player.getName() + "> " + message);
         Bukkit.getPluginManager().callEvent(playerTalkEvent);
 
         if(playerTalkEvent.isCancelled())
