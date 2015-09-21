@@ -248,7 +248,7 @@ public abstract class Arena {
         player.updateState(PlayerState.ALIVE);
         player.setCurrentArena(this);
         player.getBukkitPlayer().teleport(lobbyLocation);
-        player.getBukkitPlayer().setGameMode(Bukkit.getDefaultGameMode());
+        player.getBukkitPlayer().setGameMode(GameMode.ADVENTURE);
 
         // Visibility configuration
         for(PlayerData target : getAllPlayers()) {
