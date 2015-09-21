@@ -14,6 +14,7 @@ import net.revtut.libraries.games.player.PlayerState;
 import net.revtut.libraries.maths.AlgebraAPI;
 import net.revtut.libraries.text.TextAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -509,7 +510,13 @@ public class GameListener implements Listener {
         }
 
         // Crossing borders
-        if(!AlgebraAPI.isInAABB(event.getTo(), arena.getCorners()[0], arena.getCorners()[1])) {
+        Location[] corners;
+        if(arena.getSession().getState() == GameState.DEATHMATCH)
+            corners = arena.getCornersDeathMatch();
+        else
+            corners = arena.getCorners();
+
+        if(!AlgebraAPI.isInAABB(event.getTo(), corners[0], corners[1])) {
             // Call event
             PlayerCrossArenaBorderEvent crossArenaBorderEvent = new PlayerCrossArenaBorderEvent(player, arena);
             Bukkit.getPluginManager().callEvent(crossArenaBorderEvent);

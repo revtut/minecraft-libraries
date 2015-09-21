@@ -29,7 +29,7 @@ public class ArenaSolo extends Arena {
     /**
      * Death location of the arena
      */
-    private Location deathLocation;
+    private Location deathLocation, deathDeathMatchLocation;
 
     /**
      * Constructor of ArenaTeam
@@ -46,16 +46,21 @@ public class ArenaSolo extends Arena {
      * @param arenaWorld world of the arena
      * @param lobbyLocation location of the lobby
      * @param spectatorLocation location of the spectator's spawn
+     * @param spectatorDeathMatchLocation location of the spectator's spawn on death match
      * @param corners corners of the arena
+     * @param cornersDeathMatch corners of the death match arena
      * @param spawnLocations locations of the spawn
      * @param deathLocation location to spawn dead players
      * @param deathMatchLocations locations for the death match
      * @param gameSession session of the arena
      */
-    public void initialize(World arenaWorld, Location lobbyLocation, Location spectatorLocation, Location[] corners, List<Location> spawnLocations, Location deathLocation, List<Location> deathMatchLocations, GameSession gameSession) {
-        super.initialize(arenaWorld, lobbyLocation, spectatorLocation, corners, gameSession);
+    public void initialize(World arenaWorld, Location lobbyLocation, Location spectatorLocation, Location spectatorDeathMatchLocation,
+                           Location[] corners, Location[] cornersDeathMatch, List<Location> spawnLocations, Location deathLocation, Location deathDeathMatchLocation,
+                           List<Location> deathMatchLocations, GameSession gameSession) {
+        super.initialize(arenaWorld, lobbyLocation, spectatorLocation, spectatorDeathMatchLocation, corners, cornersDeathMatch, gameSession);
         this.spawnLocations = spawnLocations;
         this.deathLocation = deathLocation;
+        this.deathDeathMatchLocation = deathDeathMatchLocation;
         this.deathMatchLocations = deathMatchLocations;
     }
 
@@ -81,6 +86,14 @@ public class ArenaSolo extends Arena {
      */
     public Location getDeathLocation() {
         return deathLocation;
+    }
+
+    /**
+     * Get the death location of death match
+     * @return death location of death match
+     */
+    public Location getDeathDeathMatchLocation() {
+        return deathDeathMatchLocation;
     }
 
     /**

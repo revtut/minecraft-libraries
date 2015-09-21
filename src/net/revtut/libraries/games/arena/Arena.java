@@ -50,14 +50,14 @@ public abstract class Arena {
     /**
      * Lobby and spectator location of the arena
      */
-    private Location lobbyLocation, spectatorLocation;
+    private Location lobbyLocation, spectatorLocation, spectatorDeathMatchLocation;
 
     /**
      * Corners of the arena
      * corner[0] - lowest corner
      * corner[1] - highest corner
      */
-    private Location[] corners;
+    private Location[] corners, cornersDeathMatch;
 
     /**
      * Current session of the arena
@@ -90,13 +90,16 @@ public abstract class Arena {
      * @param arenaWorld world of the arena
      * @param lobbyLocation location of the lobby
      * @param spectatorLocation location of the spectator's spawn
+     * @param spectatorDeathMatchLocation location of the spectator's spawn on death match
      * @param corners corners of the arena
+     * @param cornersDeathMatch corners of the death match arena
      * @param gameSession session of the arena
      */
-    public void initialize(World arenaWorld, Location lobbyLocation, Location spectatorLocation, Location[] corners, GameSession gameSession) {
+    public void initialize(World arenaWorld, Location lobbyLocation, Location spectatorLocation, Location spectatorDeathMatchLocation, Location[] corners, Location[] cornersDeathMatch, GameSession gameSession) {
         this.arenaWorld = arenaWorld;
         this.lobbyLocation = lobbyLocation;
         this.spectatorLocation = spectatorLocation;
+        this.spectatorDeathMatchLocation = spectatorDeathMatchLocation;
         this.currentSession = gameSession;
 
         // Make sure corners are in the right position
@@ -122,6 +125,29 @@ public abstract class Arena {
         }
 
         this.corners = corners;
+
+        lowestCorner = cornersDeathMatch[0];
+        highestCorner = cornersDeathMatch[1];
+
+        if(highestCorner.getX() < lowestCorner.getX()){
+            double temporary = highestCorner.getX();
+            highestCorner.setX(lowestCorner.getX());
+            lowestCorner.setX(temporary);
+        }
+
+        if(highestCorner.getY() < lowestCorner.getY()){
+            double temporary = highestCorner.getY();
+            highestCorner.setY(lowestCorner.getY());
+            lowestCorner.setY(temporary);
+        }
+
+        if(highestCorner.getZ() < lowestCorner.getZ()){
+            double temporary = highestCorner.getZ();
+            highestCorner.setZ(lowestCorner.getZ());
+            lowestCorner.setZ(temporary);
+        }
+
+        this.cornersDeathMatch = cornersDeathMatch;
     }
 
     /**
@@ -176,11 +202,27 @@ public abstract class Arena {
     }
 
     /**
+     * Get the spectator location of death match of the arena
+     * @return spectator location of death match of the arena
+     */
+    public Location getSpectatorDeathMatchLocation() {
+        return spectatorDeathMatchLocation;
+    }
+
+    /**
      * Get the corners of the arena
      * @return corners of the arena, corner[0] lowest, corner[1] highest
      */
     public Location[] getCorners() {
         return corners;
+    }
+
+    /**
+     * Get the corners of the death match of the arena
+     * @return corners of the death match of the arena, corner[0] lowest, corner[1] highest
+     */
+    public Location[] getCornersDeathMatch() {
+        return cornersDeathMatch;
     }
 
     /**
