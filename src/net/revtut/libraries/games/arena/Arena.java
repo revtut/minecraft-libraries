@@ -347,7 +347,7 @@ public abstract class Arena {
         // Update player
         player.updateState(PlayerState.SPECTATOR);
         player.setCurrentArena(this);
-        player.getBukkitPlayer().teleport(spectatorLocation);
+        player.getBukkitPlayer().teleport(lobbyLocation);
         player.getBukkitPlayer().setGameMode(GameMode.SPECTATOR);
 
         // Hide to players ingame except spectators
