@@ -31,7 +31,7 @@ public class ArenaTeam extends Arena {
     /**
      * Map with death location per team
      */
-    private Map<Team, Location> deathLocations, deathDeathMatchLocation;
+    private Map<Team, Location> deadLocations, deadDeathMatchLocation;
 
     /**
      * Constructor of ArenaTeam
@@ -50,18 +50,19 @@ public class ArenaTeam extends Arena {
      * @param corners corners of the arena
      * @param cornersDeathMatch corners of the death match arena
      * @param spawnLocations locations of the spawn
-     * @param deathLocations locations to spawn dead players
+     * @param deadLocations locations to spawn dead players
+     * @param deadDeathMatchLocation locations to spawn dead players on death match
      * @param deathMatchLocations locations for the death match
      * @param teams teams of the arena
      * @param gameSession session of the arena
      */
     public void initialize(World arenaWorld, Location lobbyLocation, Location spectatorLocation, Location spectatorDeathMatchLocation,
-                           Location[] corners, Location[] cornersDeathMatch, Map<Team, List<Location>> spawnLocations, Map<Team, Location> deathLocations,
-                           Map<Team, Location> deathDeathMatchLocation, Map<Team, List<Location>> deathMatchLocations, List<Team> teams, GameSession gameSession) {
+                           Location[] corners, Location[] cornersDeathMatch, Map<Team, List<Location>> spawnLocations, Map<Team, Location> deadLocations,
+                           Map<Team, Location> deadDeathMatchLocation, Map<Team, List<Location>> deathMatchLocations, List<Team> teams, GameSession gameSession) {
         super.initialize(arenaWorld, lobbyLocation, spectatorLocation, spectatorDeathMatchLocation, corners, cornersDeathMatch, gameSession);
         this.spawnLocations = spawnLocations;
-        this.deathLocations = deathLocations;
-        this.deathDeathMatchLocation = deathDeathMatchLocation;
+        this.deadLocations = deadLocations;
+        this.deadDeathMatchLocation = deadDeathMatchLocation;
         this.deathMatchLocations = deathMatchLocations;
         this.teams = teams;
     }
@@ -126,8 +127,8 @@ public class ArenaTeam extends Arena {
      * @param team team to get death location
      * @return death location of the team
      */
-    public Location getDeathLocation(Team team) {
-        return deathLocations.get(team);
+    public Location getDeadLocation(Team team) {
+        return deadLocations.get(team);
     }
 
     /**
@@ -135,8 +136,8 @@ public class ArenaTeam extends Arena {
      * @param team team to get death location on death match
      * @return death location of the team on death match
      */
-    public Location getDeathDeathMatchLocation(Team team) {
-        return deathDeathMatchLocation.get(team);
+    public Location getDeadDeathMatchLocation(Team team) {
+        return deadDeathMatchLocation.get(team);
     }
 
     /**

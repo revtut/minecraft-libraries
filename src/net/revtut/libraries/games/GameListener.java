@@ -206,17 +206,38 @@ public class GameListener implements Listener {
             } else {
                 if(target.getState() == PlayerState.SPECTATOR) {
                     event.setCancelled(true);
-                    target.getBukkitPlayer().teleport(arena.getSpectatorLocation());
+
+                    // Get spectator location accordingly the arena state
+                    Location spectatorLocation;
+                    if(arena.getSession().getState() == GameState.DEATHMATCH)
+                        spectatorLocation = arena.getSpectatorDeathMatchLocation();
+                    else
+                        spectatorLocation = arena.getSpectatorLocation();
+                    target.getBukkitPlayer().teleport(spectatorLocation);
                     return;
                 } else if (target.getState() == PlayerState.DEAD) {
                     event.setCancelled(true);
                     if(arena.getType() == ArenaType.SOLO) {
                         ArenaSolo arenaSolo = (ArenaSolo) arena;
-                        target.getBukkitPlayer().teleport(arenaSolo.getDeathLocation());
+
+                        // Get dead location accordingly the arena state
+                        Location deadLocation;
+                        if(arenaSolo.getSession().getState() == GameState.DEATHMATCH)
+                            deadLocation = arenaSolo.getDeadDeathMatchLocation();
+                        else
+                            deadLocation = arenaSolo.getDeadLocation();
+                        target.getBukkitPlayer().teleport(deadLocation);
                         return;
                     } else if (arena.getType() == ArenaType.TEAM) {
                         ArenaTeam arenaTeam = (ArenaTeam) arena;
-                        target.getBukkitPlayer().teleport(arenaTeam.getDeathLocation(arenaTeam.getTeam(target)));
+
+                        // Get dead location accordingly the arena state
+                        Location deadLocation;
+                        if(arenaTeam.getSession().getState() == GameState.DEATHMATCH)
+                            deadLocation = arenaTeam.getDeadDeathMatchLocation(arenaTeam.getTeam(target));
+                        else
+                            deadLocation = arenaTeam.getDeadLocation(arenaTeam.getTeam(target));
+                        target.getBukkitPlayer().teleport(deadLocation);
                         return;
                     }
                 }
