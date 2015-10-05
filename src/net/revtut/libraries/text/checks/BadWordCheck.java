@@ -7,6 +7,8 @@ import org.bukkit.entity.Player;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Caps Lock Check
@@ -60,7 +62,7 @@ public class BadWordCheck implements Check {
             if(!message.contains(badWord))
                 continue;
 
-            message = message.replaceAll(badWord, generateRandomString(REPLACE_SYMBOLS, badWord.length()));
+            message = message.replaceAll(Pattern.quote(badWord), Matcher.quoteReplacement((generateRandomString(REPLACE_SYMBOLS, badWord.length()))));
         }
 
         return message;

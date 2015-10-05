@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Caps Lock Check
@@ -59,9 +60,20 @@ public class EmojiCheck implements Check {
     @Override
     public String fixMessage(String message) {
         for(final String emoticon : EMOJI.keySet())
-            message = message.replaceAll(emoticon, EMOJI.get(emoticon));
+            message = message.replaceAll(getEmoticonSearchRegex(emoticon), EMOJI.get(emoticon));
         return message;
     }
+
+    /**
+     * Get the emoticon search regex
+     * @param emoticon emoticon the get search regex
+     * @return search regex for the emoticon
+     */
+    private String getEmoticonSearchRegex(String emoticon) {
+        // Allowed characters left + emoticon + allowed characters right
+        return "(?<![-_a-zA-Z0-9)(;:*<>=/])(" + Pattern.quote(emoticon) + ")(?![-_a-zA-Z0-9)(;:*<>=/])";
+    }
+
 
     /**
      * Get the error message of the check

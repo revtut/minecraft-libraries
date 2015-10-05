@@ -186,7 +186,7 @@ public class GameListener implements Listener {
         // Checkers
         String message = event.getMessage();
         for(final Check check : checksList)
-            if(check.checkMessage(bukkitPlayer, message))
+            if (check.checkMessage(bukkitPlayer, message))
                 message = check.fixMessage(message);
 
         // Call event

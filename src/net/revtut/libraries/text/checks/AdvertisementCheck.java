@@ -19,7 +19,7 @@ public class AdvertisementCheck implements Check {
     /**
      * Websites pattern
      */
-    private static final Pattern WEBSITE_PATTERN = Pattern.compile("@(https?|ftp)://(-\\.)?([^\\s/?\\.#-]+\\.?)+(/[^\\s]*)?$@iS");
+    private static final Pattern WEBSITE_PATTERN = Pattern.compile("^((http|https|ftp)://)?[a-zA-Z0-9\\-\\.]+\\.[a-zA-Z]{2,3}(:[a-zA-Z0-9]*)?/?([a-zA-Z0-9\\-\\._\\?,'/\\\\\\+&amp;%\\$#=~])*$");
 
     /**
      * Check if message matches the check
@@ -43,7 +43,7 @@ public class AdvertisementCheck implements Check {
         final Matcher matcherWebsite = WEBSITE_PATTERN.matcher(message);
         if(matcherIP.find())
             message = matcherIP.replaceAll("mc.revtut.net");
-        if(matcherIP.find())
+        if(matcherWebsite.find())
             message = matcherWebsite.replaceAll("https://www.revtut.net");
         return message;
     }

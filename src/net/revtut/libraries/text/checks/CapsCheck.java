@@ -1,6 +1,5 @@
 package net.revtut.libraries.text.checks;
 
-import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -22,11 +21,11 @@ public class CapsCheck implements Check {
      */
     @Override
     public boolean checkMessage(final Player player, final String message) {
-        int nCapitals = 0;
+        double nCapitals = 0;
         for(final char character : message.toCharArray())
             if(Character.isUpperCase(character))
                 nCapitals++;
-        return nCapitals / message.length() >= MAX_CAPITALS;
+        return (nCapitals / message.length()) >= MAX_CAPITALS;
     }
 
     /**
@@ -36,7 +35,7 @@ public class CapsCheck implements Check {
      */
     @Override
     public String fixMessage(final String message) {
-        return WordUtils.uncapitalize(message);
+        return message.toLowerCase();
     }
 
     /**
