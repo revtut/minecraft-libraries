@@ -13,10 +13,7 @@ import net.revtut.libraries.games.guns.Gun;
 import net.revtut.libraries.games.player.PlayerData;
 import net.revtut.libraries.games.player.PlayerState;
 import net.revtut.libraries.maths.AlgebraAPI;
-import net.revtut.libraries.text.checks.AdvertisementCheck;
-import net.revtut.libraries.text.checks.BadWordCheck;
-import net.revtut.libraries.text.checks.CapsCheck;
-import net.revtut.libraries.text.checks.Check;
+import net.revtut.libraries.text.checks.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -57,7 +54,14 @@ public class GameListener implements Listener {
      */
     public GameListener() {
         gameAPI = GameAPI.getInstance();
-        checksList = ImmutableList.copyOf(new Check[] { new AdvertisementCheck(), new BadWordCheck(), new CapsCheck()});
+        checksList = ImmutableList.copyOf(
+                new Check[] {
+                        new AdvertisementCheck(),
+                        new BadWordCheck(),
+                        new CapsCheck(),
+                        new EmojiCheck()
+                }
+        );
     }
 
     /**
@@ -179,10 +183,10 @@ public class GameListener implements Listener {
         event.setCancelled(true);
 
         // Checkers
-        final String message = event.getMessage();
+        String message = event.getMessage();
         for(final Check check : checksList)
             if(check.checkMessage(bukkitPlayer, message))
-                check.fixMessage(message);
+                message = check.fixMessage(message);
 
         // Call event
         final PlayerTalkEvent playerTalkEvent = new PlayerTalkEvent(player, arena, "<" + player.getName() + "> " + message);

@@ -53,7 +53,7 @@ public class BadWordCheck implements Check {
     }
 
     /**
-     * Fixes the message in order to remove / replace non allowed elements
+     * Fixes the message in order to remove / replace some elements
      * @param message message to be fixed
      * @return fixed message
      */
@@ -93,7 +93,7 @@ public class BadWordCheck implements Check {
      * @param length length of the string
      * @return random string
      */
-    public static String generateRandomString(final char[] characters, final int length) {
+    private String generateRandomString(final char[] characters, final int length) {
         final StringBuilder stringBuilder = new StringBuilder(length);
         for(int i = 0; i < length; i++)
             stringBuilder.append(characters[(int)(Math.random() * (characters.length - 1))]);

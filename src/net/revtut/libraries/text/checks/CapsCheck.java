@@ -32,7 +32,7 @@ public class CapsCheck implements Check {
     }
 
     /**
-     * Fixes the message in order to remove / replace non allowed elements
+     * Fixes the message in order to remove / replace some elements
      * @param message message to be fixed
      * @return fixed message
      */
