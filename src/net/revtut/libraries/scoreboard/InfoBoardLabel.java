@@ -1,5 +1,7 @@
 package net.revtut.libraries.scoreboard;
 
+import org.bukkit.ChatColor;
+
 /**
  * Scoreboard Label
  */
@@ -17,18 +19,11 @@ public abstract class InfoBoardLabel {
 
     /**
      * Constructor of InfoBoardLabel
-     */
-    public InfoBoardLabel() {
-        this("", 0);
-    }
-
-    /**
-     * Constructor of InfoBoardLabel
      * @param text text of the label
      * @param position position of the label
      */
     public InfoBoardLabel(final String text, final int position) {
-        this.text = text;
+        this.text = ChatColor.translateAlternateColorCodes('&', text);
         this.position = position;
     }
 

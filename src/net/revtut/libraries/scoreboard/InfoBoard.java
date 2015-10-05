@@ -1,12 +1,14 @@
 package net.revtut.libraries.scoreboard;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * InfoBoard Library.
@@ -53,12 +55,23 @@ public class InfoBoard {
     }
 
     /**
+     * Get all the information labels from a class
+     * @param clazz class of the information labels to get
+     * @return information labels of that class
+     */
+    public List<InfoBoardLabel> getLabels(final Class<? extends InfoBoardLabel> clazz) {
+        return infoLabels.stream()
+                .filter(label -> label.getClass() == clazz)
+                .collect(Collectors.toList());
+    }
+
+    /**
      * Get a information label by its name
      * @param text name of the label
      * @return label with that name
      */
-    public InfoBoardLabel getLabel(String text) {
-        for(InfoBoardLabel label : infoLabels)
+    public InfoBoardLabel getLabel(final String text) {
+        for(final InfoBoardLabel label : infoLabels)
             if(label.getText().equalsIgnoreCase(text))
                 return label;
         return null;
@@ -69,8 +82,8 @@ public class InfoBoard {
      * @param position position of the label
      * @return label with that position
      */
-    public InfoBoardLabel getLabel(int position) {
-        for(InfoBoardLabel label : infoLabels)
+    public InfoBoardLabel getLabel(final int position) {
+        for(final InfoBoardLabel label : infoLabels)
             if(label.getPosition() == position)
                 return label;
         return null;
@@ -88,7 +101,8 @@ public class InfoBoard {
      * Add a label to the information board
      * @param label label to be added
      */
-    public void addLabel(InfoBoardLabel label) {
+    public void addLabel(final InfoBoardLabel label) {
+        objective.getScore(label.getText()).setScore(label.getPosition());
         infoLabels.add(label);
     }
 
@@ -96,7 +110,36 @@ public class InfoBoard {
      * Remove a label from the information board
      * @param label label to be removed
      */
-    public void removeLabel(InfoBoardLabel label) {
+    public void removeLabel(final InfoBoardLabel label) {
+        scoreboard.resetScores(label.getText());
         infoLabels.remove(label);
+    }
+
+    /**
+     * Update a label in the information board
+     * @param label label to be updated
+     */
+    public void updateLabel(final InfoBoardLabel label) {
+        if(infoLabels.contains(label))
+            removeLabel(label);
+        addLabel(label);
+    }
+
+    /**
+     * Send the scoreboard to a player
+     * @param player player to be sent the scoreboard
+     */
+    public void send(final Player player) {
+        player.setScoreboard(scoreboard);
+    }
+
+    /**
+     * Clear the information board
+     */
+    public void clear() {
+        objective.unregister();
+        objective = scoreboard.registerNewObjective("side", "dummy");
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        infoLabels.clear();
     }
 }
