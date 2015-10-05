@@ -515,9 +515,8 @@ public class GameListener implements Listener {
         gameAPI.hideServer(event.getPlayer());
 
         // Get needed data
-        final PlayerData player = gameAPI.getPlayer(uuid);
-        if(player == null)
-            return;
+        final PlayerData player = new PlayerData(uuid);
+        // TODO get database information about the player
 
         // Join random game
         final GameController gameController = gameAPI.getRandomGame();
