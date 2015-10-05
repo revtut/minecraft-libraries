@@ -2,14 +2,11 @@ package net.revtut.libraries.text.checks;
 
 import net.revtut.libraries.Libraries;
 import net.revtut.libraries.utils.FilesAPI;
-import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.io.FileInputStream;
-import java.util.ArrayList;
+import java.io.InputStream;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * Caps Lock Check
@@ -31,7 +28,7 @@ public class BadWordCheck implements Check {
      */
     static {
         // Bad Words
-        final FileInputStream inputStream = (FileInputStream) Libraries.getInstance().getResource("resources/badwords.txt");
+        final InputStream inputStream = Libraries.getInstance().getResource("resources/badwords.txt");
         BAD_WORDS = FilesAPI.getLines(inputStream);
 
         // Replace symbols

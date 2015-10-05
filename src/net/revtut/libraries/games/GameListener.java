@@ -51,10 +51,11 @@ public class GameListener implements Listener {
 
     /**
      * Constructor of GameListener
+     * @param gameAPI instance of game api
      */
-    public GameListener() {
-        gameAPI = GameAPI.getInstance();
-        checksList = ImmutableList.copyOf(
+    public GameListener(final GameAPI gameAPI) {
+        this.gameAPI = gameAPI;
+        this.checksList = ImmutableList.copyOf(
                 new Check[] {
                         new AdvertisementCheck(),
                         new BadWordCheck(),

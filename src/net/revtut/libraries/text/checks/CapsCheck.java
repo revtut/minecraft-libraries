@@ -4,8 +4,6 @@ import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.regex.Pattern;
-
 /**
  * Caps Lock Check
  */

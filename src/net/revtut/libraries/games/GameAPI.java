@@ -39,7 +39,7 @@ public class GameAPI {
         this.players = new ArrayList<>();
         this.games = new ArrayList<>();
 
-        Bukkit.getPluginManager().registerEvents(new GameListener(), Libraries.getInstance());
+        Bukkit.getPluginManager().registerEvents(new GameListener(this), Libraries.getInstance());
 
         // Run the tick task
         Bukkit.getScheduler().runTaskTimer(Libraries.getInstance(), () -> {

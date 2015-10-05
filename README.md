@@ -10,8 +10,8 @@
 
 ## <a name="introduction"></a>Introduction
 
-Nowadays libraries such as **Spigot, Bukkit** and so on have given lots of usefull APIs in order to code *Minecraft server* plugins.
-However there are a lots of missing functions and methods that would make a plugin development easier so we have created a collection of usefull functions to use side by side with a Minecraft server library.
+Nowadays libraries such as **Spigot, Bukkit** and so on have given lots of useful APIs in order to code *Minecraft server* plugins.
+However there are a lots of missing functions and methods that would make a plugin development easier so we have created a collection of useful functions to use side by side with a Minecraft server library.
 
 ## <a name="requirements"></a>Requirements
 * Spigot or Bukkit
@@ -43,13 +43,17 @@ However there are a lots of missing functions and methods that would make a plug
     * Convert text to JSON format
     * Time converters
     * String and list converters
+* Scoreboard
+    * Custom scoreboard
+    * Static and Scrolling scoreboard labels
 * Text
     * Send custom action bar
     * Get language of a player
     * Multiple languages
     * Send custom tab player
     * Send custom titles and subtitles
-    * Text censor, advertisements and bad words replacer
+    * Checks for bad words, advertisements, caps lock and emoji
+    * Scroll's such as text and color
 * Utils
     * Bypass respawn screen
     * Copy, delete folders
@@ -80,8 +84,7 @@ However there are a lots of missing functions and methods that would make a plug
         * Reload
     * Player
         * Cross Arena Border
-        * Damage
-        * Die
+        * Damage / Die
         * Friendly Fire
         * Join Arena / Team
         * Leave Arena / Team
@@ -93,7 +96,7 @@ However there are a lots of missing functions and methods that would make a plug
 * Player
     * Data of a player
 * Statistics
-    * Premade statistics
+    * Pre-made statistics
 * Team
     * List with all players
     * Custom color
@@ -129,7 +132,7 @@ Thats it, now you just have to register the custom events you need such as join 
 
 ## <a name="setup_database"></a>Setup Database
 
-Those who want more complex minigames can save everything in a database. We also include a API for that.
+Those who want more complex minigames can use databases also included here.
 ```java
 // Database Types - MYSQL, ORACLE, POSTGRE
 Database database = Database.createDatabase(DatabaseType.MYSQL, hostname, port, database, username, password);
