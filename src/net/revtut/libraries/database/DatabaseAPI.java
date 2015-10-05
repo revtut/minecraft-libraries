@@ -19,10 +19,10 @@ public class DatabaseAPI {
      * @param tableName name of the table to be created
      * @param columns columns of the database
      */
-    public static void createTable(Database database, String tableName, Map<String, DataType> columns) {
+    public static void createTable(final Database database, final String tableName, final Map<String, DataType> columns) {
         String sql = "CREATE TABLE IF NOT EXISTS " + tableName + " (";
         int index = 1;
-        for(Map.Entry<String, DataType> entry : columns.entrySet()) {
+        for(final Map.Entry<String, DataType> entry : columns.entrySet()) {
             sql += entry.getKey() + " " + entry.getValue();
 
             if(index < columns.size())
@@ -42,12 +42,12 @@ public class DatabaseAPI {
      * @param where columns of the "Where" condition
      * @param whereValues values of the where columns
      */
-    public static ResultSet executeQuery(Database database, String tableName, List<String> columns, List<String> where, List<String> whereValues) {
+    public static ResultSet executeQuery(final Database database, final String tableName, final List<String> columns, final List<String> where, final List<String> whereValues) {
         String sql = "SELECT ";
 
         // Columns to select
         int index = 1;
-        for(String column : columns) {
+        for(final String column : columns) {
             sql += column;
 
             if(index < columns.size())
@@ -58,7 +58,7 @@ public class DatabaseAPI {
 
         // Where
         index = 1;
-        for(String column : where) {
+        for(final String column : where) {
             sql += column + " = ?";
 
             if(index < where.size())
@@ -67,7 +67,7 @@ public class DatabaseAPI {
         }
         sql += ";";
 
-        List<Object> parameters = new ArrayList<>(whereValues);
+        final List<Object> parameters = new ArrayList<>(whereValues);
         return database.executeQuery(sql, parameters);
     }
 
@@ -77,13 +77,13 @@ public class DatabaseAPI {
      * @param tableName name of the table to execute the insertion
      * @param columns columns to set the values
      */
-    public static void executeInsertion(Database database, String tableName, Map<String, Object> columns) {
-        List<Object> parameters = new ArrayList<>();
+    public static void executeInsertion(final Database database, final String tableName, final Map<String, Object> columns) {
+        final List<Object> parameters = new ArrayList<>();
 
         // Columns
         String sql = "INSERT INTO " + tableName + " (";
         int index = 1;
-        for(Map.Entry<String, Object> entry : columns.entrySet()) {
+        for(final Map.Entry<String, Object> entry : columns.entrySet()) {
             sql += entry.getKey();
             parameters.add(entry.getValue());
 
@@ -95,7 +95,7 @@ public class DatabaseAPI {
 
         // Values
         index = 1;
-        for(Map.Entry<String, Object> ignored : columns.entrySet()) {
+        for(final Map.Entry<String, Object> ignored : columns.entrySet()) {
             sql += "?";
 
             if(index < columns.size())
@@ -116,12 +116,12 @@ public class DatabaseAPI {
      * @param where columns of the "Where" condition
      * @param whereValues values of the where columns
      */
-    public static void executeUpdate(Database database, String tableName, List<String> columns, List<Object> values, List<String> where, List<String> whereValues) {
+    public static void executeUpdate(final Database database, final String tableName, final List<String> columns, final List<Object> values, final List<String> where, final List<String> whereValues) {
         String sql = "UPDATE " + tableName + " SET ";
 
         // Set
         int index = 1;
-        for(String column : columns) {
+        for(final String column : columns) {
             sql += column + " = ?";
 
             if(index < columns.size())
@@ -132,7 +132,7 @@ public class DatabaseAPI {
 
         // Where
         index = 1;
-        for(String column : where) {
+        for(final String column : where) {
             sql += column + " = ?";
 
             if(index < where.size())
@@ -142,7 +142,7 @@ public class DatabaseAPI {
         sql += ";";
 
         // Merge values and whereValues
-        List<Object> parameters = new ArrayList<>(values);
+        final List<Object> parameters = new ArrayList<>(values);
         parameters.addAll(whereValues);
         database.executeUpdate(sql, parameters);
     }
@@ -154,12 +154,12 @@ public class DatabaseAPI {
      * @param where columns of the "Where" condition
      * @param whereValues values of the where columns
      */
-    public static void executeDeletation(Database database, String tableName, List<String> where, List<String> whereValues) {
+    public static void executeDeletation(final Database database, final String tableName, final List<String> where, final List<String> whereValues) {
         String sql = "DELETE FROM " + tableName + " WHERE ";
 
         // Where
         int index = 1;
-        for(String column : where) {
+        for(final String column : where) {
             sql += column + " = ?";
 
             if(index < where.size())
@@ -168,7 +168,7 @@ public class DatabaseAPI {
         }
         sql += ";";
 
-        List<Object> parameters = new ArrayList<>(whereValues);
+        final List<Object> parameters = new ArrayList<>(whereValues);
         database.executeUpdate(sql, parameters);
     }
 }

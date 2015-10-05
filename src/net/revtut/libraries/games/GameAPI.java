@@ -25,12 +25,12 @@ public class GameAPI {
     /**
      * List with all players
      */
-    private List<PlayerData> players;
+    private final List<PlayerData> players;
 
     /**
      * List with all game controllers
      */
-    private List<GameController> games;
+    private final List<GameController> games;
 
     /**
      * Constructor of GameAPI
@@ -44,9 +44,9 @@ public class GameAPI {
         // Run the tick task
         Bukkit.getScheduler().runTaskTimer(Libraries.getInstance(), () -> {
             for(GameController gameController : games)
-                for(Arena arena : gameController.getArenas())
-                    if(arena.getSession() != null)
-                        arena.getSession().tick();
+                gameController.getArenas().stream()
+                        .filter(arena -> arena.getSession() != null)
+                        .forEach(arena -> arena.getSession().tick());
         }, 20L, 20L);
     }
 
@@ -66,11 +66,11 @@ public class GameAPI {
      * @param worldsFolder folder where worlds are located
      * @return controller of the game
      */
-    public GameController registerGame(Plugin plugin, File worldsFolder) {
+    public GameController registerGame(final Plugin plugin, final File worldsFolder) {
         if(getGameController(plugin) != null) // Avoid registering multiple times the same game
             return null;
 
-        GameController gameController = new GameController(plugin, worldsFolder);
+        final GameController gameController = new GameController(plugin, worldsFolder);
         games.add(gameController);
         return gameController;
     }
@@ -79,8 +79,8 @@ public class GameAPI {
      * Unregister a game
      * @param plugin plugin of the game
      */
-    public void unregisterGame(Plugin plugin) {
-        GameController gameController = getGameController(plugin);
+    public void unregisterGame(final Plugin plugin) {
+        final GameController gameController = getGameController(plugin);
         if(gameController != null)
             games.remove(gameController);
     }
@@ -98,8 +98,8 @@ public class GameAPI {
      * @param plugin plugin to get the game controller
      * @return game controller of the plugin
      */
-    public GameController getGameController(Plugin plugin) {
-        for(GameController gameController : games)
+    public GameController getGameController(final Plugin plugin) {
+        for(final GameController gameController : games)
             if(gameController.getPlugin().equals(plugin))
                 return gameController;
         return null;
@@ -126,8 +126,8 @@ public class GameAPI {
      * @param uuid uuid of the player to get the player data
      * @return player data of the player
      */
-    public PlayerData getPlayer(UUID uuid) {
-        for(PlayerData player : players)
+    public PlayerData getPlayer(final UUID uuid) {
+        for(final PlayerData player : players)
             if(player.getUuid().equals(uuid))
                 return player;
         return null;
@@ -138,9 +138,9 @@ public class GameAPI {
      * @param uuid uuid of the player
      * @return arena of the player
      */
-    public Arena getPlayerArena(UUID uuid) {
+    public Arena getPlayerArena(final UUID uuid) {
         Arena arena = null;
-        for(GameController gameController : games) {
+        for(final GameController gameController : games) {
             arena = gameController.getPlayerArena(uuid);
             if(arena != null)
                 break;
@@ -153,7 +153,7 @@ public class GameAPI {
      * Add a player to the list
      * @param player player to be added
      */
-    public void addPlayer(PlayerData player) {
+    public void addPlayer(final PlayerData player) {
         players.add(player);
     }
 
@@ -161,7 +161,7 @@ public class GameAPI {
      * Remove a player from the list
      * @param player player to be removed
      */
-    public void removePlayer(PlayerData player) {
+    public void removePlayer(final PlayerData player) {
         players.remove(player);
     }
 
@@ -169,8 +169,8 @@ public class GameAPI {
      * Hide all server to a player and hide that player to the server
      * @param player player to execute that action
      */
-    public void hideServer(Player player) {
-        for(Player target : Bukkit.getOnlinePlayers()) {
+    public void hideServer(final Player player) {
+        for(final Player target : Bukkit.getOnlinePlayers()) {
             target.hidePlayer(player);
             player.hidePlayer(target);
         }

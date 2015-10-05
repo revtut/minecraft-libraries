@@ -113,5 +113,5 @@ public enum DataType {
     /**
      * A DOUBLE stored as a string , allowing for a fixed decimal point.
      */
-    DECIMAL;
+    DECIMAL
 }

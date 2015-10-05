@@ -18,22 +18,22 @@ public class GunManager {
     /**
      * List with all the guns available
      */
-    private List<Gun> guns;
+    private final List<Gun> guns;
 
     /**
      * Map with number of bullets left on the magazine per player
      */
-    private Map<UUID, Integer> currentMagSize;
+    private final Map<UUID, Integer> currentMagSize;
 
     /**
      * Map with all shot projectiles (Projectile => Player)
      */
-    private Map<UUID, UUID> projectiles;
+    private final Map<UUID, UUID> projectiles;
 
     /**
      * Map with last shot time per player
      */
-    private Map<UUID, Long> lastShot;
+    private final Map<UUID, Long> lastShot;
 
     /**
      * Constructor of GunManager
@@ -60,8 +60,8 @@ public class GunManager {
      * @param name name of the gun
      * @return gun with that name
      */
-    public Gun getGun(String name) {
-        for(Gun gun : guns)
+    public Gun getGun(final String name) {
+        for(final Gun gun : guns)
             if(gun.getName().equalsIgnoreCase(name))
                 return gun;
         return null;
@@ -72,7 +72,7 @@ public class GunManager {
      * @param player player to get the last shot
      * @return last shot of the player
      */
-    public long getLastShot(Player player) {
+    public long getLastShot(final Player player) {
         if(!lastShot.containsKey(player.getUniqueId()))
             return -1;
         return lastShot.get(player.getUniqueId());
@@ -83,7 +83,7 @@ public class GunManager {
      * @param player player to get
      * @return current magazine size
      */
-    public int getCurrentMagSize(Player player) {
+    public int getCurrentMagSize(final Player player) {
         if(!currentMagSize.containsKey(player.getUniqueId()))
             return -1;
         return currentMagSize.get(player.getUniqueId());
@@ -94,7 +94,7 @@ public class GunManager {
      * @param player player to be set
      * @param time time of the shot
      */
-    public void setLastShot(Player player, long time) {
+    public void setLastShot(final Player player, final long time) {
         lastShot.put(player.getUniqueId(), time);
     }
 
@@ -103,7 +103,7 @@ public class GunManager {
      * @param player player to be set
      * @param magSize size of the magazine
      */
-    public void setCurrentMagSize(Player player, int magSize) {
+    public void setCurrentMagSize(final Player player, final int magSize) {
         currentMagSize.put(player.getUniqueId(), magSize);
     }
 
@@ -111,7 +111,7 @@ public class GunManager {
      * Add a gun to the list
      * @param gun gun to be added
      */
-    public void addGun(Gun gun) {
+    public void addGun(final Gun gun) {
         guns.add(gun);
     }
 
@@ -119,7 +119,7 @@ public class GunManager {
      * Remove a gun from the list
      * @param gun gun to be removed
      */
-    public void removeGun(Gun gun) {
+    public void removeGun(final Gun gun) {
         guns.remove(gun);
     }
 
@@ -128,7 +128,7 @@ public class GunManager {
      * @param projectile projectile to be added
      * @param player player who shot the projectile
      */
-    public void addProjectile(Projectile projectile, Player player){
+    public void addProjectile(final Projectile projectile, final Player player){
         projectiles.put(projectile.getUniqueId(), player.getUniqueId());
     }
 
@@ -136,7 +136,7 @@ public class GunManager {
      * Remove a projectile from the map
      * @param projectile projectile to be removed
      */
-    public void removeProjectile(Projectile projectile) {
+    public void removeProjectile(final Projectile projectile) {
         projectiles.remove(projectile.getUniqueId());
     }
 
@@ -145,7 +145,7 @@ public class GunManager {
      * @param projectile projectile to check
      * @return true if contains, false otherwise
      */
-    public boolean isBullet(Projectile projectile) {
-        return projectiles.containsKey(projectile);
+    public boolean isBullet(final Projectile projectile) {
+        return projectiles.containsKey(projectile.getUniqueId());
     }
 }

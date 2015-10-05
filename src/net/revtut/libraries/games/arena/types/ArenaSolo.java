@@ -19,7 +19,7 @@ public class ArenaSolo extends Arena {
     /**
      * List with players in the arena
      */
-    private List<PlayerData> players;
+    private final List<PlayerData> players;
 
     /**
      * List with all spawn locations and death match locations
@@ -35,7 +35,7 @@ public class ArenaSolo extends Arena {
      * Constructor of ArenaTeam
      * @param name name of the arena
      */
-    public ArenaSolo(String name) {
+    public ArenaSolo(final String name) {
         super(name);
 
         this.players = new ArrayList<>();
@@ -55,9 +55,9 @@ public class ArenaSolo extends Arena {
      * @param deathMatchLocations locations for the death match
      * @param gameSession session of the arena
      */
-    public void initialize(World arenaWorld, Location lobbyLocation, Location spectatorLocation, Location spectatorDeathMatchLocation,
-                           Location[] corners, Location[] cornersDeathMatch, List<Location> spawnLocations, Location deadLocations, Location deadDeathMatchLocation,
-                           List<Location> deathMatchLocations, GameSession gameSession) {
+    public void initialize(final World arenaWorld, final Location lobbyLocation, final Location spectatorLocation, final Location spectatorDeathMatchLocation,
+                           final Location[] corners, final Location[] cornersDeathMatch, final List<Location> spawnLocations, final Location deadLocations, final Location deadDeathMatchLocation,
+                           final List<Location> deathMatchLocations, final GameSession gameSession) {
         super.initialize(arenaWorld, lobbyLocation, spectatorLocation, spectatorDeathMatchLocation, corners, cornersDeathMatch, gameSession);
         this.spawnLocations = spawnLocations;
         this.deadLocations = deadLocations;
@@ -118,8 +118,8 @@ public class ArenaSolo extends Arena {
      * @param uuid uuid of the player to be checked
      * @return true if contains, false otherwise
      */
-    public boolean containsPlayer(UUID uuid) {
-        for(PlayerData target : players)
+    public boolean containsPlayer(final UUID uuid) {
+        for(final PlayerData target : players)
             if(target.getUuid().equals(uuid))
                 return true;
         return false;
@@ -131,7 +131,7 @@ public class ArenaSolo extends Arena {
      * @return true if has joined, false otherwise
      */
     @Override
-    public boolean join(PlayerData player) {
+    public boolean join(final PlayerData player) {
         if(!super.join(player))
             return false;
 
@@ -146,7 +146,7 @@ public class ArenaSolo extends Arena {
      * @return true if has left, false otherwise
      */
     @Override
-    public boolean leave(PlayerData player) {
+    public boolean leave(final PlayerData player) {
         if(!super.leave(player))
             return false;
 
@@ -160,7 +160,7 @@ public class ArenaSolo extends Arena {
      * @param player player to spectate
      * @return true if is spectating, false otherwise
      */
-    public boolean spectate(PlayerData player) {
+    public boolean spectate(final PlayerData player) {
         if(!super.spectate(player))
             return false;
 

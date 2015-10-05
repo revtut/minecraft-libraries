@@ -3,7 +3,6 @@ package net.revtut.libraries.games.events.player;
 import net.revtut.libraries.games.arena.Arena;
 import net.revtut.libraries.games.player.PlayerData;
 import net.revtut.libraries.games.team.Team;
-import org.bukkit.event.HandlerList;
 
 /**
  * Player Leave Team Event
@@ -13,7 +12,7 @@ public class PlayerLeaveTeamEvent extends PlayerLeaveArenaEvent {
     /**
      * Team that was joined
      */
-    private Team team;
+    private final Team team;
 
     /**
      * Constructor of PlayerLeaveTeamEvent
@@ -22,7 +21,7 @@ public class PlayerLeaveTeamEvent extends PlayerLeaveArenaEvent {
      * @param team team that was left
      * @param leaveMessage leave message
      */
-    public PlayerLeaveTeamEvent(PlayerData player, Arena arena, Team team, String leaveMessage) {
+    public PlayerLeaveTeamEvent(final PlayerData player, final Arena arena, final Team team, final String leaveMessage) {
         super(player, arena, leaveMessage);
         this.team = team;
     }
@@ -35,11 +34,4 @@ public class PlayerLeaveTeamEvent extends PlayerLeaveArenaEvent {
         return team;
     }
 
-    /**
-     * Get the handlers of the event
-     * @return handlers of the event
-     */
-    public HandlerList getHandlers() {
-        return super.getHandlers();
-    }
 }

@@ -13,7 +13,7 @@ public class AnvilContainer extends ContainerAnvil {
      * Constructor of AnvilContainer
      * @param entity entity to open the anvil container
      */
-    public AnvilContainer(EntityHuman entity) {
+    public AnvilContainer(final EntityHuman entity) {
         super(entity.inventory, entity.world, new BlockPosition(0, 0, 0), entity);
     }
 
@@ -23,7 +23,7 @@ public class AnvilContainer extends ContainerAnvil {
      * @return true if can, false otherwise
      */
     @Override
-    public boolean a(EntityHuman entityhuman) {
+    public boolean a(final EntityHuman entityhuman) {
         return true;
     }
 }

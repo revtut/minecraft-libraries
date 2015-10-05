@@ -40,21 +40,21 @@ public class GameListener implements Listener {
     /**
      * Game API instance
      */
-    private GameAPI gameAPI = GameAPI.getInstance();
+    private final GameAPI gameAPI = GameAPI.getInstance();
 
     /**
      * Controls the block break event
      * @param event block break event
      */
     @EventHandler
-    public void onBlockBreak(BlockBreakEvent event) {
-        UUID uuid = event.getPlayer().getUniqueId();
+    public void onBlockBreak(final BlockBreakEvent event) {
+        final UUID uuid = event.getPlayer().getUniqueId();
 
         // Get needed data
-        Arena arena = gameAPI.getPlayerArena(uuid);
+        final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        PlayerData player = gameAPI.getPlayer(uuid);
+        final PlayerData player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -70,14 +70,14 @@ public class GameListener implements Listener {
      * @param event block place event
      */
     @EventHandler
-    public void onBlockPlace(BlockPlaceEvent event) {
-        UUID uuid = event.getPlayer().getUniqueId();
+    public void onBlockPlace(final BlockPlaceEvent event) {
+        final UUID uuid = event.getPlayer().getUniqueId();
 
         // Get needed data
-        Arena arena = gameAPI.getPlayerArena(uuid);
+        final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        PlayerData player = gameAPI.getPlayer(uuid);
+        final PlayerData player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -93,14 +93,14 @@ public class GameListener implements Listener {
      * @param event player bucket empty event
      */
     @EventHandler
-    public void onBucketEmpty(PlayerBucketEmptyEvent event) {
-        UUID uuid = event.getPlayer().getUniqueId();
+    public void onBucketEmpty(final PlayerBucketEmptyEvent event) {
+        final UUID uuid = event.getPlayer().getUniqueId();
 
         // Get needed data
-        Arena arena = gameAPI.getPlayerArena(uuid);
+        final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        PlayerData player = gameAPI.getPlayer(uuid);
+        final PlayerData player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -116,14 +116,14 @@ public class GameListener implements Listener {
      * @param event player bucket fill event
      */
     @EventHandler
-    public void onBucketFill(PlayerBucketFillEvent event) {
-        UUID uuid = event.getPlayer().getUniqueId();
+    public void onBucketFill(final PlayerBucketFillEvent event) {
+        final UUID uuid = event.getPlayer().getUniqueId();
 
         // Get needed data
-        Arena arena = gameAPI.getPlayerArena(uuid);
+        final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        PlayerData player = gameAPI.getPlayer(uuid);
+        final PlayerData player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -139,14 +139,14 @@ public class GameListener implements Listener {
      * @param event async player chat event
      */
     @EventHandler
-    public void onChat(AsyncPlayerChatEvent event) {
-        UUID uuid = event.getPlayer().getUniqueId();
+    public void onChat(final AsyncPlayerChatEvent event) {
+        final UUID uuid = event.getPlayer().getUniqueId();
 
         // Get needed data
-        Arena arena = gameAPI.getPlayerArena(uuid);
+        final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        PlayerData player = gameAPI.getPlayer(uuid);
+        final PlayerData player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -167,7 +167,7 @@ public class GameListener implements Listener {
         message = TextAPI.replaceAdvertisement(message, "mc.revtut.net", "https://www.revtut.net");
 
         // Call event
-        PlayerTalkEvent playerTalkEvent = new PlayerTalkEvent(player, arena, "<" + player.getName() + "> " + message);
+        final PlayerTalkEvent playerTalkEvent = new PlayerTalkEvent(player, arena, "<" + player.getName() + "> " + message);
         Bukkit.getPluginManager().callEvent(playerTalkEvent);
 
         if(playerTalkEvent.isCancelled())
@@ -182,7 +182,7 @@ public class GameListener implements Listener {
      * @param event entity damage event
      */
     @EventHandler
-    public void onDamage(EntityDamageEvent event) {
+    public void onDamage(final EntityDamageEvent event) {
         if(!(event.getEntity() instanceof Player))
             return;
 
@@ -190,10 +190,10 @@ public class GameListener implements Listener {
             return;
 
         // Get needed data
-        Arena arena = gameAPI.getPlayerArena(event.getEntity().getUniqueId());
+        final Arena arena = gameAPI.getPlayerArena(event.getEntity().getUniqueId());
         if(arena == null)
             return;
-        PlayerData target = gameAPI.getPlayer(event.getEntity().getUniqueId());
+        final PlayerData target = gameAPI.getPlayer(event.getEntity().getUniqueId());
         if(target == null)
             return;
 
@@ -208,7 +208,7 @@ public class GameListener implements Listener {
                     event.setCancelled(true);
 
                     // Get spectator location accordingly the arena state
-                    Location spectatorLocation;
+                    final Location spectatorLocation;
                     if(arena.getSession().getState() == GameState.DEATHMATCH)
                         spectatorLocation = arena.getSpectatorDeathMatchLocation();
                     else
@@ -218,10 +218,10 @@ public class GameListener implements Listener {
                 } else if (target.getState() == PlayerState.DEAD) {
                     event.setCancelled(true);
                     if(arena.getType() == ArenaType.SOLO) {
-                        ArenaSolo arenaSolo = (ArenaSolo) arena;
+                        final ArenaSolo arenaSolo = (ArenaSolo) arena;
 
                         // Get dead location accordingly the arena state
-                        Location deadLocation;
+                        final Location deadLocation;
                         if(arenaSolo.getSession().getState() == GameState.DEATHMATCH)
                             deadLocation = arenaSolo.getDeadDeathMatchLocation();
                         else
@@ -229,10 +229,10 @@ public class GameListener implements Listener {
                         target.getBukkitPlayer().teleport(deadLocation);
                         return;
                     } else if (arena.getType() == ArenaType.TEAM) {
-                        ArenaTeam arenaTeam = (ArenaTeam) arena;
+                        final ArenaTeam arenaTeam = (ArenaTeam) arena;
 
                         // Get dead location accordingly the arena state
-                        Location deadLocation;
+                        final Location deadLocation;
                         if(arenaTeam.getSession().getState() == GameState.DEATHMATCH)
                             deadLocation = arenaTeam.getDeadDeathMatchLocation(arenaTeam.getTeam(target));
                         else
@@ -251,7 +251,7 @@ public class GameListener implements Listener {
         }
 
         // Call event
-        PlayerDamageEvent playerDamageEvent = new PlayerDamageEvent(target, arena, event.getDamage());
+        final PlayerDamageEvent playerDamageEvent = new PlayerDamageEvent(target, arena, event.getDamage());
         Bukkit.getPluginManager().callEvent(playerDamageEvent);
 
         if (playerDamageEvent.isCancelled()) {
@@ -267,7 +267,7 @@ public class GameListener implements Listener {
      * @param event entity damage by entity event
      */
     @EventHandler
-    public void onDamageByEntity(EntityDamageByEntityEvent event) {
+    public void onDamageByEntity(final EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof Player))
             return;
 
@@ -275,11 +275,11 @@ public class GameListener implements Listener {
             return;
 
         // Get the UUID of the damager
-        UUID damagerUUID;
+        final UUID damagerUUID;
         if(event.getDamager() instanceof Player) {
             damagerUUID = event.getDamager().getUniqueId();
         } else {
-            Projectile projectile = (Projectile) event.getDamager();
+            final Projectile projectile = (Projectile) event.getDamager();
             if(!(projectile.getShooter() instanceof Player))
                 return;
 
@@ -287,16 +287,16 @@ public class GameListener implements Listener {
         }
 
         // Get needed data
-        Arena arenaTarget = gameAPI.getPlayerArena(event.getEntity().getUniqueId());
+        final Arena arenaTarget = gameAPI.getPlayerArena(event.getEntity().getUniqueId());
         if (arenaTarget == null)
             return;
-        Arena arenaDamager = gameAPI.getPlayerArena(damagerUUID);
+        final Arena arenaDamager = gameAPI.getPlayerArena(damagerUUID);
         if (arenaDamager == null)
             return;
-        PlayerData target = gameAPI.getPlayer(event.getEntity().getUniqueId());
+        final PlayerData target = gameAPI.getPlayer(event.getEntity().getUniqueId());
         if (target == null)
             return;
-        PlayerData damager = gameAPI.getPlayer(damagerUUID);
+        final PlayerData damager = gameAPI.getPlayer(damagerUUID);
         if (damager == null)
             return;
 
@@ -315,10 +315,10 @@ public class GameListener implements Listener {
 
         // Check friendly fire
         if(arenaDamager.getType() == ArenaType.TEAM) {
-            ArenaTeam arena = (ArenaTeam) arenaDamager;
+            final ArenaTeam arena = (ArenaTeam) arenaDamager;
 
             if(arena.sameTeam(damager, target)) {
-                PlayerFriendlyFireEvent playerFriendlyFireEvent = new PlayerFriendlyFireEvent(target, damager, damager.getBukkitPlayer().getItemInHand(), event.getDamage(), arenaDamager);
+                final PlayerFriendlyFireEvent playerFriendlyFireEvent = new PlayerFriendlyFireEvent(target, damager, damager.getBukkitPlayer().getItemInHand(), event.getDamage(), arenaDamager);
                 Bukkit.getPluginManager().callEvent(playerFriendlyFireEvent);
 
                 if (playerFriendlyFireEvent.isCancelled()) {
@@ -332,7 +332,7 @@ public class GameListener implements Listener {
         }
 
         // Call event
-        PlayerDamageByPlayerEvent playerDamageByPlayerEvent = new PlayerDamageByPlayerEvent(target, damager, damager.getBukkitPlayer().getItemInHand(), event.getDamage(), arenaDamager);
+        final PlayerDamageByPlayerEvent playerDamageByPlayerEvent = new PlayerDamageByPlayerEvent(target, damager, damager.getBukkitPlayer().getItemInHand(), event.getDamage(), arenaDamager);
         Bukkit.getPluginManager().callEvent(playerDamageByPlayerEvent);
 
         if (playerDamageByPlayerEvent.isCancelled()) {
@@ -348,14 +348,14 @@ public class GameListener implements Listener {
      * @param event player death event
      */
     @EventHandler
-    public void onDeath(PlayerDeathEvent event) {
-        UUID uuid = event.getEntity().getUniqueId();
+    public void onDeath(final PlayerDeathEvent event) {
+        final UUID uuid = event.getEntity().getUniqueId();
 
         // Get needed data
-        Arena arena = gameAPI.getPlayerArena(uuid);
+        final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        PlayerData player = gameAPI.getPlayer(uuid);
+        final PlayerData player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
         PlayerData killer = null;
@@ -366,7 +366,7 @@ public class GameListener implements Listener {
         }
 
         // Call event
-        PlayerDieEvent playerDieEvent = new PlayerDieEvent(player, killer, arena, "<" + player.getName() + "> has died.");
+        final PlayerDieEvent playerDieEvent = new PlayerDieEvent(player, killer, arena, "<" + player.getName() + "> has died.");
         Bukkit.getPluginManager().callEvent(playerDieEvent);
 
         arena.broadcastMessage(playerDieEvent.getDeathMessage());
@@ -378,14 +378,14 @@ public class GameListener implements Listener {
      * @param event player drop item event
      */
     @EventHandler
-    public void onDropItem(PlayerDropItemEvent event) {
-        UUID uuid = event.getPlayer().getUniqueId();
+    public void onDropItem(final PlayerDropItemEvent event) {
+        final UUID uuid = event.getPlayer().getUniqueId();
 
         // Get needed data
-        Arena arena = gameAPI.getPlayerArena(uuid);
+        final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        PlayerData player = gameAPI.getPlayer(uuid);
+        final PlayerData player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -401,14 +401,14 @@ public class GameListener implements Listener {
      * @param event food level change event
      */
     @EventHandler
-    public void onFoodLevelChange(FoodLevelChangeEvent event) {
-        UUID uuid = event.getEntity().getUniqueId();
+    public void onFoodLevelChange(final FoodLevelChangeEvent event) {
+        final UUID uuid = event.getEntity().getUniqueId();
 
         // Get needed data
-        Arena arena = gameAPI.getPlayerArena(uuid);
+        final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        PlayerData player = gameAPI.getPlayer(uuid);
+        final PlayerData player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -424,15 +424,15 @@ public class GameListener implements Listener {
      * @param event player interact event
      */
     @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
-        Player bukkitPlayer = event.getPlayer();
-        UUID uuid = bukkitPlayer.getUniqueId();
+    public void onInteract(final PlayerInteractEvent event) {
+        final Player bukkitPlayer = event.getPlayer();
+        final UUID uuid = bukkitPlayer.getUniqueId();
 
         // Get needed data
-        Arena arena = gameAPI.getPlayerArena(uuid);
+        final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        PlayerData player = gameAPI.getPlayer(uuid);
+        final PlayerData player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -446,11 +446,11 @@ public class GameListener implements Listener {
             return;
 
         // Check guns
-        ItemStack itemInHand = bukkitPlayer.getItemInHand();
+        final ItemStack itemInHand = bukkitPlayer.getItemInHand();
         if(!(itemInHand instanceof Gun))
             return;
 
-        Gun gun = (Gun) itemInHand;
+        final Gun gun = (Gun) itemInHand;
         if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
             gun.shoot(bukkitPlayer);
         else if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
@@ -462,14 +462,14 @@ public class GameListener implements Listener {
      * @param event inventory click event
      */
     @EventHandler
-    public void onInventoryClick(InventoryClickEvent event) {
-        UUID uuid = event.getWhoClicked().getUniqueId();
+    public void onInventoryClick(final InventoryClickEvent event) {
+        final UUID uuid = event.getWhoClicked().getUniqueId();
 
         // Get needed data
-        Arena arena = gameAPI.getPlayerArena(uuid);
+        final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        PlayerData player = gameAPI.getPlayer(uuid);
+        final PlayerData player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -485,20 +485,20 @@ public class GameListener implements Listener {
      * @param event player join event
      */
     @EventHandler
-    public void onJoin(PlayerJoinEvent event) {
-        UUID uuid = event.getPlayer().getUniqueId();
+    public void onJoin(final PlayerJoinEvent event) {
+        final UUID uuid = event.getPlayer().getUniqueId();
 
         // Hide every player
         gameAPI.hideServer(event.getPlayer());
 
         // Get needed data
-        PlayerData player = gameAPI.getPlayer(uuid);
+        final PlayerData player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
         // Join random game
-        GameController gameController = gameAPI.getRandomGame();
-        Arena arena = gameController.getAvailableArena(ArenaPreference.MORE_PLAYERS);
+        final GameController gameController = gameAPI.getRandomGame();
+        final Arena arena = gameController.getAvailableArena(ArenaPreference.MORE_PLAYERS);
 
         // No arena available or not allowed to join the arena
         if(arena == null || !arena.join(player)) {
@@ -513,14 +513,14 @@ public class GameListener implements Listener {
      * @param event player move event
      */
     @EventHandler
-    public void onMove(PlayerMoveEvent event) {
-        UUID uuid = event.getPlayer().getUniqueId();
+    public void onMove(final PlayerMoveEvent event) {
+        final UUID uuid = event.getPlayer().getUniqueId();
 
         // Get needed data
-        Arena arena = gameAPI.getPlayerArena(uuid);
+        final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        PlayerData player = gameAPI.getPlayer(uuid);
+        final PlayerData player = gameAPI.getPlayer(uuid);
         if (player == null)
             return;
 
@@ -531,7 +531,7 @@ public class GameListener implements Listener {
         }
 
         // Crossing borders
-        Location[] corners;
+        final Location[] corners;
         if(arena.getSession().getState() == GameState.DEATHMATCH)
             corners = arena.getCornersDeathMatch();
         else
@@ -539,7 +539,7 @@ public class GameListener implements Listener {
 
         if(!AlgebraAPI.isInAABB(event.getTo(), corners[0], corners[1])) {
             // Call event
-            PlayerCrossArenaBorderEvent crossArenaBorderEvent = new PlayerCrossArenaBorderEvent(player, arena);
+            final PlayerCrossArenaBorderEvent crossArenaBorderEvent = new PlayerCrossArenaBorderEvent(player, arena);
             Bukkit.getPluginManager().callEvent(crossArenaBorderEvent);
 
             if(event.isCancelled()) {
@@ -554,14 +554,14 @@ public class GameListener implements Listener {
      * @param event player pickup item event
      */
     @EventHandler
-    public void onPickupItem(PlayerPickupItemEvent event) {
-        UUID uuid = event.getPlayer().getUniqueId();
+    public void onPickupItem(final PlayerPickupItemEvent event) {
+        final UUID uuid = event.getPlayer().getUniqueId();
 
         // Get needed data
-        Arena arena = gameAPI.getPlayerArena(uuid);
+        final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        PlayerData player = gameAPI.getPlayer(uuid);
+        final PlayerData player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -577,14 +577,14 @@ public class GameListener implements Listener {
      * @param event player quit event
      */
     @EventHandler
-    public void onQuit(PlayerQuitEvent event) {
-        UUID uuid = event.getPlayer().getUniqueId();
+    public void onQuit(final PlayerQuitEvent event) {
+        final UUID uuid = event.getPlayer().getUniqueId();
 
         // Get needed data
-        PlayerData player = gameAPI.getPlayer(uuid);
+        final PlayerData player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
-        Arena arena = gameAPI.getPlayerArena(uuid);
+        final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena != null)
             arena.leave(player);
 

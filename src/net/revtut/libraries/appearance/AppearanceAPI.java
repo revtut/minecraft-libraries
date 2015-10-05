@@ -39,14 +39,14 @@ public final class AppearanceAPI {
      * @param delay  delay between each firework
      */
     public static void launchFirework(final Player player, final int amount, final int delay) {
-        Libraries plugin = Libraries.getInstance();
+        final Libraries plugin = Libraries.getInstance();
         for (int i = 0; i < amount; i++) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
                 final Firework fw = player.getWorld().spawn(player.getLocation(), Firework.class);
                 final FireworkMeta fm = fw.getFireworkMeta();
 
                 final int fType = random.nextInt(5) + 1;
-                FireworkEffect.Type type;
+                final FireworkEffect.Type type;
                 switch (fType) {
                     case 1:
                         type = FireworkEffect.Type.BALL;

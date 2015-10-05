@@ -15,7 +15,7 @@ public class MySQL extends Database {
      * @param username username of the MySQL
      * @param password password of the MySQL
      */
-    public MySQL(String hostname, int port, String database, String username, String password) {
+    public MySQL(final String hostname, final int port, final String database, final String username, final String password) {
         super("com.mysql.jdbc.Driver", "jdbc:mysql://" + hostname + ":" + port + "/" + database, username, password);
     }
 }

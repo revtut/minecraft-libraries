@@ -28,11 +28,11 @@ public final class CameraAPI {
      * @param alvo camera to be sent
      */
     public static void sendCamera(final Player player, final Player alvo) {
-        Libraries plugin = Libraries.getInstance();
+        final Libraries plugin = Libraries.getInstance();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            CraftPlayer craftAlvo = (CraftPlayer) alvo;
-            PacketPlayOutCamera camera = new PacketPlayOutCamera(craftAlvo.getHandle());
-            ((CraftPlayer)alvo).getHandle().playerConnection.sendPacket(camera);
+            final CraftPlayer craftAlvo = (CraftPlayer) alvo;
+            final PacketPlayOutCamera camera = new PacketPlayOutCamera(craftAlvo.getHandle());
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(camera);
         });
     }
 
@@ -42,10 +42,10 @@ public final class CameraAPI {
      * @param player player to be reseated the camera
      */
     public static void resetCamera(final Player player) {
-        Libraries plugin = Libraries.getInstance();
+        final Libraries plugin = Libraries.getInstance();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            CraftPlayer craftPlayer = (CraftPlayer) player;
-            PacketPlayOutCamera camera = new PacketPlayOutCamera(craftPlayer.getHandle());
+            final CraftPlayer craftPlayer = (CraftPlayer) player;
+            final PacketPlayOutCamera camera = new PacketPlayOutCamera(craftPlayer.getHandle());
             craftPlayer.getHandle().playerConnection.sendPacket(camera);
         });
     }

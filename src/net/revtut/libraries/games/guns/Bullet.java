@@ -10,27 +10,27 @@ public abstract class Bullet {
     /**
      * Name of the bullet
      */
-    private String name;
+    private final String name;
 
     /**
      * Projectile of the bullet
      */
-    private Class<? extends Projectile> projectile;
+    private final Class<? extends Projectile> projectile;
 
     /**
      * Minimum damage of the weapon
      */
-    private float minDamage;
+    private final float minDamage;
 
     /**
      * Maximum damage of the weapon
      */
-    private float maxDamage;
+    private final float maxDamage;
 
     /**
      * Knockback of the bullet
      */
-    private float knockback;
+    private final float knockback;
 
     /**
      * Constructor of Bullet
@@ -40,7 +40,7 @@ public abstract class Bullet {
      * @param maxDamage maximum damage per shot
      * @param knockback knockback on hit of the bullet
      */
-    public Bullet(String name, Class<? extends Projectile> projectile, float minDamage, float maxDamage, float knockback) {
+    public Bullet(final String name, final Class<? extends Projectile> projectile, final float minDamage, final float maxDamage, final float knockback) {
         this.name = name;
         this.projectile = projectile;
         this.minDamage = minDamage;

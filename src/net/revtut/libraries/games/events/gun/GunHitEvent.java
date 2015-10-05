@@ -13,7 +13,7 @@ public class GunHitEvent extends GunEvent implements Cancellable {
     /**
      * Entity that was hit
      */
-    private Entity victim;
+    private final Entity victim;
 
     /**
      * Constructor of GunHitEvent
@@ -21,8 +21,16 @@ public class GunHitEvent extends GunEvent implements Cancellable {
      * @param victim entity that was hit
      * @param gun gun that was used
      */
-    public GunHitEvent(Player shooter, Entity victim, Gun gun) {
+    public GunHitEvent(final Player shooter, final Entity victim, final Gun gun) {
         super(shooter, gun);
         this.victim = victim;
+    }
+
+    /**
+     * Get the victim of the hit
+     * @return victim of the hit
+     */
+    public Entity getVictim() {
+        return victim;
     }
 }

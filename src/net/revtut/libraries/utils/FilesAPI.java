@@ -29,7 +29,7 @@ public final class FilesAPI {
     public static List<String> getLines(final File file) {
         try {
             return getLines(new FileInputStream(file));
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             e.printStackTrace();
         }
         return null;
@@ -41,13 +41,13 @@ public final class FilesAPI {
      * @return all lines of the input stream
      */
     public static List<String> getLines(final InputStream inputStream) {
-        List<String> lines = new ArrayList<>();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+        final List<String> lines = new ArrayList<>();
+        final BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
         String line;
         try {
             while ((line = reader.readLine()) != null)
                 lines.add(line);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             e.printStackTrace();
         }
 
@@ -79,7 +79,7 @@ public final class FilesAPI {
      */
     public static boolean copyFile(final InputStream inputStream, final File outFile) {
         try {
-            OutputStream outputStream = new FileOutputStream(outFile);
+            final OutputStream outputStream = new FileOutputStream(outFile);
             final byte[] buf = new byte[1024];
             int len;
             while ((len = inputStream.read(buf)) > 0) {
@@ -109,10 +109,10 @@ public final class FilesAPI {
                     if(!trgDir.mkdirs())
                         return false;
                 // List of files inside source directory
-                String[] fList = srcDir.list();
-                for (String aFList : fList) {
-                    File dest = new File(trgDir, aFList);
-                    File source = new File(srcDir, aFList);
+                final String[] fList = srcDir.list();
+                for (final String aFList : fList) {
+                    final File dest = new File(trgDir, aFList);
+                    final File source = new File(srcDir, aFList);
 
                     // Copy that file / directory
                     copyDirectory(source, dest);
@@ -121,7 +121,7 @@ public final class FilesAPI {
                 // Copy the file
                 copyFile(srcDir, trgDir);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -137,14 +137,14 @@ public final class FilesAPI {
     public static boolean removeDirectory(final File dir) {
         try {
             if (dir.isDirectory()) {
-                File[] files = dir.listFiles();
+                final File[] files = dir.listFiles();
                 if (files != null)
-                    for (File c : files)
+                    for (final File c : files)
                         removeDirectory(c);
             }
             if(!dir.delete())
                 Logger.getLogger("Minecraft").log(Level.WARNING, "Error while trying to delete " + dir.getName() + ".");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
             return false;
         }

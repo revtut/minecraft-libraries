@@ -18,7 +18,7 @@ public abstract class ArenaEvent extends Event implements Cancellable {
     /**
      * Arena where the event occurred
      */
-    private Arena arena;
+    private final Arena arena;
 
     /**
      * Flag to check if the event was cancelled
@@ -29,7 +29,7 @@ public abstract class ArenaEvent extends Event implements Cancellable {
      * Constructor of ArenaEvent
      * @param arena arena where the event occurred
      */
-    public ArenaEvent(Arena arena) {
+    public ArenaEvent(final Arena arena) {
         this.arena = arena;
         this.isCancelled = false;
     }
@@ -62,7 +62,7 @@ public abstract class ArenaEvent extends Event implements Cancellable {
      * Set the event as cancelled or not
      * @param cancelled new value for cancelled
      */
-    public void setCancelled(boolean cancelled) {
+    public void setCancelled(final boolean cancelled) {
         this.isCancelled = cancelled;
     }
 

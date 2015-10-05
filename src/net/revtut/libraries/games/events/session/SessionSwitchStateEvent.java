@@ -11,12 +11,12 @@ public class SessionSwitchStateEvent extends SessionEvent {
     /**
      * State before the switch
      */
-    private GameState previousState;
+    private final GameState previousState;
 
     /**
      * State after the switch
      */
-    private GameState nextState;
+    private final GameState nextState;
 
     /**
      * Duration of the next state
@@ -29,10 +29,11 @@ public class SessionSwitchStateEvent extends SessionEvent {
      * @param previousState state before the switch
      * @param nextState state after the switch
      */
-    public SessionSwitchStateEvent(GameSession gameSession, GameState previousState, GameState nextState, int duration) {
+    public SessionSwitchStateEvent(final GameSession gameSession, final GameState previousState, final GameState nextState, final int duration) {
         super(gameSession);
         this.previousState = previousState;
         this.nextState = nextState;
+        this.duration = duration;
     }
 
     /**
@@ -61,7 +62,7 @@ public class SessionSwitchStateEvent extends SessionEvent {
      * Set the duration of the next state
      * @param duration duration of the next state
      */
-    public void setDuration(int duration) {
+    public void setDuration(final int duration) {
         this.duration = duration;
     }
 }

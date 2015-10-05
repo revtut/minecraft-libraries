@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,9 +27,9 @@ public final class ItemAPI {
      * @param material material of the item stack
      * @param name name of the item stack
      * @param lines lines of the item stack
-     * @return
+     * @return created item stack
      */
-    public static ItemStack createItemStack(Material material, String name, String[] lines) {
+    public static ItemStack createItemStack(final Material material, final String name, final String[] lines) {
         return createItemStack(material.getId(), (short) 0, name, lines);
     }
 
@@ -38,9 +39,9 @@ public final class ItemAPI {
      * @param value value of the item stack
      * @param name name of the item stack
      * @param lines lines of the item stack
-     * @return
+     * @return created item stack
      */
-    public static ItemStack createItemStack(Material material, short value, String name, String[] lines) {
+    public static ItemStack createItemStack(final Material material, final short value, final String name, final String[] lines) {
         return createItemStack(material.getId(), value, name, lines);
     }
 
@@ -50,16 +51,17 @@ public final class ItemAPI {
      * @param value value of the item stack
      * @param name name of the item stack
      * @param lines lines of the item stack
-     * @return
+     * @return created item stack
      */
-    public static ItemStack createItemStack(int materialID, short value, String name, String[] lines) {
-        ItemStack itemStack = new ItemStack(materialID, 1, value);
-        ItemMeta itemMeta = itemStack.getItemMeta();
+    public static ItemStack createItemStack(final int materialID, final short value, final String name, final String[] lines) {
+        final ItemStack itemStack = new ItemStack(materialID, 1, value);
+
+        final ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(name);
-        List<String> lore = new ArrayList<>();
-        for (String line : lines) {
-            lore.add(line);
-        }
+
+        final List<String> lore = new ArrayList<>();
+        Collections.addAll(lore, lines);
+
         itemMeta.setLore(lore);
         itemStack.setItemMeta(itemMeta);
         return itemStack;
@@ -70,8 +72,8 @@ public final class ItemAPI {
      * @param item item to be applied the glow effect
      * @return item wth glow effect
      */
-    public static ItemStack applyGlowEffect(ItemStack item) {
-        net.minecraft.server.v1_8_R3.ItemStack itemStack = CraftItemStack.asNMSCopy(item);
+    public static ItemStack applyGlowEffect(final ItemStack item) {
+        final net.minecraft.server.v1_8_R3.ItemStack itemStack = CraftItemStack.asNMSCopy(item);
         NBTTagCompound tag = null;
         if (!itemStack.hasTag()) {
             tag = new NBTTagCompound();
@@ -79,7 +81,7 @@ public final class ItemAPI {
         }
         if (tag == null)
             tag = itemStack.getTag();
-        NBTTagList ench = new NBTTagList();
+        final NBTTagList ench = new NBTTagList();
         tag.set("ench", ench);
         itemStack.setTag(tag);
         return CraftItemStack.asCraftMirror(itemStack);
@@ -89,12 +91,12 @@ public final class ItemAPI {
      * Open an anvil menu to player
      * @param player player to open the anvil menu
      */
-    public static void openAnvil(Player player) {
-        EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
+    public static void openAnvil(final Player player) {
+        final EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
 
-        AnvilContainer container = new AnvilContainer(entityPlayer);
+        final AnvilContainer container = new AnvilContainer(entityPlayer);
 
-        int containerCounter = entityPlayer.nextContainerCounter();
+        final int containerCounter = entityPlayer.nextContainerCounter();
         entityPlayer.playerConnection.sendPacket(new PacketPlayOutOpenWindow(containerCounter, "minecraft:anvil", new ChatMessage("Repairing"), 0));
         entityPlayer.activeContainer = container;
         entityPlayer.activeContainer.windowId = containerCounter;

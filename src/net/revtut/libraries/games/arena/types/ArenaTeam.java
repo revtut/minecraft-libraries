@@ -37,7 +37,7 @@ public class ArenaTeam extends Arena {
      * Constructor of ArenaTeam
      * @param name name of the arena
      */
-    public ArenaTeam(String name) {
+    public ArenaTeam(final String name) {
         super(name);
     }
 
@@ -56,9 +56,9 @@ public class ArenaTeam extends Arena {
      * @param teams teams of the arena
      * @param gameSession session of the arena
      */
-    public void initialize(World arenaWorld, Location lobbyLocation, Location spectatorLocation, Location spectatorDeathMatchLocation,
-                           Location[] corners, Location[] cornersDeathMatch, Map<Team, List<Location>> spawnLocations, Map<Team, Location> deadLocations,
-                           Map<Team, Location> deadDeathMatchLocation, Map<Team, List<Location>> deathMatchLocations, List<Team> teams, GameSession gameSession) {
+    public void initialize(final World arenaWorld, final Location lobbyLocation, final Location spectatorLocation, final Location spectatorDeathMatchLocation,
+                           final Location[] corners, final Location[] cornersDeathMatch, final Map<Team, List<Location>> spawnLocations, final Map<Team, Location> deadLocations,
+                           final Map<Team, Location> deadDeathMatchLocation, final Map<Team, List<Location>> deathMatchLocations, final List<Team> teams, final GameSession gameSession) {
         super.initialize(arenaWorld, lobbyLocation, spectatorLocation, spectatorDeathMatchLocation, corners, cornersDeathMatch, gameSession);
         this.spawnLocations = spawnLocations;
         this.deadLocations = deadLocations;
@@ -88,8 +88,8 @@ public class ArenaTeam extends Arena {
      * @param player player to get its team
      * @return team of the player
      */
-    public Team getTeam(PlayerData player) {
-        for(Team team : teams)
+    public Team getTeam(final PlayerData player) {
+        for(final Team team : teams)
             if(team.containsPlayer(player))
                 return team;
         return null;
@@ -102,8 +102,8 @@ public class ArenaTeam extends Arena {
     public Team getEmptierTeam() {
         Team emptierTeam = null;
         int minimumPlayers = Integer.MAX_VALUE;
-        for(Team team : teams) {
-            int numberPlayers = team.getAllPlayers().size();
+        for(final Team team : teams) {
+            final int numberPlayers = team.getAllPlayers().size();
             if (numberPlayers < minimumPlayers) {
                 emptierTeam = team;
                 minimumPlayers = numberPlayers;
@@ -118,7 +118,7 @@ public class ArenaTeam extends Arena {
      * @param team team to get spawn locations
      * @return spawn locations of the team
      */
-    public List<Location> getSpawnLocations(Team team) {
+    public List<Location> getSpawnLocations(final Team team) {
         return spawnLocations.get(team);
     }
 
@@ -127,7 +127,7 @@ public class ArenaTeam extends Arena {
      * @param team team to get death location
      * @return death location of the team
      */
-    public Location getDeadLocation(Team team) {
+    public Location getDeadLocation(final Team team) {
         return deadLocations.get(team);
     }
 
@@ -136,7 +136,7 @@ public class ArenaTeam extends Arena {
      * @param team team to get death location on death match
      * @return death location of the team on death match
      */
-    public Location getDeadDeathMatchLocation(Team team) {
+    public Location getDeadDeathMatchLocation(final Team team) {
         return deadDeathMatchLocation.get(team);
     }
 
@@ -145,7 +145,7 @@ public class ArenaTeam extends Arena {
      * @param team team to get death match locations
      * @return death match locations of the team
      */
-    public List<Location> getDeathMatchLocations(Team team) {
+    public List<Location> getDeathMatchLocations(final Team team) {
         return deathMatchLocations.get(team);
     }
 
@@ -154,8 +154,8 @@ public class ArenaTeam extends Arena {
      * @return players on the arena
      */
     public List<PlayerData> getAllPlayers() {
-        List<PlayerData> players = new ArrayList<>();
-        for(Team team : teams)
+        final List<PlayerData> players = new ArrayList<>();
+        for(final Team team : teams)
             players.addAll(team.getAllPlayers());
         return players;
     }
@@ -165,8 +165,8 @@ public class ArenaTeam extends Arena {
      * @param uuid uuid of the player to be checked
      * @return true if contains, false otherwise
      */
-    public boolean containsPlayer(UUID uuid) {
-        for(Team team : teams)
+    public boolean containsPlayer(final UUID uuid) {
+        for(final Team team : teams)
             if(team.containsPlayer(uuid))
                 return true;
         return false;
@@ -178,7 +178,7 @@ public class ArenaTeam extends Arena {
      * @param target player two
      * @return true if they are on the same team, false otherwise
      */
-    public boolean sameTeam(PlayerData player, PlayerData target) {
+    public boolean sameTeam(final PlayerData player, final PlayerData target) {
         return getTeam(player).equals(getTeam(target));
     }
 
@@ -187,7 +187,7 @@ public class ArenaTeam extends Arena {
      * @param player player to join
      */
     @Override
-    public boolean join(PlayerData player) {
+    public boolean join(final PlayerData player) {
         if(teams.size() <= 0)
             throw new IllegalStateException("Player is trying to join a arena without any team!");
 
@@ -200,7 +200,7 @@ public class ArenaTeam extends Arena {
      * @param team team to be joined
      * @return true if has joined, false otherwise
      */
-    public boolean join(PlayerData player, Team team) {
+    public boolean join(final PlayerData player, final Team team) {
         if(!super.join(player))
             return false;
 
@@ -215,11 +215,11 @@ public class ArenaTeam extends Arena {
      * @return true if has left, false otherwise
      */
     @Override
-    public boolean leave(PlayerData player) {
+    public boolean leave(final PlayerData player) {
         if(!super.leave(player))
             return false;
 
-        for(Team team : teams) {
+        for(final Team team : teams) {
             if (!team.containsPlayer(player))
                 continue;
 
@@ -235,7 +235,7 @@ public class ArenaTeam extends Arena {
      * @param player player to spectate
      * @return true if is spectating, false otherwise
      */
-    public boolean spectate(PlayerData player) {
+    public boolean spectate(final PlayerData player) {
         if(!super.spectate(player))
             return false;
 

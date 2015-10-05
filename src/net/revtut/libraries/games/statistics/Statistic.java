@@ -11,18 +11,18 @@ public abstract class Statistic {
     /**
      * List with created statistics
      */
-    private static List<Statistic> statistics = new ArrayList<>();
+    private static final List<Statistic> statistics = new ArrayList<>();
 
     /**
      * Name of the statistic
      */
-    private String name;
+    private final String name;
 
     /**
      * Constructor of Statistic
      * @param name name of the statistic
      */
-    public Statistic(String name) {
+    public Statistic(final String name) {
         this.name = name;
 
         statistics.add(this);
@@ -41,8 +41,8 @@ public abstract class Statistic {
      * @param name name of the statistic
      * @return name of the statistic
      */
-    public Statistic getStatistic(String name) {
-        for(Statistic statistic : statistics)
+    public Statistic getStatistic(final String name) {
+        for(final Statistic statistic : statistics)
             if(statistic.getName().equalsIgnoreCase(name))
                 return statistic;
         return null;

@@ -14,20 +14,20 @@ public abstract class GameClass implements Listener {
     /**
      * Name of the class
      */
-    private String name;
+    private final String name;
 
 
     /**
      * Price of the class
      */
-    private int price;
+    private final int price;
 
     /**
      * Constructor of GameClass
      * @param name name of the class
      * @param price price of the class
      */
-    public GameClass(String name, int price) {
+    public GameClass(final String name, final int price) {
         this.name = name;
         this.price = price;
     }

@@ -377,7 +377,7 @@ public enum Language {
      * @param name name of the language
      * @param code code of the language
      */
-    Language(String name, String code) {
+    Language(final String name, final String code) {
         this.name = name;
         this.code = code;
     }

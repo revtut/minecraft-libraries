@@ -14,7 +14,7 @@ public class GunReloadEvent extends GunEvent implements Cancellable {
      * @param shooter player that used the gun
      * @param gun gun that was used
      */
-    public GunReloadEvent(Player shooter, Gun gun) {
+    public GunReloadEvent(final Player shooter, final Gun gun) {
         super(shooter, gun);
     }
 }

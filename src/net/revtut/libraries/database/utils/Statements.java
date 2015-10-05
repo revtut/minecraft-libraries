@@ -202,5 +202,5 @@ public enum Statements {
     /**
      * Vacuum statement
      */
-    VACUUM;
+    VACUUM
 }

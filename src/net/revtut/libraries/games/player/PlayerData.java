@@ -21,12 +21,12 @@ public class PlayerData implements Winner {
     /**
      * Player owner of this data
      */
-    private UUID uuid;
+    private final UUID uuid;
 
     /**
      * Date of the last login
      */
-    private Date lastLogin;
+    private final Date lastLogin;
 
     /**
      * Current arena of the player
@@ -46,18 +46,18 @@ public class PlayerData implements Winner {
     /**
      * Statistics of the player
      */
-    private Map<Statistic, Long> statistics;
+    private final Map<Statistic, Long> statistics;
 
     /**
      * Achievements of the the player
      */
-    private List<Achievement> achievements;
+    private final List<Achievement> achievements;
 
     /**
      * Constructor of PlayerData
      * @param uuid uuid of the owner player
      */
-    public PlayerData(UUID uuid) {
+    public PlayerData(final UUID uuid) {
         this.uuid = uuid;
         this.lastLogin = new Date();
         this.currentArena = null;
@@ -136,7 +136,7 @@ public class PlayerData implements Winner {
      * @param statistic statistic to get
      * @return value of the statistic
      */
-    public long getStatistic(Statistic statistic) {
+    public long getStatistic(final Statistic statistic) {
         if(!statistics.containsKey(statistic))
             return 0;
         return statistics.get(statistic);
@@ -154,7 +154,7 @@ public class PlayerData implements Winner {
      * Set the current arena of the player
      * @param arena current arena of the player
      */
-    public void setCurrentArena(Arena arena) {
+    public void setCurrentArena(final Arena arena) {
         this.currentArena = arena;
     }
 
@@ -162,7 +162,7 @@ public class PlayerData implements Winner {
      * Set the game class of the player
      * @param gameClass game class of the player
      */
-    public void setGameClass(GameClass gameClass) {
+    public void setGameClass(final GameClass gameClass) {
         this.gameClass = gameClass;
     }
 
@@ -170,7 +170,7 @@ public class PlayerData implements Winner {
      * Update the state of the player
      * @param state new state of the player
      */
-    public void updateState(PlayerState state) {
+    public void updateState(final PlayerState state) {
         this.state = state;
     }
 
@@ -179,7 +179,7 @@ public class PlayerData implements Winner {
      * @param statistic statistic to add
      * @param value value of the statistic
      */
-    public void addStatistic(Statistic statistic, long value) {
+    public void addStatistic(final Statistic statistic, final long value) {
         statistics.put(statistic, value);
     }
 
@@ -187,7 +187,7 @@ public class PlayerData implements Winner {
      * Add a achievements to the player
      * @param achievement achievements to be added
      */
-    public void addAchievement(Achievement achievement) {
+    public void addAchievement(final Achievement achievement) {
         achievements.add(achievement);
     }
 
@@ -195,7 +195,7 @@ public class PlayerData implements Winner {
      * Increment a statistic of the player
      * @param statistic statistic to be incremented
      */
-    public void incrementStatistic(Statistic statistic) {
+    public void incrementStatistic(final Statistic statistic) {
         incrementStatistic(statistic, 1);
     }
 
@@ -204,7 +204,7 @@ public class PlayerData implements Winner {
      * @param statistic statistic to be decremented
      * @param value value to be decremented
      */
-    public void incrementStatistic(Statistic statistic, long value) {
+    public void incrementStatistic(final Statistic statistic, final long value) {
         statistics.put(statistic, getStatistic(statistic) + value);
     }
 

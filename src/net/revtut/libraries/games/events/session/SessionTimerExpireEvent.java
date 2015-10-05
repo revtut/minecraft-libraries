@@ -11,7 +11,7 @@ public class SessionTimerExpireEvent extends SessionEvent {
      * Constructor of SessionTimerExpireEvent
      * @param gameSession session where the event occurred
      */
-    public SessionTimerExpireEvent(GameSession gameSession) {
+    public SessionTimerExpireEvent(final GameSession gameSession) {
         super(gameSession);
     }
 }

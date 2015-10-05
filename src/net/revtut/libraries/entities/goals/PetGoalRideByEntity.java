@@ -17,22 +17,22 @@ public class PetGoalRideByEntity extends PetGoal {
     /**
      * Pet entity
      */
-    private EntityInsentient pet;
+    private final EntityInsentient pet;
 
     /**
      * Passenger of the pet
      */
-    private Entity passenger;
+    private final Entity passenger;
 
     /**
      * Ride speed of the pet
      */
-    private float rideSpeed;
+    private final float rideSpeed;
 
     /**
      * Jump height of the pet
      */
-    private float jumpHeight;
+    private final float jumpHeight;
 
     /**
      * Set yaw and pitch protected method
@@ -51,7 +51,7 @@ public class PetGoalRideByEntity extends PetGoal {
      * @param rideSpeed ride speed of the pet
      * @param jumpHeight height of the pet jump
      */
-    public PetGoalRideByEntity(EntityInsentient pet, Entity passenger, float rideSpeed, float jumpHeight) {
+    public PetGoalRideByEntity(final EntityInsentient pet, final Entity passenger, final float rideSpeed, final float jumpHeight) {
         this.pet = pet;
         this.passenger = passenger;
         this.rideSpeed = rideSpeed;
@@ -153,7 +153,7 @@ public class PetGoalRideByEntity extends PetGoal {
                 if(JUMP_FIELD.getBoolean(passenger)) {
                     pet.motY = jumpHeight;
                 }
-            } catch (IllegalAccessException e) {
+            } catch (final IllegalAccessException e) {
                 e.printStackTrace();
             }
         }

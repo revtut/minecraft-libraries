@@ -12,5 +12,5 @@ public enum Rotation {
     /**
      * Counter clockwise rotation
      */
-    COUNTER_CLOCKWISE;
+    COUNTER_CLOCKWISE
 }

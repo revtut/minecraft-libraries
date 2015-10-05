@@ -32,14 +32,16 @@ public final class AlgebraAPI {
      * @param lookAt location to look at
      * @return location that will look lookAt
      */
-    public static Location locationLookAt(Location location, Location lookAt) {
+    public static Location locationLookAt(final Location location, final Location lookAt) {
         // Values of change in distance (make it relative)
-        double deltaX = lookAt.getX() - location.getX();
-        double deltaY = lookAt.getY() - location.getY();
-        double deltaZ = lookAt.getZ() - location.getZ();
+        final double deltaX = lookAt.getX() - location.getX();
+        final double deltaY = lookAt.getY() - location.getY();
+        final double deltaZ = lookAt.getZ() - location.getZ();
 
         // Values of the new location
-        double x = location.getX(), y = location.getY(), z = location.getZ();
+        final double x = location.getX();
+        final double y = location.getY();
+        final double z = location.getZ();
         float yaw = location.getYaw(), pitch;
 
         // Set yaw
@@ -54,7 +56,7 @@ public final class AlgebraAPI {
             yaw = (float) Math.PI;
 
         // Get the distance from deltaX/deltaZ
-        double deltaXZ = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaZ, 2));
+        final double deltaXZ = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaZ, 2));
 
         // Set pitch
         pitch = (float) -Math.atan(deltaY / deltaXZ);
@@ -73,17 +75,17 @@ public final class AlgebraAPI {
      * @param player player to get the closest player
      * @return closest player
      */
-    public static Player closestPlayer(List<Player> players, Player player) {
+    public static Player closestPlayer(final List<Player> players, final Player player) {
         Player closest = null;
         double minDistance = Integer.MAX_VALUE;
-        for(Player target : players) {
+        for(final Player target : players) {
             if(target.getUniqueId().equals(player.getUniqueId()))
                 continue;
 
             if(target.getWorld() != player.getWorld())
                 continue;
 
-            double distance = distanceBetween(player.getLocation(), target.getLocation());
+            final double distance = distanceBetween(player.getLocation(), target.getLocation());
 
             if(distance < minDistance){
                 minDistance = distance;
@@ -100,12 +102,17 @@ public final class AlgebraAPI {
      * @param target target location
      * @return distance in meters
      */
-    public static double distanceBetween(Location initial, Location target) {
-        int xI = initial.getBlockX(), xF = target.getBlockX();
-        int yI = initial.getBlockY(), yF = target.getBlockY();
-        int zI = initial.getBlockZ(), zF = target.getBlockZ();
+    public static double distanceBetween(final Location initial, final Location target) {
+        final int xI = initial.getBlockX();
+        final int xF = target.getBlockX();
+        final int yI = initial.getBlockY();
+        final int yF = target.getBlockY();
+        final int zI = initial.getBlockZ();
+        final int zF = target.getBlockZ();
 
-        int deltaX = xF - xI, deltaY = yF - yI, deltaZ = zF - zI;
+        final int deltaX = xF - xI;
+        final int deltaY = yF - yI;
+        final int deltaZ = zF - zI;
 
         return Math.sqrt((deltaX * deltaX) + (deltaY * deltaY) + (deltaZ * deltaZ));
     }
@@ -118,10 +125,10 @@ public final class AlgebraAPI {
      * @param numberIntegers number of unique integeres to be generated
      * @return list with random integers
      */
-    public static List<Integer> getUniqueRandomIntegers(int minInteger, int maxInteger, int numberIntegers) {
+    public static List<Integer> getUniqueRandomIntegers(final int minInteger, final int maxInteger, final int numberIntegers) {
         if(maxInteger < numberIntegers)
             return null;
-        List<Integer> list = new ArrayList<>();
+        final List<Integer> list = new ArrayList<>();
         int number;
         for(int i = 0; i < numberIntegers; i++) {
             do {
@@ -137,7 +144,9 @@ public final class AlgebraAPI {
      * @return random vector
      */
     public static Vector getRandomVector() {
-        double x, y, z;
+        final double x;
+        final double y;
+        final double z;
         x = Math.random() * 2 - 1;
         y = Math.random() * 2 - 1;
         z = Math.random() * 2 - 1;
@@ -151,32 +160,32 @@ public final class AlgebraAPI {
      * @param player player to get hit target
      * @return player that was hit
      */
-    public static Player getHitPlayer(Player player) {
+    public static Player getHitPlayer(final Player player) {
         final int ATTACK_REACH = 4;
 
-        Location playerPos = player.getEyeLocation();
-        Vector playerDir = playerPos.getDirection();
+        final Location playerPos = player.getEyeLocation();
+        final Vector playerDir = playerPos.getDirection();
 
-        Vector playerStart = playerPos.toVector();
-        Vector playerEnd = playerStart.add(playerDir.multiply(ATTACK_REACH));
+        final Vector playerStart = playerPos.toVector();
+        final Vector playerEnd = playerStart.add(playerDir.multiply(ATTACK_REACH));
 
         Player hit = null;
 
         // Get nearby entities
-        for (Entity entity : player.getNearbyEntities(5, 5, 5)) {
+        for (final Entity entity : player.getNearbyEntities(5, 5, 5)) {
             if(!(entity instanceof Player))
                 continue;
 
-            Player target = (Player) entity;
+            final Player target = (Player) entity;
 
             // If player is visible no need to check
             if (player.canSee(target))
                 continue;
 
             // Bounding box of the given player
-            Vector targetPos = target.getLocation().toVector();
-            Vector minimum = targetPos.add(new Vector(-0.5, 0, 0.5));
-            Vector maximum = targetPos.add(new Vector(0.5, 1.67, 0.5));
+            final Vector targetPos = target.getLocation().toVector();
+            final Vector minimum = targetPos.add(new Vector(-0.5, 0, 0.5));
+            final Vector maximum = targetPos.add(new Vector(0.5, 1.67, 0.5));
 
             if (hasIntersection(playerStart, playerEnd, minimum, maximum))
                 if (hit == null || AlgebraAPI.distanceBetween(hit.getLocation(), playerPos) > AlgebraAPI.distanceBetween(target.getLocation(), playerPos))
@@ -195,12 +204,12 @@ public final class AlgebraAPI {
      * @param max maximum corner
      * @return true if intersects
      */
-    public static boolean hasIntersection(Vector p1, Vector p2, Vector min, Vector max) {
-        double EPSILON = 1e-9f;
-        Vector d = p2.subtract(p1).multiply(0.5f);
-        Vector e = max.subtract(min).multiply(0.5f);
-        Vector c = p1.add(d).subtract(min.add(max)).multiply(0.5f);
-        Vector ad = d.setX(Math.abs(d.getX())).setY(Math.abs(d.getY())).setZ(Math.abs(d.getX())); // Returns same vector with all components positive
+    public static boolean hasIntersection(final Vector p1, final Vector p2, final Vector min, final Vector max) {
+        final double EPSILON = 1e-9f;
+        final Vector d = p2.subtract(p1).multiply(0.5f);
+        final Vector e = max.subtract(min).multiply(0.5f);
+        final Vector c = p1.add(d).subtract(min.add(max)).multiply(0.5f);
+        final Vector ad = d.setX(Math.abs(d.getX())).setY(Math.abs(d.getY())).setZ(Math.abs(d.getX())); // Returns same vector with all components positive
 
         if (Math.abs(c.getX()) > e.getX() + ad.getX())
             return false;
@@ -226,7 +235,7 @@ public final class AlgebraAPI {
      * @param maximum maximum location
      * @return true if is inside AABB, false otherwise
      */
-    public static boolean isInAABB(Location location, Location minimum, Location maximum){
+    public static boolean isInAABB(final Location location, final Location minimum, final Location maximum){
         return location.getX() >= minimum.getX() && location.getX() <= maximum.getX() && location.getY() >= minimum.getY() && location.getY() <= maximum.getY() && location.getZ() >= minimum.getZ() && location.getZ() <= maximum.getZ();
     }
 
@@ -236,12 +245,11 @@ public final class AlgebraAPI {
      * @param angle angle to rotate
      * @return rotated vector
      */
-    public static Vector rotateAroundAxisX(Vector vector, double angle) {
-        double y, z, cos, sin;
-        cos = Math.cos(angle);
-        sin = Math.sin(angle);
-        y = vector.getY() * cos - vector.getZ() * sin;
-        z = vector.getY() * sin + vector.getZ() * cos;
+    public static Vector rotateAroundAxisX(final Vector vector, final double angle) {
+        final double cos = Math.cos(angle);
+        final double sin = Math.sin(angle);
+        final double y =  vector.getY() * cos - vector.getZ() * sin;
+        final double z = vector.getY() * sin + vector.getZ() * cos;
         return vector.setY(y).setZ(z);
     }
 
@@ -251,12 +259,11 @@ public final class AlgebraAPI {
      * @param angle angle to rotate
      * @return rotated vector
      */
-    public static Vector rotateAroundAxisY(Vector vector, double angle) {
-        double x, z, cos, sin;
-        cos = Math.cos(angle);
-        sin = Math.sin(angle);
-        x = vector.getX() * cos + vector.getZ() * sin;
-        z = vector.getX() * -sin + vector.getZ() * cos;
+    public static Vector rotateAroundAxisY(final Vector vector, final double angle) {
+        final double cos = Math.cos(angle);
+        final double sin = Math.sin(angle);
+        final double x =  vector.getX() * cos + vector.getZ() * sin;
+        final double z = vector.getX() * -sin + vector.getZ() * cos;
         return vector.setX(x).setZ(z);
     }
 
@@ -266,12 +273,11 @@ public final class AlgebraAPI {
      * @param angle angle to rotate
      * @return rotated vector
      */
-    public static Vector rotateAroundAxisZ(Vector vector, double angle) {
-        double x, y, cos, sin;
-        cos = Math.cos(angle);
-        sin = Math.sin(angle);
-        x = vector.getX() * cos - vector.getY() * sin;
-        y = vector.getX() * sin + vector.getY() * cos;
+    public static Vector rotateAroundAxisZ(final Vector vector, final double angle) {
+        final double cos = Math.cos(angle);
+        final double sin = Math.sin(angle);
+        final double x =  vector.getX() * cos - vector.getY() * sin;
+        final double y = vector.getX() * sin + vector.getY() * cos;
         return vector.setX(x).setY(y);
     }
 
@@ -285,22 +291,22 @@ public final class AlgebraAPI {
      * @param rotation rotation of the circle
      * @return list with circle points
      */
-    public static List<Location> getCircle(Location center, double startAngle, double slope, double radius, int numberPoints, Rotation rotation) {
-        World world = center.getWorld();
+    public static List<Location> getCircle(final Location center, final double startAngle, final double slope, final double radius, final int numberPoints, final Rotation rotation) {
+        final World world = center.getWorld();
 
-        double incrementAngle = (2 * Math.PI) / numberPoints;
-        double incrementY = Math.tan(slope) * radius * 2 / numberPoints;
+        final double incrementAngle = (2 * Math.PI) / numberPoints;
+        final double incrementY = Math.tan(slope) * radius * 2 / numberPoints;
         double y = center.getY() - incrementY * numberPoints / 4;
 
-        List<Location> locations = new ArrayList<>();
+        final List<Location> locations = new ArrayList<>();
         for(int i = 0; i < numberPoints; i++) {
-            double angle;
+            final double angle;
             if(rotation == Rotation.COUNTER_CLOCKWISE)
                 angle = startAngle + i * incrementAngle;
             else
                 angle = startAngle - i * incrementAngle;
-            double x = center.getX() + (radius * Math.cos(angle));
-            double z = center.getZ() + (radius * Math.sin(angle));
+            final double x = center.getX() + (radius * Math.cos(angle));
+            final double z = center.getZ() + (radius * Math.sin(angle));
             locations.add(new Location(world, x, y, z));
 
             if(i < numberPoints / 2)
@@ -323,17 +329,17 @@ public final class AlgebraAPI {
      * @param rotation rotation of the helix
      * @return list with helix points
      */
-    public static List<Location> getHelix(Location center, double height, double startAngle, double radius, int numberPoints, int numberCircles, Rotation rotation) {
-        List<Location> locations = new ArrayList<>();
+    public static List<Location> getHelix(final Location center, final double height, final double startAngle, final double radius, int numberPoints, final int numberCircles, final Rotation rotation) {
+        final List<Location> locations = new ArrayList<>();
         for(int i = 0; i < numberCircles; i++) {
             locations.addAll(getCircle(center, startAngle, 0, radius, numberPoints, rotation));
         }
 
         numberPoints *= numberCircles;
-        double incrementY = height / numberPoints;
+        final double incrementY = height / numberPoints;
 
         for(int i = 0; i < numberPoints; i++) {
-            double y = center.getY() + incrementY * i;
+            final double y = center.getY() + incrementY * i;
             locations.get(i).setY(y);
         }
 
@@ -347,8 +353,8 @@ public final class AlgebraAPI {
      * @param numberPoints number of points of the sphere
      * @return list with sphere points
      */
-    public static List<Location> getSphere(Location center, double radius, int numberPoints) {
-        List<Location> locations = new ArrayList<>();
+    public static List<Location> getSphere(final Location center, final double radius, final int numberPoints) {
+        final List<Location> locations = new ArrayList<>();
         for(int i = 0; i < numberPoints; i++)
             locations.add(center.clone().add(getRandomVector().multiply(radius)));
 
@@ -365,20 +371,20 @@ public final class AlgebraAPI {
      * @param rotation rotation of the helix
      * @return list with sphere points
      */
-    public static List<Location> getTornado(Location bottom, double height, double maxRadius, int numberPoints, int numberCircles, Rotation rotation) {
+    public static List<Location> getTornado(final Location bottom, final double height, final double maxRadius, final int numberPoints, final int numberCircles, final Rotation rotation) {
         int index = 0;
         int multiplier = 0;
 
-        int totalPoints = numberPoints * numberCircles;
-        double incrementRadius = maxRadius / totalPoints;
-        double incrementY = height / totalPoints;
+        final int totalPoints = numberPoints * numberCircles;
+        final double incrementRadius = maxRadius / totalPoints;
+        final double incrementY = height / totalPoints;
 
-        List<Location> locations = new ArrayList<>();
+        final List<Location> locations = new ArrayList<>();
         for(int i = 0; i < numberCircles; i++) {
             for(int j = 0; j < numberPoints; j++) {
-                double y = bottom.getY() + incrementY * multiplier;
-                double radius = incrementRadius * multiplier;
-                Location location = getCircle(bottom, 0, 0, radius, numberPoints, rotation).get(index);
+                final double y = bottom.getY() + incrementY * multiplier;
+                final double radius = incrementRadius * multiplier;
+                final Location location = getCircle(bottom, 0, 0, radius, numberPoints, rotation).get(index);
                 location.setY(y);
                 locations.add(location);
                 index++;

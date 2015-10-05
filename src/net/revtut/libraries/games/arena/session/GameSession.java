@@ -12,7 +12,7 @@ public class GameSession {
     /**
      * Arena of the session
      */
-    private Arena arena;
+    private final Arena arena;
 
     /**
      * State of the arena
@@ -27,7 +27,7 @@ public class GameSession {
     /**
      * Minimum and maximum players on the game session
      */
-    private int minPlayers, maxPlayers;
+    private final int minPlayers, maxPlayers;
 
     /**
      * Constructor of GameSession
@@ -35,7 +35,7 @@ public class GameSession {
      * @param minPlayers minimum players of the game
      * @param maxPlayers maximum players of the game
      */
-    public GameSession(Arena arena, int minPlayers, int maxPlayers) {
+    public GameSession(final Arena arena, final int minPlayers, final int maxPlayers) {
         this.arena = arena;
         this.minPlayers = minPlayers;
         this.maxPlayers = maxPlayers;
@@ -89,7 +89,7 @@ public class GameSession {
      * @param state new value for the state
      * @param duration duration of the new state
      */
-    public void updateState(GameState state, int duration) {
+    public void updateState(final GameState state, final int duration) {
         // Call event
         SessionEvent event = new SessionSwitchStateEvent(this, this.state, state, duration);
         Bukkit.getPluginManager().callEvent(event);

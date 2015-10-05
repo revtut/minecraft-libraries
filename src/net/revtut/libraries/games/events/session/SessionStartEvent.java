@@ -11,7 +11,7 @@ public class SessionStartEvent extends SessionEvent {
      * Constructor of SessionStartEvent
      * @param gameSession session where the event occurred
      */
-    public SessionStartEvent(GameSession gameSession) {
+    public SessionStartEvent(final GameSession gameSession) {
         super(gameSession);
     }
 }

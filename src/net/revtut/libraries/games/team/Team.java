@@ -22,17 +22,17 @@ public class Team implements Winner {
     /**
      * Name of the team
      */
-    private String name;
+    private final String name;
 
     /**
      * Color of the team
      */
-    private Color color;
+    private final Color color;
 
     /**
      * List with all players on the team
      */
-    private List<PlayerData> players;
+    private final List<PlayerData> players;
 
     /**
      * Default constructor of Team
@@ -46,7 +46,7 @@ public class Team implements Winner {
      * @param name name of the team
      * @param color color of the team
      */
-    public Team(String name, Color color) {
+    public Team(final String name, final Color color) {
         this.name = name;
         this.color = color;
         this.players = new ArrayList<>();
@@ -81,7 +81,7 @@ public class Team implements Winner {
      * @param state state to filter players
      * @return players that correspond to that state
      */
-    public List<PlayerData> getPlayers(PlayerState state) {
+    public List<PlayerData> getPlayers(final PlayerState state) {
         return players.stream().filter(player -> player.getState() == state).collect(Collectors.toList());
     }
 
@@ -98,7 +98,7 @@ public class Team implements Winner {
      * @param player player to be checked
      * @return true if belongs, false otherwise
      */
-    public boolean containsPlayer(PlayerData player) {
+    public boolean containsPlayer(final PlayerData player) {
         return containsPlayer(player.getUuid());
     }
 
@@ -107,8 +107,8 @@ public class Team implements Winner {
      * @param player UUID of the player to be checked
      * @return true if belongs, false otherwise
      */
-    public boolean containsPlayer(UUID player) {
-        for(PlayerData target : players)
+    public boolean containsPlayer(final UUID player) {
+        for(final PlayerData target : players)
             if(player.equals(target.getUuid()))
                 return true;
         return false;
@@ -119,12 +119,12 @@ public class Team implements Winner {
      * @param player player to be added
      * @return true if has joined, false otherwise
      */
-    public boolean join(PlayerData player) {
+    public boolean join(final PlayerData player) {
         if(players.contains(player))
             return true;
 
         // Call event
-        PlayerJoinTeamEvent event = new PlayerJoinTeamEvent(player, player.getCurrentArena(), this, player.getName() + " has joined the team " + name);
+        final PlayerJoinTeamEvent event = new PlayerJoinTeamEvent(player, player.getCurrentArena(), this, player.getName() + " has joined the team " + name);
         Libraries.getInstance().getServer().getPluginManager().callEvent(event);
 
         if(event.isCancelled())
@@ -142,12 +142,12 @@ public class Team implements Winner {
      * @param player player to be removed
      * @return true if has left, false otherwise
      */
-    public boolean leave(PlayerData player) {
+    public boolean leave(final PlayerData player) {
         if(!players.contains(player))
             return true;
 
         // Call event
-        PlayerLeaveTeamEvent event = new PlayerLeaveTeamEvent(player, player.getCurrentArena(), this, player.getName() + " has left the team " + name);
+        final PlayerLeaveTeamEvent event = new PlayerLeaveTeamEvent(player, player.getCurrentArena(), this, player.getName() + " has left the team " + name);
         Libraries.getInstance().getServer().getPluginManager().callEvent(event);
 
         if(event.isCancelled())
@@ -165,12 +165,12 @@ public class Team implements Winner {
      * @param player player to spectate
      * @return true if is spectating, false otherwise
      */
-    public boolean spectate(PlayerData player) {
+    public boolean spectate(final PlayerData player) {
         if(players.contains(player))
             return true;
 
         // Call event
-        PlayerSpectateTeamEvent event = new PlayerSpectateTeamEvent(player, player.getCurrentArena(), this, player.getName() + " is now spectating the team " + name);
+        final PlayerSpectateTeamEvent event = new PlayerSpectateTeamEvent(player, player.getCurrentArena(), this, player.getName() + " is now spectating the team " + name);
         Libraries.getInstance().getServer().getPluginManager().callEvent(event);
 
         if(event.isCancelled())
@@ -187,8 +187,8 @@ public class Team implements Winner {
      * Broadcast a message to the team
      * @param message message to be broadcast
      */
-    public void broadcastMessage(String message) {
-        for(PlayerData player : getAllPlayers())
+    public void broadcastMessage(final String message) {
+        for(final PlayerData player : getAllPlayers())
             player.getBukkitPlayer().sendMessage(message);
     }
 
@@ -197,10 +197,10 @@ public class Team implements Winner {
      * @param obj team to be compared
      * @return true if they are equal, false otherwise
      */
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if(!(obj instanceof Team))
             return false;
-        Team target = (Team) obj;
+        final Team target = (Team) obj;
         return target.getName().equals(name);
     }
 

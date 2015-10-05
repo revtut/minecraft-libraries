@@ -11,37 +11,37 @@ public class PetGoalFollowEntity extends PetGoal {
     /**
      * Pet entity
      */
-    private EntityInsentient pet;
+    private final EntityInsentient pet;
 
     /**
      * Target of the pet
      */
-    private Entity target;
+    private final Entity target;
 
     /**
      * Follow speed
      */
-    private double speed;
+    private final double speed;
 
     /**
      * Distance to the target so it start moving
      */
-    private float startDistance;
+    private final float startDistance;
 
     /**
      * Distance to the target so it stop moving
      */
-    private float stopDistance;
+    private final float stopDistance;
 
     /**
      * Maximum distance to the target so it teleports
      */
-    private float maxDistance;
+    private final float maxDistance;
 
     /**
      * Navigation of the pet
      */
-    private Navigation navigation;
+    private final Navigation navigation;
 
     /**
      * Timer for ticking
@@ -57,7 +57,7 @@ public class PetGoalFollowEntity extends PetGoal {
      * @param stopDistance stop distance pet will stop following
      * @param maxDistance maximum distance between target and pet
      */
-    public PetGoalFollowEntity(EntityInsentient pet, Entity target, double speed, float startDistance, float stopDistance, float maxDistance) {
+    public PetGoalFollowEntity(final EntityInsentient pet, final Entity target, final double speed, final float startDistance, final float stopDistance, final float maxDistance) {
         this.pet = pet;
         this.target = target;
         this.speed = speed;
@@ -139,7 +139,7 @@ public class PetGoalFollowEntity extends PetGoal {
         }
 
         if (pet.getGoalTarget() == null) {
-            PathEntity path = navigation.a(target);
+            final PathEntity path = navigation.a(target);
 
             //Smooth path finding to entity instead of location
             navigation.a(path, speed);

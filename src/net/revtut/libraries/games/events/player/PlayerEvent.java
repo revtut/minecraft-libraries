@@ -19,12 +19,12 @@ public abstract class PlayerEvent extends Event implements Cancellable {
     /**
      * Player that caused the event
      */
-    private PlayerData player;
+    private final PlayerData player;
 
     /**
      * Arena where the event occurred
      */
-    private Arena arena;
+    private final Arena arena;
 
     /**
      * Flag to check if the event was cancelled
@@ -36,7 +36,7 @@ public abstract class PlayerEvent extends Event implements Cancellable {
      * @param player player that caused the event
      * @param arena arena where the event occurred
      */
-    public PlayerEvent(PlayerData player, Arena arena) {
+    public PlayerEvent(final PlayerData player, final Arena arena) {
         this.player = player;
         this.arena = arena;
         this.isCancelled = false;
@@ -78,7 +78,7 @@ public abstract class PlayerEvent extends Event implements Cancellable {
      * Set the event as cancelled or not
      * @param cancelled new value for cancelled
      */
-    public void setCancelled(boolean cancelled) {
+    public void setCancelled(final boolean cancelled) {
         this.isCancelled = cancelled;
     }
 

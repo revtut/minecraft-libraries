@@ -92,17 +92,17 @@ public enum Color {
     /**
      * Name of the color
      */
-    private String name;
+    private final String name;
 
     /**
      * Bukkit color
      */
-    private org.bukkit.ChatColor bukkitColor;
+    private final org.bukkit.ChatColor bukkitColor;
 
     /**
      * Wool with that color
      */
-    private ItemStack item;
+    private final ItemStack item;
 
     /**
      * Constructor of Color
@@ -110,7 +110,7 @@ public enum Color {
      * @param bukkitColor bukkit color
      * @param item wool item with that color
      */
-    Color(String name, org.bukkit.ChatColor bukkitColor, ItemStack item) {
+    Color(final String name, final org.bukkit.ChatColor bukkitColor, final ItemStack item) {
         this.name = name;
         this.bukkitColor = bukkitColor;
         this.item = item;

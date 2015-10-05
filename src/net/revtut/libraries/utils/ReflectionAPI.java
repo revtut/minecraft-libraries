@@ -4,6 +4,8 @@ import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Reflection Library.
@@ -26,7 +28,7 @@ public final class ReflectionAPI {
      * @return version of the game
      */
     private static String getMinecraftVersion() {
-        String name = Bukkit.getServer().getClass().getPackage().getName();
+        final String name = Bukkit.getServer().getClass().getPackage().getName();
         return name.substring(name.lastIndexOf('.') + 1) + ".";
     }
 
@@ -36,12 +38,12 @@ public final class ReflectionAPI {
      * @param className className to get the NMS class
      * @return nms class
      */
-    public static Class<?> getNMSClass(String className) {
-        String fullName = "net.minecraft.server." + getMinecraftVersion() + className;
+    public static Class<?> getNMSClass(final String className) {
+        final String fullName = "net.minecraft.server." + getMinecraftVersion() + className;
         Class<?> clazz = null;
         try {
             clazz = Class.forName(fullName);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
         return clazz;
@@ -53,12 +55,12 @@ public final class ReflectionAPI {
      * @param className className to get the CraftBukkit class
      * @return craftBukkit class
      */
-    public static Class<?> getOBCClass(String className) {
-        String fullName = "org.bukkit.craftbukkit." + getMinecraftVersion() + className;
+    public static Class<?> getOBCClass(final String className) {
+        final String fullName = "org.bukkit.craftbukkit." + getMinecraftVersion() + className;
         Class<?> clazz = null;
         try {
             clazz = Class.forName(fullName);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
         return clazz;
@@ -71,12 +73,12 @@ public final class ReflectionAPI {
      * @param name  field name
      * @return field of the class
      */
-    public static Field getField(Class<?> clazz, String name) {
+    public static Field getField(final Class<?> clazz, final String name) {
         try {
-            Field field = clazz.getDeclaredField(name);
+            final Field field = clazz.getDeclaredField(name);
             field.setAccessible(true);
             return field;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -90,8 +92,8 @@ public final class ReflectionAPI {
      * @param args  args of the method
      * @return method of the class
      */
-    public static Method getMethod(Class<?> clazz, String name, Class<?>... args) {
-        for (Method m : clazz.getMethods()) {
+    public static Method getMethod(final Class<?> clazz, final String name, final Class<?>... args) {
+        for (final Method m : clazz.getMethods()) {
             if ((m.getName().equals(name)) && ((args.length == 0) || (classListEqual(args, m.getParameterTypes())))) {
                 m.setAccessible(true);
                 return m;
@@ -106,10 +108,16 @@ public final class ReflectionAPI {
      * @param obj object to get the handle
      * @return object handle
      */
-    public static Object getHandle(Object obj) {
+    public static Object getHandle(final Object obj) {
         try {
-            return getMethod(obj.getClass(), "getHandle", new Class[0]).invoke(obj, new Object[0]);
-        } catch (Exception e) {
+            final Method getHandle = getMethod(obj.getClass(), "getHandle", new Class[0]);
+            if(getHandle == null) {
+                Logger.getLogger("Minecraft").log(Level.SEVERE, "'getHandle' method does not exist on this object.");
+                return null;
+            }
+
+            return getHandle.invoke(obj, new Object[0]);
+        } catch (final Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -122,7 +130,7 @@ public final class ReflectionAPI {
      * @param l2 class second to compare
      * @return true if they are equal
      */
-    private static boolean classListEqual(Class<?>[] l1, Class<?>[] l2) {
+    private static boolean classListEqual(final Class<?>[] l1, final Class<?>[] l2) {
         boolean equal = true;
         if (l1.length != l2.length) {
             return false;

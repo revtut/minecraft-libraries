@@ -16,34 +16,34 @@ import java.util.regex.Pattern;
  * @author Joao Silva
  * @version 1.0
  */
-public class TextAPI {
+public final class TextAPI {
 
     /**
      * List with all the bad words
      */
-    private static List<String> badWords;
+    private static final List<String> badWords;
 
     /**
      * Array with replace symbols (for example, for bad words)
      */
-    private static char[] replaceSymbols;
+    private static final char[] replaceSymbols;
 
     /**
      * IP address pattern
      */
-    private static Pattern ipPattern;
+    private static final Pattern ipPattern;
 
     /**
      * Web address pattern
      */
-    private static Pattern websitePattern;
+    private static final Pattern websitePattern;
 
     /**
      * Initialize needed variables
      */
     static {
         // Bad Words
-        FileInputStream inputStream = (FileInputStream) Libraries.getInstance().getResource("resources/badwords.txt");
+        final FileInputStream inputStream = (FileInputStream) Libraries.getInstance().getResource("resources/badwords.txt");
         badWords = FilesAPI.getLines(inputStream);
 
         // Replace symbols
@@ -55,12 +55,17 @@ public class TextAPI {
     }
 
     /**
+     * Constructor of TitleAPI
+     */
+    private TextAPI() {}
+
+    /**
      * Replace all bad words on a string with random characters
      * @param text text to have its bad words replaced
      * @return text with bad words replaced
      */
     public static String replaceBadWords(String text) {
-        for(String badWord : badWords) {
+        for(final String badWord : badWords) {
             if(!text.contains(badWord))
                 continue;
 
@@ -77,9 +82,9 @@ public class TextAPI {
      * @param websiteReplacement replacement string for websites
      * @return text with no advertisements
      */
-    public static String replaceAdvertisement(String text, String ipReplacement, String websiteReplacement) {
-        Matcher matcherIP = ipPattern.matcher(text);
-        Matcher matcherWebsite = websitePattern.matcher(text);
+    public static String replaceAdvertisement(String text, final String ipReplacement, final String websiteReplacement) {
+        final Matcher matcherIP = ipPattern.matcher(text);
+        final Matcher matcherWebsite = websitePattern.matcher(text);
         if(matcherIP.find())
             text = matcherIP.replaceAll(ipReplacement);
         if(matcherWebsite.find())
@@ -94,8 +99,8 @@ public class TextAPI {
      * @param length length of the string
      * @return random string
      */
-    public static String generateRandomString(char[] characters, int length) {
-        StringBuilder stringBuilder = new StringBuilder(length);
+    public static String generateRandomString(final char[] characters, final int length) {
+        final StringBuilder stringBuilder = new StringBuilder(length);
         for(int i = 0; i < length; i++)
             stringBuilder.append(characters[(int)(Math.random() * (characters.length - 1))]);
 

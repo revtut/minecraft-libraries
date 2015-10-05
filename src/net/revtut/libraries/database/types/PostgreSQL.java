@@ -15,7 +15,7 @@ public class PostgreSQL extends Database {
      * @param username username of the PostgreSQL
      * @param password password of the PostgreSQL
      */
-    public PostgreSQL(String hostname, int port, String database, String username, String password) {
+    public PostgreSQL(final String hostname, final int port, final String database, final String username, final String password) {
         super("org.postgresql.Driver", "jdbc:postgresql://" + hostname + ":" + port + "/" + database, username, password);
     }
 }

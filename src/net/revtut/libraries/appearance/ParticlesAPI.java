@@ -33,12 +33,10 @@ public final class ParticlesAPI {
      * @param numberPoints number of points of the circle
      * @param enumParticle particle to be played
      */
-    public static void circleParticleEffect(Location center, double slope, double radius, int numberPoints, EnumParticle enumParticle) {
-        List<Location> circleLocations = AlgebraAPI.getCircle(center, 0, slope, radius, numberPoints, Rotation.CLOCKWISE);
-        for(int i = 0; i < circleLocations.size(); i++) {
-            final Location playLocation = circleLocations.get(i);
-
-            PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(enumParticle, false, (float) playLocation.getX(), (float) playLocation.getY(), (float) playLocation.getZ(), 0f, 0f, 0f, 0f, 1);
+    public static void circleParticleEffect(final Location center, final double slope, final double radius, final int numberPoints, final EnumParticle enumParticle) {
+        final List<Location> circleLocations = AlgebraAPI.getCircle(center, 0, slope, radius, numberPoints, Rotation.CLOCKWISE);
+        for (final Location playLocation : circleLocations) {
+            final PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(enumParticle, false, (float) playLocation.getX(), (float) playLocation.getY(), (float) playLocation.getZ(), 0f, 0f, 0f, 0f, 1);
             sendParticlePacket(playLocation, particlePacket);
         }
     }
@@ -52,12 +50,10 @@ public final class ParticlesAPI {
      * @param numberCircles number of circles of the helix
      * @param enumParticle particle to be played
      */
-    public static void helixParticleEffect(Location center, double height, double radius, int numberPoints, int numberCircles, EnumParticle enumParticle) {
-        List<Location> helixLocations = AlgebraAPI.getHelix(center, height, 0, radius, numberPoints, numberCircles, Rotation.CLOCKWISE);
-        for(int i = 0; i < helixLocations.size(); i++) {
-            final Location playLocation = helixLocations.get(i);
-
-            PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(enumParticle, false, (float) playLocation.getX(), (float) playLocation.getY(), (float) playLocation.getZ(), 0f, 0f, 0f, 0f, 1);
+    public static void helixParticleEffect(final Location center, final double height, final double radius, final int numberPoints, final int numberCircles, final EnumParticle enumParticle) {
+        final List<Location> helixLocations = AlgebraAPI.getHelix(center, height, 0, radius, numberPoints, numberCircles, Rotation.CLOCKWISE);
+        for (final Location playLocation : helixLocations) {
+            final PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(enumParticle, false, (float) playLocation.getX(), (float) playLocation.getY(), (float) playLocation.getZ(), 0f, 0f, 0f, 0f, 1);
             sendParticlePacket(playLocation, particlePacket);
         }
     }
@@ -69,14 +65,14 @@ public final class ParticlesAPI {
      * @param numberPoints number of points of the helix
      * @param enumParticle particle to be played
      */
-    public static void trailParticleEffect(Location start, Location end, int numberPoints, EnumParticle enumParticle) {
-        double incrementX = (end.getX() - start.getX()) / numberPoints;
-        double incrementY = (end.getY() - start.getY()) / numberPoints;
-        double incrementZ = (end.getZ() - start.getZ()) / numberPoints;
+    public static void trailParticleEffect(final Location start, final Location end, final int numberPoints, final EnumParticle enumParticle) {
+        final double incrementX = (end.getX() - start.getX()) / numberPoints;
+        final double incrementY = (end.getY() - start.getY()) / numberPoints;
+        final double incrementZ = (end.getZ() - start.getZ()) / numberPoints;
 
-        Location location = new Location(start.getWorld(), start.getX(), start.getY(), start.getZ());
+        final Location location = new Location(start.getWorld(), start.getX(), start.getY(), start.getZ());
         while(Math.abs(location.getX()) <= Math.abs(end.getX()) && Math.abs(location.getY()) <= Math.abs(end.getY()) && Math.abs(location.getZ()) <= Math.abs(end.getZ())) {
-            PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(enumParticle, false, (float) location.getX(), (float) location.getY(), (float) location.getZ(), 0f, 0f, 0f, 0f, 1);
+            final PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(enumParticle, false, (float) location.getX(), (float) location.getY(), (float) location.getZ(), 0f, 0f, 0f, 0f, 1);
             sendParticlePacket(location, particlePacket);
 
             // Update coordinates
@@ -91,9 +87,9 @@ public final class ParticlesAPI {
      * @return particle effect
      */
     private static EnumParticle randomParticle() {
-        EnumParticle[] enumParticles = EnumParticle.values();
+        final EnumParticle[] enumParticles = EnumParticle.values();
 
-        int particleValue = (int) (Math.random() * enumParticles.length) + 1;
+        final int particleValue = (int) (Math.random() * enumParticles.length) + 1;
 
         return enumParticles[particleValue];
     }
@@ -103,7 +99,7 @@ public final class ParticlesAPI {
      * @param location location to play the packet
      * @param particlePacket particle packet
      */
-    public static void sendParticlePacket(Location location, PacketPlayOutWorldParticles particlePacket) {
+    public static void sendParticlePacket(final Location location, final PacketPlayOutWorldParticles particlePacket) {
         Bukkit.getOnlinePlayers().stream()
                 .filter(player -> player.getWorld().getName().equalsIgnoreCase(location.getWorld().getName()))
                 .filter(player -> AlgebraAPI.distanceBetween(player.getLocation(), location) <= 20.0D)

@@ -27,34 +27,31 @@ public final class TabAPI {
     /**
      * Set the tab list of a player.
      *
-     * @param p      player to send the tab
+     * @param player player to send the tab
      * @param title  tab title
      * @param footer tab foot
      */
-    public static void setTab(final Player p, final String title, final String footer) {
-        Libraries plugin = Libraries.getInstance();
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
-            @Override
-            public void run() {
-                IChatBaseComponent tabTitle = IChatBaseComponent.ChatSerializer.a(title);
-                IChatBaseComponent tabFooter = IChatBaseComponent.ChatSerializer.a(footer);
-                PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
+    public static void setTab(final Player player, final String title, final String footer) {
+        final Libraries plugin = Libraries.getInstance();
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            final IChatBaseComponent tabTitle = IChatBaseComponent.ChatSerializer.a(title);
+            final IChatBaseComponent tabFooter = IChatBaseComponent.ChatSerializer.a(footer);
+            final PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
 
-                try {
-                    Field headerField = packet.getClass().getDeclaredField("a");
-                    headerField.setAccessible(true);
-                    headerField.set(packet, tabTitle);
-                    headerField.setAccessible(!headerField.isAccessible());
+            try {
+                final Field headerField = packet.getClass().getDeclaredField("a");
+                headerField.setAccessible(true);
+                headerField.set(packet, tabTitle);
+                headerField.setAccessible(!headerField.isAccessible());
 
-                    Field footerField = packet.getClass().getDeclaredField("b");
-                    footerField.setAccessible(true);
-                    footerField.set(packet, tabFooter);
-                    footerField.setAccessible(!footerField.isAccessible());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+                final Field footerField = packet.getClass().getDeclaredField("b");
+                footerField.setAccessible(true);
+                footerField.set(packet, tabFooter);
+                footerField.setAccessible(!footerField.isAccessible());
+            } catch (final Exception e) {
+                e.printStackTrace();
             }
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
         });
     }
 }

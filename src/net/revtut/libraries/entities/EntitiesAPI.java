@@ -31,7 +31,7 @@ public final class EntitiesAPI {
      * @param entity entity to be renamed
      * @param name new name of the entity
      */
-    public static void renameEntity(Entity entity, String name) {
+    public static void renameEntity(final Entity entity, final String name) {
         entity.setCustomNameVisible(true);
         entity.setCustomName(name);
     }
@@ -42,7 +42,7 @@ public final class EntitiesAPI {
      * @param location location to spawn
      * @return spawned entity
      */
-    public static Entity spawnEntity(EntityType entityType, Location location) {
+    public static Entity spawnEntity(final EntityType entityType, final Location location) {
         return location.getWorld().spawnEntity(location, entityType);
     }
 
@@ -52,11 +52,11 @@ public final class EntitiesAPI {
      * @param target target to be followed
      * @param lookTarget true if want the entity to look at the target
      */
-    public static void entityFollow(Entity entity, Entity target, boolean lookTarget) {
-        EntityLiving entityLiving = ((CraftLivingEntity) entity).getHandle();
+    public static void entityFollow(final Entity entity, final Entity target, final boolean lookTarget) {
+        final EntityLiving entityLiving = ((CraftLivingEntity) entity).getHandle();
 
         if (entityLiving instanceof EntityInsentient) {
-            EntityInsentient entityInsentient = (EntityInsentient) entityLiving;
+            final EntityInsentient entityInsentient = (EntityInsentient) entityLiving;
 
             // Clear goals
             clearGoals(entity);
@@ -77,7 +77,7 @@ public final class EntitiesAPI {
      * Freeze a entity
      * @param entity entity to be frozen
      */
-    public static void freezeEntity(Entity entity) {
+    public static void freezeEntity(final Entity entity) {
         clearGoals(entity);
         clearTargets(entity);
     }
@@ -87,14 +87,14 @@ public final class EntitiesAPI {
      * @param entity entity to be ridden
      * @param rider rider of the entity
      */
-    public static void rideEntity(Entity entity, Entity rider) {
+    public static void rideEntity(final Entity entity, final Entity rider) {
         // Set passenger
         entity.setPassenger(rider);
 
-        EntityLiving entityLiving = ((CraftLivingEntity) entity).getHandle();
+        final EntityLiving entityLiving = ((CraftLivingEntity) entity).getHandle();
 
         if (entityLiving instanceof EntityInsentient) {
-            EntityInsentient entityInsentient = (EntityInsentient) entityLiving;
+            final EntityInsentient entityInsentient = (EntityInsentient) entityLiving;
 
             // Clear goals
             clearGoals(entity);
@@ -112,15 +112,15 @@ public final class EntitiesAPI {
      * Clear goals of a entity
      * @param entity entity to be cleared
      */
-    public static void clearGoals(Entity entity) {
-        EntityLiving entityLiving = ((CraftLivingEntity) entity).getHandle();
+    public static void clearGoals(final Entity entity) {
+        final EntityLiving entityLiving = ((CraftLivingEntity) entity).getHandle();
 
         try {
             if (entityLiving instanceof EntityInsentient) {
-                EntityInsentient entityInsentient = (EntityInsentient) entityLiving;
+                final EntityInsentient entityInsentient = (EntityInsentient) entityLiving;
 
                 // Get "b"
-                Field bSelector = ReflectionAPI.getField(PathfinderGoalSelector.class, "b");
+                final Field bSelector = ReflectionAPI.getField(PathfinderGoalSelector.class, "b");
                 if(bSelector == null)
                     return;
                 bSelector.setAccessible(true);
@@ -130,7 +130,7 @@ public final class EntitiesAPI {
             } else {
                 throw new IllegalArgumentException(entity.getType().getName() + " is not an instance of an EntityInsentient.");
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
@@ -139,15 +139,15 @@ public final class EntitiesAPI {
      * Clear the targets of a entity
      * @param entity entity to be cleared
      */
-    public static void clearTargets(Entity entity) {
-        EntityLiving entityLiving = ((CraftLivingEntity) entity).getHandle();
+    public static void clearTargets(final Entity entity) {
+        final EntityLiving entityLiving = ((CraftLivingEntity) entity).getHandle();
 
         try {
             if (entityLiving instanceof EntityInsentient) {
-                EntityInsentient entityInsentient = (EntityInsentient) entityLiving;
+                final EntityInsentient entityInsentient = (EntityInsentient) entityLiving;
 
                 // Get "b"
-                Field bSelector = ReflectionAPI.getField(PathfinderGoalSelector.class, "b");
+                final Field bSelector = ReflectionAPI.getField(PathfinderGoalSelector.class, "b");
                 if(bSelector == null)
                     return;
                 bSelector.setAccessible(true);
@@ -157,7 +157,7 @@ public final class EntitiesAPI {
             } else {
                 throw new IllegalArgumentException(entity.getType().getName() + " is not an instance of an EntityInsentient.");
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
@@ -168,19 +168,19 @@ public final class EntitiesAPI {
      * @param goal goal to be added
      * @param priority priority of the goal
      */
-    public static void addGoal(Entity entity, PathfinderGoal goal, int priority) {
-        EntityLiving entityLiving = ((CraftLivingEntity) entity).getHandle();
+    public static void addGoal(final Entity entity, final PathfinderGoal goal, final int priority) {
+        final EntityLiving entityLiving = ((CraftLivingEntity) entity).getHandle();
 
         try {
             if (entityLiving instanceof EntityInsentient) {
-                EntityInsentient entityInsentient = (EntityInsentient) entityLiving;
+                final EntityInsentient entityInsentient = (EntityInsentient) entityLiving;
 
                 // Add goal
                 entityInsentient.goalSelector.a(priority, goal);
             } else {
                 throw new IllegalArgumentException(entity.getType().getName() + " is not an instance of an EntityInsentient.");
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }
@@ -191,13 +191,13 @@ public final class EntitiesAPI {
      * @param id id of the entity
      * @param customClass custom class for the entity
      */
-    public static void registerEntity(String name, int id, Class<?> customClass) {
+    public static void registerEntity(final String name, final int id, final Class<?> customClass) {
         try {
-            List<Map<Object, Object>> dataMaps = new ArrayList<>();
-            Field[] arrayOfField;
-            int j = (arrayOfField = EntityTypes.class.getDeclaredFields()).length;
+            final List<Map<Object, Object>> dataMaps = new ArrayList<>();
+            final Field[] arrayOfField;
+            final int j = (arrayOfField = EntityTypes.class.getDeclaredFields()).length;
             for (int i = 0; i < j; i++) {
-                Field field = arrayOfField[i];
+                final Field field = arrayOfField[i];
                 if (field.getType().getSimpleName().equals(Map.class.getSimpleName())) {
                     field.setAccessible(true);
                     dataMaps.add((Map<Object, Object>) field.get(null));
@@ -206,7 +206,7 @@ public final class EntitiesAPI {
 
             dataMaps.get(1).put(customClass, name);
             dataMaps.get(3).put(customClass, id);
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
     }

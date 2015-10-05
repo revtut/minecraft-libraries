@@ -37,5 +37,5 @@ public enum GameState {
     /**
      * Session exists but it is not in any state
      */
-    NONE;
+    NONE
 }

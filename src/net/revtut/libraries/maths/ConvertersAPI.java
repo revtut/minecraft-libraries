@@ -23,14 +23,14 @@ public final class ConvertersAPI {
      * @param text text to be converted
      * @return converted text to JSON
      */
-    public static String convertToJSON(String text) {
+    public static String convertToJSON(final String text) {
         if (text == null || text.length() == 0) {
             return "\"\"";
         }
         char c;
         int i;
-        int len = text.length();
-        StringBuilder sb = new StringBuilder(len + 4);
+        final int len = text.length();
+        final StringBuilder sb = new StringBuilder(len + 4);
         String t;
         sb.append('"');
         for (i = 0; i < len; i += 1) {
@@ -126,7 +126,7 @@ public final class ConvertersAPI {
      * @param hours hours to be converted
      * @return converted days
      */
-    private static long convertHoursToDays(long hours) {
+    private static long convertHoursToDays(final long hours) {
         return hours / 24;
     }
 
@@ -136,7 +136,7 @@ public final class ConvertersAPI {
      * @param minutes minutes to be converted
      * @return converted hours
      */
-    private static long convertMinutesToHours(long minutes) {
+    private static long convertMinutesToHours(final long minutes) {
         return minutes / 60;
     }
 
@@ -146,7 +146,7 @@ public final class ConvertersAPI {
      * @param seconds seconds to be converted
      * @return converted minutes
      */
-    private static long convertSecondsToMinutes(long seconds) {
+    private static long convertSecondsToMinutes(final long seconds) {
         return seconds / 60;
     }
 
@@ -157,13 +157,13 @@ public final class ConvertersAPI {
      * @param sec seconds to be converted
      * @return seconds converted to the format
      */
-    public static String convertSecondsToDHMS(long sec) {
-        long days = sec / (86400);
+    public static String convertSecondsToDHMS(final long sec) {
+        final long days = sec / (86400);
         long rest = sec % 86400;
-        long hours = rest / 3600;
+        final long hours = rest / 3600;
         rest = rest % 3600;
-        long minutes = rest / 60;
-        long seconds = rest % 60;
+        final long minutes = rest / 60;
+        final long seconds = rest % 60;
 
         return days + "d : " + hours + "h : " + minutes + "m : " + seconds + "s";
     }
@@ -175,9 +175,9 @@ public final class ConvertersAPI {
      * @param sec seconds to be converted
      * @return seconds converted to the format
      */
-    public static String convertSecondsToMS(long sec) {
-        long minutes = sec / 60;
-        long seconds = sec % 60;
+    public static String convertSecondsToMS(final long sec) {
+        final long minutes = sec / 60;
+        final long seconds = sec % 60;
 
         return minutes + "m : " + seconds + "s";
     }
@@ -189,7 +189,7 @@ public final class ConvertersAPI {
      * @param separator string to separe each string
      * @return string unified
      */
-    public static String convertListToString(List<?> list, String separator) {
+    public static String convertListToString(final List<?> list, final String separator) {
         String converted = "";
         for (int i = 0; i < list.size(); i++) {
             if (i < (list.size() - 1))

@@ -2,7 +2,6 @@ package net.revtut.libraries.games.events.player;
 
 import net.revtut.libraries.games.arena.Arena;
 import net.revtut.libraries.games.player.PlayerData;
-import org.bukkit.event.HandlerList;
 
 /**
  * Player Damage Event
@@ -20,7 +19,7 @@ public class PlayerDamageEvent extends PlayerEvent {
      * @param arena arena where the event occurred
      * @param damage damage of the event
      */
-    public PlayerDamageEvent(PlayerData player, Arena arena, double damage) {
+    public PlayerDamageEvent(final PlayerData player, final Arena arena, final double damage) {
         super(player, arena);
         this.damage = damage;
     }
@@ -37,15 +36,8 @@ public class PlayerDamageEvent extends PlayerEvent {
      * Set the damage of the event
      * @param damage new value of event damage
      */
-    public void setDamage(double damage) {
+    public void setDamage(final double damage) {
         this.damage = damage;
     }
 
-    /**
-     * Get the handlers of the event
-     * @return handlers of the event
-     */
-    public HandlerList getHandlers() {
-        return super.getHandlers();
-    }
 }

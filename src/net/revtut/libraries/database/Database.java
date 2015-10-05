@@ -45,7 +45,7 @@ public abstract class Database {
      * @param username username of the database
      * @param password password of the database
      */
-    public Database(String driver, String url, String username, String password) {
+    public Database(final String driver, final String url, final String username, final String password) {
         this.driver = driver;
         this.url = url;
         this.username = username;
@@ -57,7 +57,7 @@ public abstract class Database {
      * @param type type of the database
      * @return created database
      */
-    public static Database createDatabase(DatabaseType type, String hostname, int port, String database, String username, String password) {
+    public static Database createDatabase(final DatabaseType type, final String hostname, final int port, final String database, final String username, final String password) {
         switch (type) {
             case MYSQL:
                 return new MySQL(hostname, port, database, username, password);
@@ -112,7 +112,7 @@ public abstract class Database {
         try {
             if(connection != null)
                 connection.rollback();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             e.printStackTrace();
         }
     }
@@ -135,11 +135,11 @@ public abstract class Database {
      * Close a statement
      * @param statement statement to be closed
      */
-    public void close(Statement statement) {
+    public void close(final Statement statement) {
         try {
             if (statement != null)
                 statement.close();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             e.printStackTrace();
         }
     }
@@ -148,11 +148,11 @@ public abstract class Database {
      * Close a ResultSet
      * @param resultSet result set to be closed
      */
-    public void close(ResultSet resultSet) {
+    public void close(final ResultSet resultSet) {
         try {
             if (resultSet != null)
                 resultSet.close();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             e.printStackTrace();
         }
     }
@@ -163,18 +163,18 @@ public abstract class Database {
      * @param parameters parameters of the prepared statement
      * @return result of the given query
      */
-    public ResultSet executeQuery(String sql, List<Object> parameters) {
+    public ResultSet executeQuery(final String sql, final List<Object> parameters) {
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(sql);
 
             int index = 0;
-            for (Object parameter : parameters)
+            for (final Object parameter : parameters)
                 preparedStatement.setObject(++index, parameter);
 
             resultSet = preparedStatement.executeQuery();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             e.printStackTrace();
         } finally {
             close(preparedStatement);
@@ -189,18 +189,18 @@ public abstract class Database {
      * @param parameters parameters of the prepared statement
      * @return number of rows updated
      */
-    public int executeUpdate(String sql, List<Object> parameters) {
+    public int executeUpdate(final String sql, final List<Object> parameters) {
         int numberRowsUpdated = -1;
         PreparedStatement preparedStatement = null;
         try {
             preparedStatement = connection.prepareStatement(sql);
 
             int index = 0;
-            for (Object parameter : parameters)
+            for (final Object parameter : parameters)
                 preparedStatement.setObject(++index, parameter);
 
             numberRowsUpdated = preparedStatement.executeUpdate();
-        } catch (SQLException e) {
+        } catch (final SQLException e) {
             e.printStackTrace();
         } finally {
             close(preparedStatement);

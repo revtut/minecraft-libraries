@@ -10,14 +10,14 @@ public class SessionTimerTickEvent extends SessionEvent {
     /**
      * Time until timer expire
      */
-    private int time;
+    private final int time;
 
     /**
      * Constructor of SessionTimerTickEvent
      * @param gameSession session where the event occurred
      * @param time time until game session change state
      */
-    public SessionTimerTickEvent(GameSession gameSession, int time) {
+    public SessionTimerTickEvent(final GameSession gameSession, final int time) {
         super(gameSession);
         this.time = time;
     }

@@ -35,12 +35,12 @@ public abstract class Arena {
     /**
      * ID of the arena
      */
-    private int id;
+    private final int id;
 
     /**
      * Name of the arena
      */
-    private String name;
+    private final String name;
 
     /**
      * World of the arena
@@ -67,14 +67,14 @@ public abstract class Arena {
     /**
      * Flags of the arena
      */
-    private Map<ArenaFlag, Boolean> flags;
+    private final Map<ArenaFlag, Boolean> flags;
 
     /**
      * Constructor of the Arena
      */
-    public Arena(String name) {
+    public Arena(final String name) {
         // Call event
-        ArenaLoadEvent event = new ArenaLoadEvent(this);
+        final ArenaLoadEvent event = new ArenaLoadEvent(this);
         Bukkit.getPluginManager().callEvent(event);
 
         if(event.isCancelled())
@@ -95,7 +95,7 @@ public abstract class Arena {
      * @param cornersDeathMatch corners of the death match arena
      * @param gameSession session of the arena
      */
-    public void initialize(World arenaWorld, Location lobbyLocation, Location spectatorLocation, Location spectatorDeathMatchLocation, Location[] corners, Location[] cornersDeathMatch, GameSession gameSession) {
+    public void initialize(final World arenaWorld, final Location lobbyLocation, final Location spectatorLocation, final Location spectatorDeathMatchLocation, final Location[] corners, final Location[] cornersDeathMatch, final GameSession gameSession) {
         this.arenaWorld = arenaWorld;
         this.lobbyLocation = lobbyLocation;
         this.spectatorLocation = spectatorLocation;
@@ -107,19 +107,19 @@ public abstract class Arena {
         Location highestCorner = corners[1];
 
         if(highestCorner.getX() < lowestCorner.getX()){
-            double temporary = highestCorner.getX();
+            final double temporary = highestCorner.getX();
             highestCorner.setX(lowestCorner.getX());
             lowestCorner.setX(temporary);
         }
 
         if(highestCorner.getY() < lowestCorner.getY()){
-            double temporary = highestCorner.getY();
+            final double temporary = highestCorner.getY();
             highestCorner.setY(lowestCorner.getY());
             lowestCorner.setY(temporary);
         }
 
         if(highestCorner.getZ() < lowestCorner.getZ()){
-            double temporary = highestCorner.getZ();
+            final double temporary = highestCorner.getZ();
             highestCorner.setZ(lowestCorner.getZ());
             lowestCorner.setZ(temporary);
         }
@@ -130,19 +130,19 @@ public abstract class Arena {
         highestCorner = cornersDeathMatch[1];
 
         if(highestCorner.getX() < lowestCorner.getX()){
-            double temporary = highestCorner.getX();
+            final double temporary = highestCorner.getX();
             highestCorner.setX(lowestCorner.getX());
             lowestCorner.setX(temporary);
         }
 
         if(highestCorner.getY() < lowestCorner.getY()){
-            double temporary = highestCorner.getY();
+            final double temporary = highestCorner.getY();
             highestCorner.setY(lowestCorner.getY());
             lowestCorner.setY(temporary);
         }
 
         if(highestCorner.getZ() < lowestCorner.getZ()){
-            double temporary = highestCorner.getZ();
+            final double temporary = highestCorner.getZ();
             highestCorner.setZ(lowestCorner.getZ());
             lowestCorner.setZ(temporary);
         }
@@ -238,7 +238,7 @@ public abstract class Arena {
      * @param state state to filter players
      * @return players that correspond to that state
      */
-    public List<PlayerData> getPlayers(PlayerState state) {
+    public List<PlayerData> getPlayers(final PlayerState state) {
         return getAllPlayers().stream().filter(player -> player.getState() == state).collect(Collectors.toList());
     }
 
@@ -255,7 +255,7 @@ public abstract class Arena {
      * @param flag flag to get the value
      * @return value of the flag
      */
-    public boolean getFlag(ArenaFlag flag) {
+    public boolean getFlag(final ArenaFlag flag) {
         return flags.containsKey(flag) ? flags.get(flag) : true;
     }
 
@@ -264,7 +264,7 @@ public abstract class Arena {
      * @param flag flag to be updated / added
      * @param value value of the flag
      */
-    public void updateFlag(ArenaFlag flag, boolean value) {
+    public void updateFlag(final ArenaFlag flag, final boolean value) {
         flags.put(flag, value);
     }
 
@@ -273,12 +273,12 @@ public abstract class Arena {
      * @param player player to join
      * @return true if has joined, false otherwise
      */
-    public boolean join(PlayerData player) {
+    public boolean join(final PlayerData player) {
         if(!canJoin(player))
             return false;
 
         // Call event
-        PlayerJoinArenaEvent event = new PlayerJoinArenaEvent(player, this, player.getName() + " has joined the arena " + name);
+        final PlayerJoinArenaEvent event = new PlayerJoinArenaEvent(player, this, player.getName() + " has joined the arena " + name);
         Bukkit.getPluginManager().callEvent(event);
 
         if(event.isCancelled())
@@ -293,7 +293,7 @@ public abstract class Arena {
         player.getBukkitPlayer().setGameMode(GameMode.ADVENTURE);
 
         // Visibility configuration
-        for(PlayerData target : getAllPlayers()) {
+        for(final PlayerData target : getAllPlayers()) {
             target.getBukkitPlayer().showPlayer(player.getBukkitPlayer());
 
             if(target.getState() == PlayerState.SPECTATOR)
@@ -310,9 +310,9 @@ public abstract class Arena {
      * @param player player to leave
      * @return true if has left, false otherwise
      */
-    public boolean leave(PlayerData player) {
+    public boolean leave(final PlayerData player) {
         // Call event
-        PlayerLeaveArenaEvent event = new PlayerLeaveArenaEvent(player, this, player.getName() + " has left the arena " + name);
+        final PlayerLeaveArenaEvent event = new PlayerLeaveArenaEvent(player, this, player.getName() + " has left the arena " + name);
         Bukkit.getPluginManager().callEvent(event);
 
         if(event.isCancelled())
@@ -334,9 +334,9 @@ public abstract class Arena {
      * @param player player to spectate
      * @return true if is spectating, false otherwise
      */
-    public boolean spectate(PlayerData player) {
+    public boolean spectate(final PlayerData player) {
         // Call event
-        PlayerSpectateArenaEvent event = new PlayerSpectateArenaEvent(player, this, player.getName() + " is spectating the arena " + name);
+        final PlayerSpectateArenaEvent event = new PlayerSpectateArenaEvent(player, this, player.getName() + " is spectating the arena " + name);
         Bukkit.getPluginManager().callEvent(event);
 
         if(event.isCancelled())
@@ -351,9 +351,9 @@ public abstract class Arena {
         player.getBukkitPlayer().setGameMode(GameMode.SPECTATOR);
 
         // Hide to players ingame except spectators
-        for(PlayerData target : getAllPlayers())
-            if(target.getState() != PlayerState.SPECTATOR)
-                player.getBukkitPlayer().hidePlayer(target.getBukkitPlayer());
+        getAllPlayers().stream()
+                .filter(target -> target.getState() != PlayerState.SPECTATOR)
+                .forEach(target -> player.getBukkitPlayer().hidePlayer(target.getBukkitPlayer()));
 
         return true;
     }
@@ -363,7 +363,7 @@ public abstract class Arena {
      * @param player player to be joined
      * @return true if can, false otherwise
      */
-    public boolean canJoin(PlayerData player) {
+    public boolean canJoin(final PlayerData player) {
         // Avoid joining when no session is created
         if(currentSession == null)
             return false;
@@ -383,8 +383,8 @@ public abstract class Arena {
      * Broadcast a message to the arena
      * @param message message to be broadcast
      */
-    public void broadcastMessage(String message) {
-        for(PlayerData player : getAllPlayers())
+    public void broadcastMessage(final String message) {
+        for(final PlayerData player : getAllPlayers())
             player.getBukkitPlayer().sendMessage(message);
     }
 

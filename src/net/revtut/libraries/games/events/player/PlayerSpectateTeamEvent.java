@@ -3,7 +3,6 @@ package net.revtut.libraries.games.events.player;
 import net.revtut.libraries.games.arena.Arena;
 import net.revtut.libraries.games.player.PlayerData;
 import net.revtut.libraries.games.team.Team;
-import org.bukkit.event.HandlerList;
 
 /**
  * Player Spectate Team Event
@@ -13,7 +12,7 @@ public class PlayerSpectateTeamEvent extends PlayerSpectateArenaEvent {
     /**
      * Team that was spectated
      */
-    private Team team;
+    private final Team team;
 
     /**
      * Constructor of PlayerSpectateTeamEvent
@@ -22,7 +21,7 @@ public class PlayerSpectateTeamEvent extends PlayerSpectateArenaEvent {
      * @param team team that was spectated
      * @param joinMessage join message
      */
-    public PlayerSpectateTeamEvent(PlayerData player, Arena arena, Team team, String joinMessage) {
+    public PlayerSpectateTeamEvent(final PlayerData player, final Arena arena, final Team team, final String joinMessage) {
         super(player, arena, joinMessage);
         this.team = team;
     }
@@ -35,11 +34,4 @@ public class PlayerSpectateTeamEvent extends PlayerSpectateArenaEvent {
         return team;
     }
 
-    /**
-     * Get the handlers of the event
-     * @return handlers of the event
-     */
-    public HandlerList getHandlers() {
-        return super.getHandlers();
-    }
 }

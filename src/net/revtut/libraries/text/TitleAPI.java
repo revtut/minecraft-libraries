@@ -25,72 +25,72 @@ public final class TitleAPI {
     /**
      * Send a title to a player.
      *
-     * @param p     player to send the title
-     * @param title json title to send
+     * @param player player to send the title
+     * @param title  json title to send
      */
-    public static void sendTitle(final Player p, final String title) {
-        Libraries plugin = Libraries.getInstance();
+    public static void sendTitle(final Player player, final String title) {
+        final Libraries plugin = Libraries.getInstance();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            IChatBaseComponent titleSerializer = IChatBaseComponent.ChatSerializer.a(title);
-            PacketPlayOutTitle packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, titleSerializer);
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+            final IChatBaseComponent titleSerializer = IChatBaseComponent.ChatSerializer.a(title);
+            final PacketPlayOutTitle packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, titleSerializer);
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
         });
     }
 
     /**
      * Send a subtitle to a player.
      *
-     * @param p        player to send the subtitle
+     * @param player   player to send the subtitle
      * @param subtitle json subtitle to send
      */
-    public static void sendSubTitle(final Player p, final String subtitle) {
-        Libraries plugin = Libraries.getInstance();
+    public static void sendSubTitle(final Player player, final String subtitle) {
+        final Libraries plugin = Libraries.getInstance();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            IChatBaseComponent subTitleSerializer = IChatBaseComponent.ChatSerializer.a(subtitle);
-            PacketPlayOutTitle packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, subTitleSerializer);
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+            final IChatBaseComponent subTitleSerializer = IChatBaseComponent.ChatSerializer.a(subtitle);
+            final PacketPlayOutTitle packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, subTitleSerializer);
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
         });
     }
 
     /**
      * Set the title times.
      *
-     * @param p       player to update the times
+     * @param player  player to update the times
      * @param fadeIn  time the title should take to fade in
      * @param stay    time the title should stay on screen
      * @param fadeOut time the title should take to fade out
      */
-    public static void sendTimes(final Player p, final int fadeIn, final int stay, final int fadeOut) {
-        Libraries plugin = Libraries.getInstance();
+    public static void setTimes(final Player player, final int fadeIn, final int stay, final int fadeOut) {
+        final Libraries plugin = Libraries.getInstance();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            PacketPlayOutTitle packet = new PacketPlayOutTitle(fadeIn, stay, fadeOut);
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+            final PacketPlayOutTitle packet = new PacketPlayOutTitle(fadeIn, stay, fadeOut);
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
         });
     }
 
     /**
      * Reset the players timing, title, subtitle.
      *
-     * @param p player to be reseted
+     * @param player player to be reseted
      */
-    public static void reset(final Player p) {
-        Libraries plugin = Libraries.getInstance();
+    public static void reset(final Player player) {
+        final Libraries plugin = Libraries.getInstance();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            PacketPlayOutTitle packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.RESET, null);
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+            final PacketPlayOutTitle packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.RESET, null);
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
         });
     }
 
     /**
      * Clear the players title.
      *
-     * @param p player to be cleared
+     * @param player player to be cleared
      */
-    public static void clear(final Player p) {
-        Libraries plugin = Libraries.getInstance();
+    public static void clear(final Player player) {
+        final Libraries plugin = Libraries.getInstance();
         Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-            PacketPlayOutTitle packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.CLEAR, null);
-            ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+            final PacketPlayOutTitle packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.CLEAR, null);
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
         });
     }
 }

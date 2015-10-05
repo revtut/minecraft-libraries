@@ -2,7 +2,6 @@ package net.revtut.libraries.games.events.player;
 
 import net.revtut.libraries.games.arena.Arena;
 import net.revtut.libraries.games.player.PlayerData;
-import org.bukkit.event.HandlerList;
 
 /**
  * Player Spectate Arena Event
@@ -20,7 +19,7 @@ public class PlayerSpectateArenaEvent extends PlayerEvent {
      * @param arena arena that was spectated
      * @param joinMessage join message
      */
-    public PlayerSpectateArenaEvent(PlayerData player, Arena arena, String joinMessage) {
+    public PlayerSpectateArenaEvent(final PlayerData player, final Arena arena, final String joinMessage) {
         super(player, arena);
         this.joinMessage = joinMessage;
     }
@@ -37,15 +36,8 @@ public class PlayerSpectateArenaEvent extends PlayerEvent {
      * Set the join message
      * @param joinMessage new join message
      */
-    public void setJoinMessage(String joinMessage) {
+    public void setJoinMessage(final String joinMessage) {
         this.joinMessage = joinMessage;
     }
 
-    /**
-     * Get the handlers of the event
-     * @return handlers of the event
-     */
-    public HandlerList getHandlers() {
-        return super.getHandlers();
-    }
 }

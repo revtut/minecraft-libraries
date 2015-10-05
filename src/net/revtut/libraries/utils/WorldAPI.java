@@ -22,8 +22,10 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * World Library.
@@ -71,9 +73,9 @@ public final class WorldAPI {
      * @param worldName name of the world to load
      * @return loaded world
      */
-    public static World loadWorld(String worldName) {
+    public static World loadWorld(final String worldName) {
         // World Creator
-        WorldCreator creator = new WorldCreator(worldName);
+        final WorldCreator creator = new WorldCreator(worldName);
         creator.type(WorldType.FLAT);
         creator.generateStructures(false);
         return creator.createWorld();
@@ -102,12 +104,12 @@ public final class WorldAPI {
         world.getEntities().forEach(org.bukkit.entity.Entity::remove);
 
         // Unload all the chunks
-        for (Chunk chunk : world.getLoadedChunks()) {
+        for (final Chunk chunk : world.getLoadedChunks()) {
             chunk.unload();
         }
 
         // Unload world
-        boolean successfull = Bukkit.unloadWorld(world, true);
+        final boolean successfull = Bukkit.unloadWorld(world, true);
         RegionFileCache.a();
 
         return successfull;
@@ -119,11 +121,11 @@ public final class WorldAPI {
      * @param worldName name of the world to load
      * @return loaded world
      */
-    public static World loadWorldAsync(String worldName) {
+    public static World loadWorldAsync(final String worldName) {
         while (alreadyLoading) {
             try {
                 Thread.sleep(50);
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
                 e.printStackTrace();
             }
         }
@@ -133,15 +135,15 @@ public final class WorldAPI {
         generator = null;
         ret = null;
 
-        WorldCreator creator = new WorldCreator(worldName);
+        final WorldCreator creator = new WorldCreator(worldName);
         Validate.notNull(creator, "Creator may not be null");
 
-        String name = creator.name();
+        final String name = creator.name();
         generator = creator.generator();
-        File folder = new File(getWorldContainer(), name);
-        World world = getCraftServer().getWorld(name);
-        net.minecraft.server.v1_8_R3.WorldType type = net.minecraft.server.v1_8_R3.WorldType.getType(creator.type().getName());
-        boolean generateStructures = creator.generateStructures();
+        final File folder = new File(getWorldContainer(), name);
+        final World world = getCraftServer().getWorld(name);
+        final net.minecraft.server.v1_8_R3.WorldType type = net.minecraft.server.v1_8_R3.WorldType.getType(creator.type().getName());
+        final boolean generateStructures = creator.generateStructures();
 
         if (world != null) {
             return world;
@@ -155,23 +157,23 @@ public final class WorldAPI {
             generator = getGenerator(name);
         }
 
-        Convertable converter = new WorldLoaderServer(getWorldContainer());
+        final Convertable converter = new WorldLoaderServer(getWorldContainer());
         if (converter.isConvertable(name)) {
             Bukkit.getLogger().info("Converting world '" + name + "'");
             converter.convert(name, new IProgressUpdate() {
                 private long b = System.currentTimeMillis();
 
-                public void a(String s) {
+                public void a(final String s) {
                 }
 
-                public void a(int i) {
+                public void a(final int i) {
                     if (System.currentTimeMillis() - this.b >= 1000L) {
                         this.b = System.currentTimeMillis();
                         MinecraftServer.LOGGER.info("Converting... " + i + "%");
                     }
                 }
 
-                public void c(String s) {
+                public void c(final String s) {
                 }
             });
         }
@@ -180,7 +182,7 @@ public final class WorldAPI {
                 int dimension2 = 10 + getServer().worlds.size();
                 boolean used = false;
                 do
-                    for (WorldServer server : getServer().worlds) {
+                    for (final WorldServer server : getServer().worlds) {
                         used = server.dimension == dimension2;
                         if (used) {
                             dimension2++;
@@ -188,29 +190,29 @@ public final class WorldAPI {
                         }
                     }
                 while (used);
-                boolean hardcore = false;
+                final boolean hardcore = false;
                 final int dimension = dimension2;
                 new Thread() {
                     public void run() {
-                        Object sdm = new ServerNBTManager(getWorldContainer(), name, true);
+                        final Object sdm = new ServerNBTManager(getWorldContainer(), name, true);
                         WorldData worlddata = ((IDataManager) sdm).getWorldData();
                         if (worlddata == null) {
-                            WorldSettings worldSettings = new WorldSettings(creator.seed(), WorldSettings.EnumGamemode.getById(getCraftServer().getDefaultGameMode().getValue()), generateStructures, hardcore, type);
+                            final WorldSettings worldSettings = new WorldSettings(creator.seed(), WorldSettings.EnumGamemode.getById(getCraftServer().getDefaultGameMode().getValue()), generateStructures, hardcore, type);
                             worldSettings.setGeneratorSettings(creator.generatorSettings());
                             worlddata = new WorldData(worldSettings, name);
                         }
                         worlddata.checkName(name);
-                        WorldServer internal = (WorldServer) new WorldServer(getServer(), (IDataManager) sdm, worlddata, dimension, getServer().methodProfiler, creator.environment(), generator).b();
+                        final WorldServer internal = (WorldServer) new WorldServer(getServer(), (IDataManager) sdm, worlddata, dimension, getServer().methodProfiler, creator.environment(), generator).b();
                         new BukkitRunnable() {
                             public void run() {
                                 try {
-                                    Field w = CraftServer.class.getDeclaredField("worlds");
+                                    final Field w = CraftServer.class.getDeclaredField("worlds");
                                     w.setAccessible(true);
                                     if (!((Map<String, World>) w.get(getCraftServer())).containsKey(name.toLowerCase())) {
                                         aborted = true;
                                         return;
                                     }
-                                } catch (Exception e) {
+                                } catch (final Exception e) {
                                     e.printStackTrace();
                                     aborted = true;
                                     return;
@@ -236,25 +238,25 @@ public final class WorldAPI {
                                         }.runTask(Libraries.getInstance());
                                         System.out.print("Preparing start region for level " + (getServer().worlds.size() - 1) + " (Seed: " + internal.getSeed() + ")");
                                         if (internal.getWorld().getKeepSpawnInMemory()) {
-                                            short short1 = 196;
+                                            final short short1 = 196;
                                             long i = System.currentTimeMillis();
                                             for (int j = -short1; j <= short1; j += 16) {
                                                 for (int k = -short1; k <= short1; k += 16) {
-                                                    long l = System.currentTimeMillis();
+                                                    final long l = System.currentTimeMillis();
 
                                                     if (l < i) {
                                                         i = l;
                                                     }
 
                                                     if (l > i + 1000L) {
-                                                        int i1 = (short1 * 2 + 1) * (short1 * 2 + 1);
-                                                        int j1 = (j + short1) * (short1 * 2 + 1) + k + 1;
+                                                        final int i1 = (short1 * 2 + 1) * (short1 * 2 + 1);
+                                                        final int j1 = (j + short1) * (short1 * 2 + 1) + k + 1;
 
                                                         System.out.println("Preparing spawn area for " + name + ", " + j1 * 100 / i1 + "%");
                                                         i = l;
                                                     }
 
-                                                    BlockPosition chunkcoordinates = internal.getSpawn();
+                                                    final BlockPosition chunkcoordinates = internal.getSpawn();
                                                     getChunkAt(internal.chunkProviderServer, chunkcoordinates.getX() + j >> 4, chunkcoordinates.getZ() + k >> 4);
                                                 }
                                             }
@@ -267,18 +269,18 @@ public final class WorldAPI {
                                         ret = (World) internal.getWorld();
                                     }
 
-                                    private net.minecraft.server.v1_8_R3.Chunk getChunkAt(ChunkProviderServer cps, int i, int j) {
-                                        Runnable runnable = null;
+                                    private net.minecraft.server.v1_8_R3.Chunk getChunkAt(final ChunkProviderServer cps, final int i, final int j) {
+                                        final Runnable runnable = null;
                                         cps.unloadQueue.remove(i, j);
                                         net.minecraft.server.v1_8_R3.Chunk chunk = cps.chunks.get(LongHash.toLong(i, j));
                                         ChunkRegionLoader loader = null;
                                         try{
-                                            Field f = ChunkProviderServer.class.getDeclaredField("chunkLoader");
+                                            final Field f = ChunkProviderServer.class.getDeclaredField("chunkLoader");
                                             f.setAccessible(true);
                                             if ((f.get(cps) instanceof ChunkRegionLoader)) {
                                                 loader = (ChunkRegionLoader)f.get(cps);
                                             }
-                                        }catch(Exception e){
+                                        }catch(final Exception e){
                                             e.printStackTrace();
                                         }
 
@@ -291,7 +293,7 @@ public final class WorldAPI {
                                             while(wait==null){
                                                 try {
                                                     Thread.sleep(10);
-                                                } catch (InterruptedException e) {
+                                                } catch (final InterruptedException e) {
                                                     e.printStackTrace();
                                                 }
                                             }
@@ -307,7 +309,7 @@ public final class WorldAPI {
 
                                         return chunk;
                                     }
-                                    public net.minecraft.server.v1_8_R3.Chunk originalGetChunkAt(ChunkProviderServer cps, int i, int j) {
+                                    public net.minecraft.server.v1_8_R3.Chunk originalGetChunkAt(final ChunkProviderServer cps, final int i, final int j) {
                                         cps.unloadQueue.remove(i, j);
                                         net.minecraft.server.v1_8_R3.Chunk chunk = cps.chunks.get(LongHash.toLong(i, j));
                                         boolean newChunk = false;
@@ -321,12 +323,12 @@ public final class WorldAPI {
                                                 else {
                                                     try {
                                                         chunk = cps.chunkProvider.getOrCreateChunk(i, j);
-                                                    } catch (Throwable throwable) {
-                                                        CrashReport crashreport = CrashReport.a(throwable, "Exception generating new chunk");
-                                                        CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Chunk to be generated");
+                                                    } catch (final Throwable throwable) {
+                                                        final CrashReport crashreport = CrashReport.a(throwable, "Exception generating new chunk");
+                                                        final CrashReportSystemDetails crashreportsystemdetails = crashreport.a("Chunk to be generated");
 
-                                                        crashreportsystemdetails.a("Location", String.format("%d,%d", new Object[] { Integer.valueOf(i), Integer.valueOf(j) }));
-                                                        crashreportsystemdetails.a("Position hash", Long.valueOf(LongHash.toLong(i, j)));
+                                                        crashreportsystemdetails.a("Location", String.format("%d,%d", new Object[] {i, j}));
+                                                        crashreportsystemdetails.a("Position hash", LongHash.toLong(i, j));
                                                         crashreportsystemdetails.a("Generator", cps.chunkProvider.getName());
                                                         throw new ReportedException(crashreport);
                                                     }
@@ -340,7 +342,7 @@ public final class WorldAPI {
                                             new BukkitRunnable(){public void run(){
                                                 chunki.addEntities();
 
-                                                Server server = cps.world.getServer();
+                                                final Server server = cps.world.getServer();
                                                 if (server != null) {
                                                     server.getPluginManager().callEvent(new ChunkLoadEvent(chunki.bukkitChunk, newChunki));
                                                 }
@@ -351,7 +353,7 @@ public final class WorldAPI {
                                                     if ((x == 0) && (z == 0)) {
                                                         continue;
                                                     }
-                                                    net.minecraft.server.v1_8_R3.Chunk neighbor = cps.getChunkIfLoaded(chunk.locX + x, chunk.locZ + z);
+                                                    final net.minecraft.server.v1_8_R3.Chunk neighbor = cps.getChunkIfLoaded(chunk.locX + x, chunk.locZ + z);
                                                     if (neighbor != null) {
                                                         neighbor.setNeighborLoaded(-x, -z);
                                                         chunk.setNeighborLoaded(x, z);
@@ -366,16 +368,16 @@ public final class WorldAPI {
                                         return chunk;
                                     }
 
-                                    public void loadNearby(net.minecraft.server.v1_8_R3.Chunk c, IChunkProvider ichunkprovider, IChunkProvider ichunkprovider1, int i, int j) {
+                                    public void loadNearby(final net.minecraft.server.v1_8_R3.Chunk c, final IChunkProvider ichunkprovider, final IChunkProvider ichunkprovider1, final int i, final int j) {
                                         c.world.timings.syncChunkLoadPostTimer.startTiming();
-                                        boolean flag = ichunkprovider.isChunkLoaded(i, j - 1);
-                                        boolean flag1 = ichunkprovider.isChunkLoaded(i + 1, j);
-                                        boolean flag2 = ichunkprovider.isChunkLoaded(i, j + 1);
-                                        boolean flag3 = ichunkprovider.isChunkLoaded(i - 1, j);
-                                        boolean flag4 = ichunkprovider.isChunkLoaded(i - 1, j - 1);
-                                        boolean flag5 = ichunkprovider.isChunkLoaded(i + 1, j + 1);
-                                        boolean flag6 = ichunkprovider.isChunkLoaded(i - 1, j + 1);
-                                        boolean flag7 = ichunkprovider.isChunkLoaded(i + 1, j - 1);
+                                        final boolean flag = ichunkprovider.isChunkLoaded(i, j - 1);
+                                        final boolean flag1 = ichunkprovider.isChunkLoaded(i + 1, j);
+                                        final boolean flag2 = ichunkprovider.isChunkLoaded(i, j + 1);
+                                        final boolean flag3 = ichunkprovider.isChunkLoaded(i - 1, j);
+                                        final boolean flag4 = ichunkprovider.isChunkLoaded(i - 1, j - 1);
+                                        final boolean flag5 = ichunkprovider.isChunkLoaded(i + 1, j + 1);
+                                        final boolean flag6 = ichunkprovider.isChunkLoaded(i - 1, j + 1);
+                                        final boolean flag7 = ichunkprovider.isChunkLoaded(i + 1, j - 1);
 
                                         if ((flag1) && (flag2) && (flag5)) {
                                             if (!c.isDone())
@@ -387,7 +389,7 @@ public final class WorldAPI {
                                         }
 
                                         if ((flag3) && (flag2) && (flag6)) {
-                                            net.minecraft.server.v1_8_R3.Chunk chunk = getOrCreateChunk((ChunkProviderServer) ichunkprovider, i - 1, j);
+                                            final net.minecraft.server.v1_8_R3.Chunk chunk = getOrCreateChunk((ChunkProviderServer) ichunkprovider, i - 1, j);
                                             if (!chunk.isDone())
                                                 getChunkAt((ChunkProviderServer) ichunkprovider1, i - 1, j);
                                             else {
@@ -396,7 +398,7 @@ public final class WorldAPI {
                                         }
 
                                         if ((flag) && (flag1) && (flag7)) {
-                                            net.minecraft.server.v1_8_R3.Chunk chunk = getOrCreateChunk((ChunkProviderServer) ichunkprovider, i, j - 1);
+                                            final net.minecraft.server.v1_8_R3.Chunk chunk = getOrCreateChunk((ChunkProviderServer) ichunkprovider, i, j - 1);
                                             if (!chunk.isDone())
                                                 getChunkAt((ChunkProviderServer) ichunkprovider1, i, j - 1);
                                             else {
@@ -405,7 +407,7 @@ public final class WorldAPI {
                                         }
 
                                         if ((flag4) && (flag) && (flag3)) {
-                                            net.minecraft.server.v1_8_R3.Chunk chunk = getOrCreateChunk((ChunkProviderServer) ichunkprovider, i - 1, j - 1);
+                                            final net.minecraft.server.v1_8_R3.Chunk chunk = getOrCreateChunk((ChunkProviderServer) ichunkprovider, i - 1, j - 1);
                                             if (!chunk.isDone())
                                                 getChunkAt((ChunkProviderServer) ichunkprovider1, i - 1, j - 1);
                                             else {
@@ -415,10 +417,10 @@ public final class WorldAPI {
 
                                         c.world.timings.syncChunkLoadPostTimer.stopTiming();
                                     }
-                                    public boolean a(IChunkProvider ichunkprovider, net.minecraft.server.v1_8_R3.Chunk chunk, int i, int j)
+                                    public boolean a(final IChunkProvider ichunkprovider, final net.minecraft.server.v1_8_R3.Chunk chunk, final int i, final int j)
                                     {
                                         if ((ichunkprovider != null) && (ichunkprovider.a(ichunkprovider, chunk, i, j))) {
-                                            net.minecraft.server.v1_8_R3.Chunk chunk1 = getOrCreateChunk((ChunkProviderServer) ichunkprovider, i, j);
+                                            final net.minecraft.server.v1_8_R3.Chunk chunk1 = getOrCreateChunk((ChunkProviderServer) ichunkprovider, i, j);
 
                                             chunk1.e();
                                             return true;
@@ -426,7 +428,7 @@ public final class WorldAPI {
                                         return false;
                                     }
 
-                                    private net.minecraft.server.v1_8_R3.Chunk getOrCreateChunk(ChunkProviderServer ip, int i, int j) {
+                                    private net.minecraft.server.v1_8_R3.Chunk getOrCreateChunk(final ChunkProviderServer ip, final int i, final int j) {
                                         net.minecraft.server.v1_8_R3.Chunk chunk = ip.chunks.get(LongHash.toLong(i, j));
 
                                         chunk = chunk == null ? getChunkAt(ip, i, j) : (!ip.world.ad()) && (!ip.forceChunkLoad) ? ip.emptyChunk : chunk;
@@ -435,7 +437,7 @@ public final class WorldAPI {
                                         if ((i != chunk.locX) || (j != chunk.locZ)) {
                                             System.err.println("Chunk (" + chunk.locX + ", " + chunk.locZ + ") stored at  (" + i + ", " + j + ") in world '" + ip.world.getWorld().getName() + "'");
                                             System.err.println(chunk.getClass().getName());
-                                            Throwable ex = new Throwable();
+                                            final Throwable ex = new Throwable();
                                             ex.fillInStackTrace();
                                             ex.printStackTrace();
                                         }
@@ -454,14 +456,14 @@ public final class WorldAPI {
         while (ret == null && !aborted) {
             try {
                 Thread.sleep(50);
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
         try {
             Thread.sleep(1000);
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
             e.printStackTrace();
         }
         alreadyLoading = false;
@@ -477,16 +479,16 @@ public final class WorldAPI {
             return getServer().universe;
         }
         try {
-            Field container = CraftServer.class.getDeclaredField("container");
+            final Field container = CraftServer.class.getDeclaredField("container");
             container.setAccessible(true);
-            Field settings = CraftServer.class.getDeclaredField("configuration");
+            final Field settings = CraftServer.class.getDeclaredField("configuration");
             settings.setAccessible(true);
-            File co = (File) container.get(getCraftServer());
+            final File co = (File) container.get(getCraftServer());
             if (co == null)
                 container.set(getCraftServer(), new File(((YamlConfiguration) settings.get(getCraftServer())).getString("settings.world-container", ".")));
 
             return (File) container.get(getCraftServer());
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -513,9 +515,9 @@ public final class WorldAPI {
      * @param world world to get chunk generator
      * @return chunk generator
      */
-    public static ChunkGenerator getGenerator(String world) {
+    public static ChunkGenerator getGenerator(final String world) {
         try {
-            Field settings = CraftServer.class.getDeclaredField("configuration");
+            final Field settings = CraftServer.class.getDeclaredField("configuration");
             settings.setAccessible(true);
             ConfigurationSection section = ((YamlConfiguration) settings.get(getCraftServer())).getConfigurationSection("worlds");
             ChunkGenerator result = null;
@@ -524,12 +526,12 @@ public final class WorldAPI {
                 section = section.getConfigurationSection(world);
 
                 if (section != null) {
-                    String name = section.getString("generator");
+                    final String name = section.getString("generator");
 
                     if ((name != null) && (!name.equals(""))) {
-                        String[] split = name.split(":", 2);
-                        String id = split.length > 1 ? split[1] : null;
-                        Plugin plugin = Bukkit.getPluginManager().getPlugin(split[0]);
+                        final String[] split = name.split(":", 2);
+                        final String id = split.length > 1 ? split[1] : null;
+                        final Plugin plugin = Bukkit.getPluginManager().getPlugin(split[0]);
 
                         if (plugin == null)
                             Bukkit.getLogger().severe("Could not set generator for default world '" + world + "': Plugin '" + split[0] + "' does not exist");
@@ -540,7 +542,7 @@ public final class WorldAPI {
                                 result = plugin.getDefaultWorldGenerator(world, id);
                                 if (result == null)
                                     Bukkit.getLogger().severe("Could not set generator for default world '" + world + "': Plugin '" + plugin.getDescription().getFullName() + "' lacks a default world generator");
-                            } catch (Throwable t) {
+                            } catch (final Throwable t) {
                                 plugin.getLogger().log(Level.SEVERE, "Could not set generator for default world '" + world + "': Plugin '" + plugin.getDescription().getFullName(), t);
                             }
                         }
@@ -549,7 +551,7 @@ public final class WorldAPI {
             }
 
             return result;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -563,33 +565,51 @@ public final class WorldAPI {
      * @param max max damge applied
      * @return true if successfull
      */
-    public static boolean changeFallingBlockDamage(FallingBlock block, float damage, int max) {
+    public static boolean changeFallingBlockDamage(final FallingBlock block, final float damage, final int max) {
         try {
             // Falling block
             Class classzz = ReflectionAPI.getOBCClass("entity.CraftFallingSand");
-            Object fallingBlock = ReflectionAPI.getMethod(classzz, "getHandle").invoke(block);
+            final Method getHandle = ReflectionAPI.getMethod(classzz, "getHandle");
+            if(getHandle == null) {
+                Logger.getLogger("Minecraft").log(Level.SEVERE, "'getHandle' method does not exist on falling block class.");
+                return false;
+            }
+
+            final Object fallingBlock = getHandle.invoke(block);
 
             // Enable falling block damage
             classzz = ReflectionAPI.getNMSClass("EntityFallingBlock");
             Field field = ReflectionAPI.getField(classzz, "hurtEntities");
+            if(field == null) {
+                Logger.getLogger("Minecraft").log(Level.SEVERE, "'hurtEntities' field does not exist on falling block class.");
+                return false;
+            }
             field.setAccessible(true);
             field.setBoolean(fallingBlock, true);
             field.setAccessible(false);
 
             // Set the hurt amount of a falling block
             field = ReflectionAPI.getField(classzz, "fallHurtAmount");
+            if(field == null) {
+                Logger.getLogger("Minecraft").log(Level.SEVERE, "'fallHurtAmount' field does not exist on falling block class.");
+                return false;
+            }
             field.setAccessible(true);
             field.setFloat(fallingBlock, damage);
             field.setAccessible(false);
 
             // Set the maximum hurt amount of a falling block
             field = ReflectionAPI.getField(classzz, "fallHurtMax");
+            if(field == null) {
+                Logger.getLogger("Minecraft").log(Level.SEVERE, "'fallHurtMax' field does not exist on falling block class.");
+                return false;
+            }
             field.setAccessible(true);
             field.setInt(fallingBlock, max);
             field.setAccessible(false);
 
             return true;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
             return false;
         }

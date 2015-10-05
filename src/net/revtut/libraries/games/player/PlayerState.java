@@ -28,5 +28,5 @@ public enum PlayerState {
     /**
      * Player is not in any arena
      */
-    NOT_ASSIGNED;
+    NOT_ASSIGNED
 }

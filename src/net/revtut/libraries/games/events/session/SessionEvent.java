@@ -18,7 +18,7 @@ public abstract class SessionEvent extends Event implements Cancellable {
     /**
      * Session where the event occurred
      */
-    private GameSession gameSession;
+    private final GameSession gameSession;
 
     /**
      * Flag to check if the event was cancelled
@@ -29,7 +29,7 @@ public abstract class SessionEvent extends Event implements Cancellable {
      * Constructor of SessionEvent
      * @param gameSession session where the event occurred
      */
-    public SessionEvent(GameSession gameSession) {
+    public SessionEvent(final GameSession gameSession) {
         this.gameSession = gameSession;
         this.isCancelled = false;
     }
@@ -62,7 +62,7 @@ public abstract class SessionEvent extends Event implements Cancellable {
      * Set the event as cancelled or not
      * @param cancelled new value for cancelled
      */
-    public void setCancelled(boolean cancelled) {
+    public void setCancelled(final boolean cancelled) {
         this.isCancelled = cancelled;
     }
 

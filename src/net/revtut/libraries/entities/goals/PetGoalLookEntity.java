@@ -12,17 +12,17 @@ public class PetGoalLookEntity extends PetGoal {
     /**
      * Pet entity
      */
-    private EntityInsentient pet;
+    private final EntityInsentient pet;
 
     /**
      * Target of the pet
      */
-    private Entity target;
+    private final Entity target;
 
     /**
      * Maximum distance to look at target
      */
-    private double range;
+    private final double range;
 
     /**
      * Constructor of PetGoalFollowEntity
@@ -30,7 +30,7 @@ public class PetGoalLookEntity extends PetGoal {
      * @param target target of the pet
      * @param range range to look at target
      */
-    public PetGoalLookEntity(EntityInsentient pet, Entity target, double range) {
+    public PetGoalLookEntity(final EntityInsentient pet, final Entity target, final double range) {
         this.pet = pet;
         this.target = target;
         this.range = range;

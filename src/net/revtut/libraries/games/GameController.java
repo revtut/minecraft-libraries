@@ -24,23 +24,23 @@ public class GameController {
     /**
      * Plugin owner of the controller
      */
-    private Plugin plugin;
+    private final Plugin plugin;
 
     /**
      * File where worlds are located
      */
-    private File worldsFolder;
+    private final File worldsFolder;
 
     /**
      * List with all arenas
      */
-    private List<Arena> arenas;
+    private final List<Arena> arenas;
 
     /**
      * Constructor of GameController
      * @param plugin plugin owner of the controller
      */
-    public GameController(Plugin plugin, File worldsFolder) {
+    public GameController(final Plugin plugin, final File worldsFolder) {
         this.plugin = plugin;
         this.worldsFolder = worldsFolder;
         this.arenas = new ArrayList<>();
@@ -75,8 +75,8 @@ public class GameController {
      * @return online players on the game
      */
     public List<PlayerData> getOnlinePlayers() {
-        List<PlayerData> players = new ArrayList<>();
-        for(Arena arena : arenas)
+        final List<PlayerData> players = new ArrayList<>();
+        for(final Arena arena : arenas)
             players.addAll(arena.getAllPlayers());
         return players;
     }
@@ -86,8 +86,8 @@ public class GameController {
      * @return list with all available arenas
      */
     public List<Arena> getAvailableArenas() {
-        List<Arena> availableArenas = new ArrayList<>();
-        for(Arena arena : arenas) {
+        final List<Arena> availableArenas = new ArrayList<>();
+        for(final Arena arena : arenas) {
             if(!arena.canJoin(null))
                 continue;
 
@@ -102,7 +102,7 @@ public class GameController {
      * @param preference preference for the arena
      * @return arena that best suits the preference
      */
-    public Arena getAvailableArena(ArenaPreference preference) {
+    public Arena getAvailableArena(final ArenaPreference preference) {
         Arena arena = null;
         int comparator;
 
@@ -121,7 +121,7 @@ public class GameController {
         }
 
         // Check all arenas
-        for(Arena targetArena : arenas) {
+        for(final Arena targetArena : arenas) {
             if(!targetArena.canJoin(null))
                 continue;
 
@@ -164,8 +164,8 @@ public class GameController {
      * @param uuid uuid of the player to get the arena
      * @return arena of the player
      */
-    public Arena getPlayerArena(UUID uuid) {
-        for(Arena arena : arenas)
+    public Arena getPlayerArena(final UUID uuid) {
+        for(final Arena arena : arenas)
             if(arena.containsPlayer(uuid))
                 return arena;
         return null;
@@ -176,7 +176,7 @@ public class GameController {
      * @param arena arena to be checked
      * @return true if contains, false otherwise
      */
-    public boolean hasArena(Arena arena) {
+    public boolean hasArena(final Arena arena) {
         return arenas.contains(arena);
     }
 
@@ -185,8 +185,8 @@ public class GameController {
      * @param type type of the arena
      * @return created arena
      */
-    public Arena createArena(ArenaType type) {
-        Arena arena;
+    public Arena createArena(final ArenaType type) {
+        final Arena arena;
         switch (type) {
             case SOLO:
                 arena = new ArenaSolo(plugin.getName());
@@ -206,7 +206,7 @@ public class GameController {
      * Remove a arena
      * @param arena arena to be removed
      */
-    public void removeArena(Arena arena) {
+    public void removeArena(final Arena arena) {
         arena.close();
         arenas.remove(arena);
     }
@@ -216,13 +216,13 @@ public class GameController {
      * @param prefix prefix of the world name
      * @return loaded world
      */
-    public World loadRandomWorld(String prefix) {
+    public World loadRandomWorld(final String prefix) {
         // Copy world folder
-        String[] listWorlds = getWorldsFolder().list();
+        final String[] listWorlds = getWorldsFolder().list();
         if (listWorlds == null)
             throw new IllegalStateException("List of worlds is null.");
 
-        int posWorld = (int) (Math.random() * (listWorlds.length - 1));
+        final int posWorld = (int) (Math.random() * (listWorlds.length - 1));
         final String sourcePath = new File(getWorldsFolder() + File.separator + listWorlds[posWorld]).getAbsolutePath();
         final String mapName = prefix + "_" + listWorlds[posWorld];
         final String targetPath = new File(System.getProperty("user.dir") + File.separator + mapName).getAbsolutePath();
@@ -230,7 +230,7 @@ public class GameController {
         FilesAPI.copyDirectory(new File(sourcePath), new File(targetPath));
 
         // Load World
-        World world = WorldAPI.loadWorldAsync(mapName);
+        final World world = WorldAPI.loadWorldAsync(mapName);
         if(world == null)
             throw new IllegalStateException("Loaded world is null.");
         world.setAutoSave(false);

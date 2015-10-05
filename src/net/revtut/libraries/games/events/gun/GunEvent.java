@@ -19,12 +19,12 @@ public abstract class GunEvent extends Event implements Cancellable {
     /**
      * Player that used the gun
      */
-    private Player shooter;
+    private final Player shooter;
 
     /**
      * Gun that was used
      */
-    private Gun gun;
+    private final Gun gun;
 
     /**
      * Flag to check if the event was cancelled
@@ -36,7 +36,7 @@ public abstract class GunEvent extends Event implements Cancellable {
      * @param shooter player that used the gun
      * @param gun gun that was used
      */
-    public GunEvent(Player shooter, Gun gun) {
+    public GunEvent(final Player shooter, final Gun gun) {
         this.shooter = shooter;
         this.gun = gun;
         this.isCancelled = false;
@@ -78,7 +78,7 @@ public abstract class GunEvent extends Event implements Cancellable {
      * Set the event as cancelled or not
      * @param cancelled new value for cancelled
      */
-    public void setCancelled(boolean cancelled) {
+    public void setCancelled(final boolean cancelled) {
         this.isCancelled = cancelled;
     }
 

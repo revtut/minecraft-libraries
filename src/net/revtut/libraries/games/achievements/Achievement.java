@@ -13,13 +13,13 @@ public abstract class Achievement implements Listener {
     /**
      * Name of the achievement
      */
-    private String name;
+    private final String name;
 
     /**
      * Constructor of Achievement
      * @param name name of the achievement
      */
-    public Achievement(String name) {
+    public Achievement(final String name) {
         this.name = name;
     }
 

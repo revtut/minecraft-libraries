@@ -26,8 +26,8 @@ public final class NameTagAPI implements Listener {
      *
      * @param p player to hide the NameTag
      */
-    public static void hideNametag(Player p) {
-        LivingEntity entidade = p.getWorld().spawn(p.getLocation(), Squid.class);
+    public static void hideNametag(final Player p) {
+        final LivingEntity entidade = p.getWorld().spawn(p.getLocation(), Squid.class);
         entidade.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1));
         p.setPassenger(entidade);
     }
@@ -37,8 +37,8 @@ public final class NameTagAPI implements Listener {
      *
      * @param p player to Unhide the NameTag
      */
-    public static void unHideNametag(Player p) {
-        LivingEntity entidade = (LivingEntity) p.getPassenger();
+    public static void unHideNametag(final Player p) {
+        final LivingEntity entidade = (LivingEntity) p.getPassenger();
         if(entidade == null)
             return;
 
@@ -52,7 +52,7 @@ public final class NameTagAPI implements Listener {
      * @param p player to see if has nametag visible
      * @return true he has it hidden
      */
-    public static boolean isNameTagHidden(Player p) {
+    public static boolean isNameTagHidden(final Player p) {
         return p.getPassenger() != null && p.getPassenger().getType() == EntityType.SQUID && ((LivingEntity) p.getPassenger()).hasPotionEffect(PotionEffectType.INVISIBILITY);
     }
 
@@ -66,14 +66,14 @@ public final class NameTagAPI implements Listener {
      * @param player   player to show the NameTag
      * @param perPlayerScoreBoard if multiple ScoreBoards
      */
-    public static void setNameTag(String tagId, String prefix, String suffix, Scoreboard board, Player player, boolean perPlayerScoreBoard) {
+    public static void setNameTag(final String tagId, final String prefix, final String suffix, final Scoreboard board, final Player player, final boolean perPlayerScoreBoard) {
         if(!perPlayerScoreBoard) {
             setNameTag(tagId, prefix, suffix, board, player); // Only one ScoreBoard is in use
             return;
         }
 
         Scoreboard targetBoard;
-        for (Player target : Bukkit.getOnlinePlayers()) {
+        for (final Player target : Bukkit.getOnlinePlayers()) {
             targetBoard = target.getScoreboard();
             if (targetBoard != null)
                 setNameTag(tagId, prefix, suffix, targetBoard, player); // Add "Player" to target Board
@@ -90,7 +90,7 @@ public final class NameTagAPI implements Listener {
      * @param board scoreBoard of the Teams
      * @param player player to set the name tag
      */
-    private static void setNameTag(String tagId, String prefix, String suffix, Scoreboard board, Player player) {
+    private static void setNameTag(final String tagId, final String prefix, final String suffix, final Scoreboard board, final Player player) {
         Team team = board.getTeam(tagId);
         if (team == null) {
             team = board.registerNewTeam(tagId);
@@ -102,7 +102,7 @@ public final class NameTagAPI implements Listener {
         team.addEntry(player.getName());
 
         // Display name
-        String name = prefix + player.getName() + suffix;
+        final String name = prefix + player.getName() + suffix;
         if (!player.getDisplayName().equals(name))
             player.setDisplayName(name);
     }

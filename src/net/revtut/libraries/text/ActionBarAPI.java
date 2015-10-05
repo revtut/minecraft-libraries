@@ -25,17 +25,17 @@ public final class ActionBarAPI {
     /**
      * Send a action bar to a player.
      *
-     * @param p player to send the action bar
+     * @param player player to send the action bar
      * @param message  message to be sent
      * @param stay time that the message should stay
      */
-    public static void sendActionBar(final Player p, final String message, final int stay) {
-        Libraries plugin = Libraries.getInstance();
+    public static void sendActionBar(final Player player, final String message, final int stay) {
+        final Libraries plugin = Libraries.getInstance();
         for(int i = 0; i < stay; i++) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
-                IChatBaseComponent actionMessage = IChatBaseComponent.ChatSerializer.a(message);
-                PacketPlayOutChat ppoc = new PacketPlayOutChat(actionMessage, (byte) 2);
-                ((CraftPlayer) p).getHandle().playerConnection.sendPacket(ppoc);
+                final IChatBaseComponent actionMessage = IChatBaseComponent.ChatSerializer.a(message);
+                final PacketPlayOutChat ppoc = new PacketPlayOutChat(actionMessage, (byte) 2);
+                ((CraftPlayer) player).getHandle().playerConnection.sendPacket(ppoc);
             }), i * 20);
         }
     }

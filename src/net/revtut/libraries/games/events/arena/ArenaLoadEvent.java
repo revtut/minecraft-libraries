@@ -12,7 +12,7 @@ public class ArenaLoadEvent extends ArenaEvent {
      *
      * @param arena arena where the event occurred
      */
-    public ArenaLoadEvent(Arena arena) {
+    public ArenaLoadEvent(final Arena arena) {
         super(arena);
     }
 }

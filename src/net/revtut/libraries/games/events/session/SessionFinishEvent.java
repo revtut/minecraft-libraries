@@ -11,7 +11,7 @@ public class SessionFinishEvent extends SessionEvent {
      * Constructor of SessionFinishEvent
      * @param gameSession session where the event occurred
      */
-    public SessionFinishEvent(GameSession gameSession) {
+    public SessionFinishEvent(final GameSession gameSession) {
         super(gameSession);
     }
 }
