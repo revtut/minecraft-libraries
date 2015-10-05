@@ -30,6 +30,4 @@ public final class BypassesAPI {
         final EntityPlayer cPlayer = ((CraftPlayer) player).getHandle(); // Gets the EntityPlayer class
         cPlayer.playerConnection.a(in); // Handles the rest of it
     }
-
-
 }
