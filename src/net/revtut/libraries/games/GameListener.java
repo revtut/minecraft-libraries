@@ -1,5 +1,6 @@
 package net.revtut.libraries.games;
 
+import com.google.common.collect.ImmutableList;
 import net.revtut.libraries.games.arena.Arena;
 import net.revtut.libraries.games.arena.ArenaFlag;
 import net.revtut.libraries.games.arena.ArenaPreference;
@@ -12,7 +13,10 @@ import net.revtut.libraries.games.guns.Gun;
 import net.revtut.libraries.games.player.PlayerData;
 import net.revtut.libraries.games.player.PlayerState;
 import net.revtut.libraries.maths.AlgebraAPI;
-import net.revtut.libraries.text.TextAPI;
+import net.revtut.libraries.text.checks.AdvertisementCheck;
+import net.revtut.libraries.text.checks.BadWordCheck;
+import net.revtut.libraries.text.checks.CapsCheck;
+import net.revtut.libraries.text.checks.Check;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -30,6 +34,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -40,7 +45,20 @@ public class GameListener implements Listener {
     /**
      * Game API instance
      */
-    private final GameAPI gameAPI = GameAPI.getInstance();
+    private final GameAPI gameAPI;
+
+    /**
+     * Checks to be used on chat
+     */
+    private final List<Check> checksList;
+
+    /**
+     * Constructor of GameListener
+     */
+    public GameListener() {
+        gameAPI = GameAPI.getInstance();
+        checksList = ImmutableList.copyOf(new Check[] { new AdvertisementCheck(), new BadWordCheck(), new CapsCheck()});
+    }
 
     /**
      * Controls the block break event
@@ -140,7 +158,8 @@ public class GameListener implements Listener {
      */
     @EventHandler
     public void onChat(final AsyncPlayerChatEvent event) {
-        final UUID uuid = event.getPlayer().getUniqueId();
+        final Player bukkitPlayer = event.getPlayer();
+        final UUID uuid = bukkitPlayer.getUniqueId();
 
         // Get needed data
         final Arena arena = gameAPI.getPlayerArena(uuid);
@@ -159,12 +178,11 @@ public class GameListener implements Listener {
         // Cancel the event to use our own methods
         event.setCancelled(true);
 
-        // Filter bad words
-        String message = event.getMessage();
-        message = TextAPI.replaceBadWords(message);
-
-        // Filter advertisements
-        message = TextAPI.replaceAdvertisement(message, "mc.revtut.net", "https://www.revtut.net");
+        // Checkers
+        final String message = event.getMessage();
+        for(final Check check : checksList)
+            if(check.checkMessage(bukkitPlayer, message))
+                check.fixMessage(message);
 
         // Call event
         final PlayerTalkEvent playerTalkEvent = new PlayerTalkEvent(player, arena, "<" + player.getName() + "> " + message);
