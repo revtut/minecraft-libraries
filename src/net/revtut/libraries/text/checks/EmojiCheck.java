@@ -2,6 +2,7 @@ package net.revtut.libraries.text.checks;
 
 import net.revtut.libraries.Libraries;
 import net.revtut.libraries.utils.FilesAPI;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -9,6 +10,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -27,29 +29,49 @@ public class EmojiCheck implements Check {
     static {
         // Emoji
         EMOJI = new HashMap<>();
-        EMOJI.put(":-)", "?");
-        EMOJI.put(":)", "?");
+        EMOJI.put(":-)", "☻");
+        EMOJI.put(":)", "☻");
 
-        EMOJI.put(":-(", "?");
-        EMOJI.put(":(", "?");
+        EMOJI.put(":-(", "☹");
+        EMOJI.put(":(", "☹");
 
-        EMOJI.put("<3", "?");
+        EMOJI.put("<3", "❤");
 
-        EMOJI.put("o.o", "?_?");
-        EMOJI.put("o.O", "?_?");
-        EMOJI.put("O.o", "?_?");
-        EMOJI.put("0.0", "?_?");
-        EMOJI.put("o.0", "?_?");
-        EMOJI.put("0.o", "?_?");
+        EMOJI.put("o.o", "◕_◕");
+        EMOJI.put("0.0", "◕_◕");
 
-        EMOJI.put("*_*", "?_?");
-        EMOJI.put("*-*", "?_?");
+        EMOJI.put("*_*", "★_★");
+        EMOJI.put("*-*", "★_★");
 
-        EMOJI.put(">:-[", "(?_?)");
-        EMOJI.put(">:[", "(?_?)");
+        EMOJI.put(">:-[", "(◣_◢)");
+        EMOJI.put(">:[", "(◣_◢)");
 
-        EMOJI.put("O:-)", "???");
-        EMOJI.put("O:)", "???");
+        EMOJI.put("O:-)", "◔◡◔");
+        EMOJI.put("O:)", "◔◡◔");
+        EMOJI.put("0:-)", "◔◡◔");
+        EMOJI.put("0:)", "◔◡◔");
+
+        EMOJI.put(":X", ":✖");
+        EMOJI.put(":-X", ":✖");
+
+        EMOJI.put("yolo", "Yᵒᵘ Oᶰˡʸ Lᶤᵛᵉ Oᶰᶜᵉ");
+
+        EMOJI.put("Love you", "ᶫᵒᵛᵉᵧₒᵤ");
+
+        EMOJI.put("Happy Birthday", "ዞᏜ℘℘Ꮍ ℬℹℛʈዞᗬᏜᎽ");
+
+        EMOJI.put("(C)", "©");
+        EMOJI.put("(R)", "®");
+        EMOJI.put("(P)", "℗");
+        EMOJI.put("(TM)", "™");
+
+        EMOJI.put("->", "→");
+        EMOJI.put("<-", "←");
+
+        EMOJI.put("|>", "▶");
+        EMOJI.put("<|", "◀");
+
+        EMOJI.put("(v)", "✌");
     }
 
     /**
@@ -61,7 +83,7 @@ public class EmojiCheck implements Check {
     @Override
     public boolean checkMessage(final Player player, final String message) {
         for(final String emoticon : EMOJI.keySet())
-            if(message.contains(emoticon))
+            if(StringUtils.containsIgnoreCase(message, emoticon))
                 return true;
         return false;
     }
@@ -73,8 +95,12 @@ public class EmojiCheck implements Check {
      */
     @Override
     public String fixMessage(String message) {
-        for(final String emoticon : EMOJI.keySet())
-            message = message.replaceAll(getEmoticonSearchRegex(emoticon), EMOJI.get(emoticon));
+        for(final String emoticon : EMOJI.keySet()) {
+            if (!StringUtils.containsIgnoreCase(message, emoticon))
+                continue;
+            message = message.replaceAll(getEmoticonSearchRegex(emoticon), Matcher.quoteReplacement(EMOJI.get(emoticon)));
+        }
+
         return message;
     }
 
@@ -85,7 +111,7 @@ public class EmojiCheck implements Check {
      */
     private String getEmoticonSearchRegex(String emoticon) {
         // Allowed characters left + emoticon + allowed characters right
-        return "(?<![-_a-zA-Z0-9)(;:*<>=/])(" + Pattern.quote(emoticon) + ")(?![-_a-zA-Z0-9)(;:*<>=/])";
+        return "(?<![-_a-zA-Z0-9)(;:*<>=/])((?i)" + Pattern.quote(emoticon) + ")(?![-_a-zA-Z0-9)(;:*<>=/])";
     }
 
 
