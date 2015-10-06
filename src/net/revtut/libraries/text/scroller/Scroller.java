@@ -24,6 +24,22 @@ public abstract class Scroller {
     }
 
     /**
+     * Get the full text of the scroller
+     * @return full text of the scroller
+     */
+    public String getText() {
+        return text;
+    }
+
+    /**
+     * Get the position pointer of the scroller
+     * @return position pointer of the scroller
+     */
+    public int getPosition() {
+        return position;
+    }
+
+    /**
      * Get the next string for the scroller
      * @return next string for the scroller
      */

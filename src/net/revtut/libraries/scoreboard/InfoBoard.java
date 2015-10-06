@@ -1,5 +1,7 @@
 package net.revtut.libraries.scoreboard;
 
+import net.revtut.libraries.Libraries;
+import net.revtut.libraries.scoreboard.label.ScrollingLabel;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -37,13 +39,18 @@ public class InfoBoard {
 
     /**
      * Constructor of InfoBoard
+     * @param interval interval between updates dynamic labels (-1 for disabling)
      */
-    public InfoBoard() {
+    public InfoBoard(int interval) {
         scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         objective = scoreboard.registerNewObjective("side", "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         this.infoLabels = new ArrayList<>();
+
+        if(interval < 0)
+            return;
+        Bukkit.getScheduler().runTaskTimer(Libraries.getInstance(), () -> getLabels(ScrollingLabel.class).forEach(this::updateLabel), 0L, interval);
     }
 
     /**
@@ -128,6 +135,7 @@ public class InfoBoard {
     public void updateLabel(final InfoBoardLabel label) {
         if(infoLabels.contains(label))
             removeLabel(label);
+        label.update();
         addLabel(label);
     }
 
