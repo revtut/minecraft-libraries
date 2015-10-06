@@ -20,6 +20,14 @@ public abstract class InfoBoardLabel {
     /**
      * Constructor of InfoBoardLabel
      * @param text text of the label
+     */
+    public InfoBoardLabel(final String text) {
+        this(text, -1);
+    }
+
+    /**
+     * Constructor of InfoBoardLabel
+     * @param text text of the label
      * @param position position of the label
      */
     public InfoBoardLabel(final String text, final int position) {

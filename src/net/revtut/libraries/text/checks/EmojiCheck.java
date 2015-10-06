@@ -1,14 +1,10 @@
 package net.revtut.libraries.text.checks;
 
-import net.revtut.libraries.Libraries;
-import net.revtut.libraries.utils.FilesAPI;
 import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.io.InputStream;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

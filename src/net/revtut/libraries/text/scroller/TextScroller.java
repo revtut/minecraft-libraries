@@ -47,7 +47,7 @@ public class TextScroller extends Scroller {
         }
 
         // Build the string
-        StringBuilder builder = new StringBuilder(initialColor);
+        final StringBuilder builder = new StringBuilder(initialColor);
         for(int length = 0, index = position; length < this.length; index++) {
             if(index >= text.length())
                 index = 0;

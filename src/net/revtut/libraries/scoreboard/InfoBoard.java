@@ -33,6 +33,11 @@ public class InfoBoard {
     private Objective objective;
 
     /**
+     * Title of the information board
+     */
+    private InfoBoardLabel title;
+
+    /**
      * Map with all the information labels
      */
     private List<InfoBoardLabel> infoLabels;
@@ -50,7 +55,11 @@ public class InfoBoard {
 
         if(interval < 0)
             return;
-        Bukkit.getScheduler().runTaskTimer(Libraries.getInstance(), () -> getLabels(ScrollingLabel.class).forEach(this::updateLabel), 0L, interval);
+        Bukkit.getScheduler().runTaskTimer(Libraries.getInstance(), () -> {
+            if(title.getClass() == ScrollingLabel.class)
+                updateTitle();
+            getLabels(ScrollingLabel.class).forEach(this::updateLabel);
+        }, 0L, interval);
     }
 
     /**
@@ -97,11 +106,20 @@ public class InfoBoard {
     }
 
     /**
-     * Set the title of the scoreboard
-     * @param title title of the scoreboard
+     * Set the title label of the scoreboard
+     * @param title title label of the scoreboard
      */
-    public void setTitle(final String title) {
-        objective.setDisplayName(title);
+    public void setTitle(final InfoBoardLabel title) {
+        this.title = title;
+        updateTitle();
+    }
+
+    /**
+     * Update the title of the scoreboard
+     */
+    public void updateTitle() {
+        title.update();
+        objective.setDisplayName(title.getText());
     }
 
     /**

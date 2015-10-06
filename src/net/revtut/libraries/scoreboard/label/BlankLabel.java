@@ -9,6 +9,13 @@ public class BlankLabel extends InfoBoardLabel {
 
     /**
      * Constructor of BlankLabel
+     */
+    public BlankLabel() {
+        this(-1);
+    }
+
+    /**
+     * Constructor of BlankLabel
      * @param position position of the label
      */
     public BlankLabel(final int position) {

@@ -10,6 +10,14 @@ public class StaticLabel extends InfoBoardLabel {
     /**
      * Constructor of StaticLabel
      * @param text text of the label
+     */
+    public StaticLabel(final String text) {
+        this(text, -1);
+    }
+
+    /**
+     * Constructor of StaticLabel
+     * @param text text of the label
      * @param position position of the label
      */
     public StaticLabel(final String text, final int position) {
