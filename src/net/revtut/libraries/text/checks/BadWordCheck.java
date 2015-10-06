@@ -63,7 +63,7 @@ public class BadWordCheck implements Check {
             if(!StringUtils.containsIgnoreCase(message, badWord))
                 continue;
 
-            message = message.replaceAll("(?i)" + Pattern.quote(badWord), Matcher.quoteReplacement(generateCensoredString(REPLACE_PATTERN, badWord.length())));
+            message = message.replaceAll("(?i)\\b" + Pattern.quote(badWord) + "\\b", Matcher.quoteReplacement(generateCensoredString(REPLACE_PATTERN, badWord.length())));
         }
 
         return message;

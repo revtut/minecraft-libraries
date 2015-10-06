@@ -33,13 +33,32 @@ public class TextScroller extends Scroller {
         if(position >= text.length())
             position = 0;
 
-        int endPosition = position + length - 1;
-        if(endPosition >= text.length())
-            endPosition -= text.length() + 1;
+        // Bypass initial color position if needed
+        while(text.charAt(position) == '§')
+            position += 2;
 
-        if(endPosition < position)
-            return text.substring(position, text.length() - 1) + text.substring(0, endPosition + 1);
-        else
-            return text.substring(position, endPosition + 1);
+        // Get the color that will start the text message
+        String initialColor = "§r";
+        for(int index = position; index >= 0; index--) {
+            if(text.charAt(index) == '§' && index < text.length() - 1) {
+                initialColor = "" + text.charAt(index) + text.charAt(index + 1);
+                break;
+            }
+        }
+
+        // Build the string
+        StringBuilder builder = new StringBuilder(initialColor);
+        for(int length = 0, index = position; length < this.length; index++) {
+            if(index >= text.length())
+                index = 0;
+
+            // Only count non colors as length
+            if(text.charAt(index) != '§' && index > 0 && text.charAt(index - 1) != '§')
+                length++;
+
+            builder.append(text.charAt(index));
+        }
+
+        return builder.toString();
     }
 }
