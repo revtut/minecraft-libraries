@@ -2,6 +2,7 @@ package net.revtut.libraries.text.checks;
 
 import net.revtut.libraries.Libraries;
 import net.revtut.libraries.utils.FilesAPI;
+import org.apache.commons.lang3.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -23,7 +24,7 @@ public class BadWordCheck implements Check {
     /**
      * Array with replace symbols
      */
-    private static final char[] REPLACE_SYMBOLS;
+    private static final String REPLACE_PATTERN;
 
     /**
      * Initialize variables
@@ -34,7 +35,7 @@ public class BadWordCheck implements Check {
         BAD_WORDS = FilesAPI.getLines(inputStream);
 
         // Replace symbols
-        REPLACE_SYMBOLS = new char[] {'#', '$', '@', '&', '%', '*'};
+        REPLACE_PATTERN = "#*$@%!";
     }
 
     /**
@@ -46,7 +47,7 @@ public class BadWordCheck implements Check {
     @Override
     public boolean checkMessage(final Player player, final String message) {
         for(final String badWord : BAD_WORDS)
-            if(message.contains(badWord))
+            if(StringUtils.containsIgnoreCase(message, badWord))
                 return true;
         return false;
     }
@@ -59,10 +60,10 @@ public class BadWordCheck implements Check {
     @Override
     public String fixMessage(String message) {
         for(final String badWord : BAD_WORDS) {
-            if(!message.contains(badWord))
+            if(!StringUtils.containsIgnoreCase(message, badWord))
                 continue;
 
-            message = message.replaceAll(Pattern.quote(badWord), Matcher.quoteReplacement((generateRandomString(REPLACE_SYMBOLS, badWord.length()))));
+            message = message.replaceAll("(?i)" + Pattern.quote(badWord), Matcher.quoteReplacement(generateCensoredString(REPLACE_PATTERN, badWord.length())));
         }
 
         return message;
@@ -87,15 +88,15 @@ public class BadWordCheck implements Check {
     }
 
     /**
-     * Generate a random string from a array of characters
-     * @param characters characters allowed on the string
+     * Generate a censored string from a pattern string
+     * @param pattern pattern string
      * @param length length of the string
-     * @return random string
+     * @return censored string
      */
-    private String generateRandomString(final char[] characters, final int length) {
+    private String generateCensoredString(final String pattern, final int length) {
         final StringBuilder stringBuilder = new StringBuilder(length);
         for(int i = 0; i < length; i++)
-            stringBuilder.append(characters[(int)(Math.random() * (characters.length - 1))]);
+            stringBuilder.append(pattern.charAt(i % pattern.length()));
 
         return stringBuilder.toString();
     }

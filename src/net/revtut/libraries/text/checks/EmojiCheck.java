@@ -27,15 +27,29 @@ public class EmojiCheck implements Check {
     static {
         // Emoji
         EMOJI = new HashMap<>();
+        EMOJI.put(":-)", "?");
+        EMOJI.put(":)", "?");
 
-        final InputStream inputStream = Libraries.getInstance().getResource("resources/emoji.txt");
-        final List<String> emojiList = FilesAPI.getLines(inputStream);
-        for(final String emoji : emojiList) {
-            final String[] emojiArray = emoji.split(" ");
-            final String unicodeCharacter = emojiArray[emojiArray.length - 1]; // Last 'word' in the file must be the unicode character
-            for(int i = 0; i < emojiArray.length - 1; i++)
-                EMOJI.put(emojiArray[i], unicodeCharacter);
-        }
+        EMOJI.put(":-(", "?");
+        EMOJI.put(":(", "?");
+
+        EMOJI.put("<3", "?");
+
+        EMOJI.put("o.o", "?_?");
+        EMOJI.put("o.O", "?_?");
+        EMOJI.put("O.o", "?_?");
+        EMOJI.put("0.0", "?_?");
+        EMOJI.put("o.0", "?_?");
+        EMOJI.put("0.o", "?_?");
+
+        EMOJI.put("*_*", "?_?");
+        EMOJI.put("*-*", "?_?");
+
+        EMOJI.put(">:-[", "(?_?)");
+        EMOJI.put(">:[", "(?_?)");
+
+        EMOJI.put("O:-)", "???");
+        EMOJI.put("O:)", "???");
     }
 
     /**
