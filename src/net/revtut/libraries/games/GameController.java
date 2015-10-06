@@ -224,13 +224,13 @@ public class GameController {
 
         final int posWorld = (int) (Math.random() * (listWorlds.length - 1));
         final String sourcePath = new File(getWorldsFolder() + File.separator + listWorlds[posWorld]).getAbsolutePath();
-        final String mapName = prefix + "_" + listWorlds[posWorld];
+        final String mapName = prefix + listWorlds[posWorld];
         final String targetPath = new File(System.getProperty("user.dir") + File.separator + mapName).getAbsolutePath();
 
         FilesAPI.copyDirectory(new File(sourcePath), new File(targetPath));
 
         // Load World
-        final World world = WorldAPI.loadWorldAsync(mapName);
+        final World world = WorldAPI.loadWorld(mapName);
         if(world == null)
             throw new IllegalStateException("Loaded world is null.");
         world.setAutoSave(false);

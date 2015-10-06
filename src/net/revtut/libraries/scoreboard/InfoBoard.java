@@ -102,6 +102,10 @@ public class InfoBoard {
      * @param label label to be added
      */
     public void addLabel(final InfoBoardLabel label) {
+        // Fix duplicated entry
+        String labelText = label.getText();
+        while(containsText(labelText))
+            labelText += "§r";
         objective.getScore(label.getText()).setScore(label.getPosition());
         infoLabels.add(label);
     }
@@ -123,6 +127,18 @@ public class InfoBoard {
         if(infoLabels.contains(label))
             removeLabel(label);
         addLabel(label);
+    }
+
+    /**
+     * Check if the scoreboard contains a text
+     * @param text text to check if is contained
+     * @return true if contains, false otherwise
+     */
+    public boolean containsText(String text) {
+        for(InfoBoardLabel label : infoLabels)
+            if(label.getText().equalsIgnoreCase(text))
+                return true;
+        return false;
     }
 
     /**
