@@ -230,7 +230,7 @@ public class GameController {
         FilesAPI.copyDirectory(new File(sourcePath), new File(targetPath));
 
         // Load World
-        final World world = WorldAPI.loadWorld(mapName);
+        final World world = WorldAPI.loadWorldAsync(mapName);
         if(world == null)
             throw new IllegalStateException("Loaded world is null.");
         world.setAutoSave(false);
