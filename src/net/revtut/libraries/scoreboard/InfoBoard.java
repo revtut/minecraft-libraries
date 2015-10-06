@@ -105,7 +105,9 @@ public class InfoBoard {
         // Fix duplicated entry
         String labelText = label.getText();
         while(containsText(labelText))
-            labelText += "§r";
+            labelText += "Â§r";
+        label.setText(labelText);
+
         objective.getScore(label.getText()).setScore(label.getPosition());
         infoLabels.add(label);
     }
