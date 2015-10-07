@@ -554,22 +554,20 @@ public class GameListener implements Listener {
         }
 
         // Crossing borders
-        if(arena.getSession().getState() != GameState.LOBBY) {
-            final Location[] corners;
-            if (arena.getSession().getState() == GameState.DEATHMATCH)
-                corners = arena.getCornersDeathMatch();
-            else
-                corners = arena.getCorners();
+        final Location[] corners;
+        if(arena.getSession().getState() == GameState.DEATHMATCH)
+            corners = arena.getCornersDeathMatch();
+        else
+            corners = arena.getCorners();
 
-            if (!AlgebraAPI.isInAABB(event.getTo(), corners[0], corners[1])) {
-                // Call event
-                final PlayerCrossArenaBorderEvent crossArenaBorderEvent = new PlayerCrossArenaBorderEvent(player, arena);
-                Bukkit.getPluginManager().callEvent(crossArenaBorderEvent);
+        if(!AlgebraAPI.isInAABB(event.getTo(), corners[0], corners[1])) {
+            // Call event
+            final PlayerCrossArenaBorderEvent crossArenaBorderEvent = new PlayerCrossArenaBorderEvent(player, arena);
+            Bukkit.getPluginManager().callEvent(crossArenaBorderEvent);
 
-                if (crossArenaBorderEvent.isCancelled()) {
-                    event.setTo(event.getFrom());
-                    return;
-                }
+            if(crossArenaBorderEvent.isCancelled()) {
+                event.setTo(event.getFrom());
+                return;
             }
         }
     }
