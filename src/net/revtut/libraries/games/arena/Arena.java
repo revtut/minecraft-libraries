@@ -87,20 +87,26 @@ public abstract class Arena {
 
     /**
      * Initialize the arena
-     * @param arenaWorld world of the arena
      * @param lobbyLocation location of the lobby
+     * @param gameSession session of the arena
+     */
+    public void initArena(final Location lobbyLocation, final GameSession gameSession) {
+        this.lobbyLocation = lobbyLocation;
+        this.currentSession = gameSession;
+    }
+
+    /**
+     * Initialize the arena world
+     * @param arenaWorld world of the arena
      * @param spectatorLocation location of the spectator's spawn
      * @param spectatorDeathMatchLocation location of the spectator's spawn on death match
      * @param corners corners of the arena
      * @param cornersDeathMatch corners of the death match arena
-     * @param gameSession session of the arena
      */
-    public void initialize(final World arenaWorld, final Location lobbyLocation, final Location spectatorLocation, final Location spectatorDeathMatchLocation, final Location[] corners, final Location[] cornersDeathMatch, final GameSession gameSession) {
+    public void initWorld(final World arenaWorld, final Location spectatorLocation, final Location spectatorDeathMatchLocation, final Location[] corners, final Location[] cornersDeathMatch) {
         this.arenaWorld = arenaWorld;
-        this.lobbyLocation = lobbyLocation;
         this.spectatorLocation = spectatorLocation;
         this.spectatorDeathMatchLocation = spectatorDeathMatchLocation;
-        this.currentSession = gameSession;
 
         // Make sure corners are in the right position
         Location lowestCorner = corners[0];

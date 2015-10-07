@@ -43,8 +43,16 @@ public class ArenaTeam extends Arena {
 
     /**
      * Initialize the arena
-     * @param arenaWorld world of the arena
      * @param lobbyLocation location of the lobby
+     * @param gameSession session of the arena
+     */
+    public void initArena(final Location lobbyLocation, final GameSession gameSession) {
+        super.initArena(lobbyLocation, gameSession);
+    }
+
+    /**
+     * Initialize the arena world
+     * @param arenaWorld world of the arena
      * @param spectatorLocation location of the spectator's spawn
      * @param spectatorDeathMatchLocation location of the spectator's spawn on death match
      * @param corners corners of the arena
@@ -54,12 +62,11 @@ public class ArenaTeam extends Arena {
      * @param deadDeathMatchLocation locations to spawn dead players on death match
      * @param deathMatchLocations locations for the death match
      * @param teams teams of the arena
-     * @param gameSession session of the arena
      */
-    public void initialize(final World arenaWorld, final Location lobbyLocation, final Location spectatorLocation, final Location spectatorDeathMatchLocation,
+    public void initWorld(final World arenaWorld, final Location spectatorLocation, final Location spectatorDeathMatchLocation,
                            final Location[] corners, final Location[] cornersDeathMatch, final Map<Team, List<Location>> spawnLocations, final Map<Team, Location> deadLocations,
-                           final Map<Team, Location> deadDeathMatchLocation, final Map<Team, List<Location>> deathMatchLocations, final List<Team> teams, final GameSession gameSession) {
-        super.initialize(arenaWorld, lobbyLocation, spectatorLocation, spectatorDeathMatchLocation, corners, cornersDeathMatch, gameSession);
+                           final Map<Team, Location> deadDeathMatchLocation, final Map<Team, List<Location>> deathMatchLocations, final List<Team> teams) {
+        super.initWorld(arenaWorld, spectatorLocation, spectatorDeathMatchLocation, corners, cornersDeathMatch);
         this.spawnLocations = spawnLocations;
         this.deadLocations = deadLocations;
         this.deadDeathMatchLocation = deadDeathMatchLocation;
