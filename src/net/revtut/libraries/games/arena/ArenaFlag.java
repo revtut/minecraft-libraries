@@ -62,5 +62,10 @@ public enum ArenaFlag {
     /**
      * Pickup a dropped item
      */
-    PICKUP_ITEM
+    PICKUP_ITEM,
+
+    /**
+     * Weather change
+     */
+    WEATHER;
 }

@@ -29,6 +29,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
+import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -82,7 +83,7 @@ public class GameListener implements Listener {
             return;
 
         // Check flag
-        if(!arena.getFlag(ArenaFlag.BLOCK_BREAK)) {
+        if(!arena.getFlag(ArenaFlag.BLOCK_BREAK)) { // TODO add listeners for this events
             event.setCancelled(true);
             return;
         }
@@ -613,5 +614,23 @@ public class GameListener implements Listener {
         GameAPI.getInstance().removePlayer(player);
 
         event.setQuitMessage(null);
+    }
+
+    /**
+     * Controls the weather change event
+     * @param event weather change event
+     */
+    @EventHandler
+    public void onWeatherChange(final WeatherChangeEvent event) {
+        // Get needed data
+        final Arena arena = gameAPI.getArena(event.getWorld().getName());
+        if(arena == null)
+            return;
+
+        // Check flag
+        if(!arena.getFlag(ArenaFlag.WEATHER)) {
+            event.setCancelled(true);
+            return;
+        }
     }
 }

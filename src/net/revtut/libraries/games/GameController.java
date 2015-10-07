@@ -71,6 +71,22 @@ public class GameController {
     }
 
     /**
+     * Get the arena by its world name
+     * @param worldName world name of the arena world
+     * @return arena with that world name
+     */
+    public Arena getArena(final String worldName) {
+        for(final Arena arena : arenas) {
+            if(arena.getWorld() == null)
+                continue;
+
+            if (arena.getWorld().getName().equalsIgnoreCase(worldName))
+                return arena;
+        }
+        return null;
+    }
+
+    /**
      * Get all the online players on the game
      * @return online players on the game
      */

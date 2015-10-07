@@ -4,6 +4,7 @@ import net.revtut.libraries.Libraries;
 import net.revtut.libraries.games.arena.Arena;
 import net.revtut.libraries.games.player.PlayerData;
 import org.bukkit.Bukkit;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
@@ -142,6 +143,22 @@ public class GameAPI {
         Arena arena = null;
         for(final GameController gameController : games) {
             arena = gameController.getPlayerArena(uuid);
+            if(arena != null)
+                break;
+        }
+
+        return arena;
+    }
+
+    /**
+     * Get the arena by its world name
+     * @param worldName world name of the arena world
+     * @return arena with that world name
+     */
+    public Arena getArena(final String worldName) {
+        Arena arena = null;
+        for(final GameController gameController : games) {
+            arena = gameController.getArena(worldName);
             if(arena != null)
                 break;
         }
