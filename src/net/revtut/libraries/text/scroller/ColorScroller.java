@@ -49,10 +49,19 @@ public class ColorScroller extends Scroller {
         if(position >= text.length())
             position = 0;
 
-        int endPosition = position + length - 1;
-        if(endPosition >= text.length())
-            endPosition = text.length() - 1;
+        // Build the string
+        final StringBuilder builder = new StringBuilder(text);
+        builder.insert(position, scroll);
+        int endPosition = (position + 2) + length; // Position + 2 because a color is two characters
+        if(endPosition >= builder.length()) {
+            endPosition -= builder.length();
+            endPosition += 2; // Insert the 'scroll' text at the beginning so we have to increase 2 again.
 
-        return base + text.substring(0, position) + scroll + text.substring(position, endPosition + 1) + base + text.substring(endPosition, text.length());
+            builder.insert(0, scroll);
+        }
+        builder.insert(endPosition, base);
+
+
+        return builder.toString();
     }
 }
