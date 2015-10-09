@@ -1,6 +1,4 @@
-package net.revtut.libraries.utils;
-
-import com.google.common.base.Objects;
+package net.revtut.libraries.structures;
 
 /**
  * Pair Template Class
@@ -61,15 +59,16 @@ public class Pair<F, S> {
 
     /**
      * Check if two pairs are equal
-     * @param o pair object to be compared
+     * @param object pair object to be compared
      * @return true if they are equal, false otherwise
      */
     @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Pair)) {
+    public boolean equals(Object object) {
+        if (!(object instanceof Pair)) {
             return false;
         }
-        Pair<?, ?> p = (Pair<?, ?>) o;
-        return Objects.equal(p.first, first) && Objects.equal(p.second, second);
+
+        Pair<?, ?> pair = (Pair<?, ?>) object;
+        return pair.first.equals(first) && pair.second.equals(second);
     }
 }
