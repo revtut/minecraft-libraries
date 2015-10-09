@@ -32,7 +32,7 @@ public class GunHitEvent extends GunEvent implements Cancellable {
      * @param gun gun that was used
      * @param shotType shot type
      */
-    public GunHitEvent(final Player shooter, final Entity victim, final Gun gun, final ShotType shotType) {
+    public GunHitEvent(final Entity shooter, final Entity victim, final Gun gun, final ShotType shotType) {
         super(shooter, gun);
         this.victim = victim;
         this.shotType = shotType;

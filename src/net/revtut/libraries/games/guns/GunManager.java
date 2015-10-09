@@ -1,5 +1,8 @@
 package net.revtut.libraries.games.guns;
 
+import net.revtut.libraries.Libraries;
+import net.revtut.libraries.games.GameListener;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 
@@ -43,6 +46,8 @@ public class GunManager {
         currentMagSize = new HashMap<>();
         projectiles = new HashMap<>();
         lastShot = new HashMap<>();
+
+        Bukkit.getPluginManager().registerEvents(new GunListener(), Libraries.getInstance());
     }
 
     /**

@@ -227,27 +227,27 @@ public abstract class Gun extends ItemStack {
     /**
      * On hit by a bullet
      * @param shooter player that shot the gun
-     * @param entity entity that was hit
+     * @param target entity that was hit
      * @param landLocation projectile land location
      * @param projectile projectile that hit
      */
-    public void onHit(final Player shooter, final Entity entity, final Location landLocation, final Projectile projectile) {
+    public void hit(final Entity shooter, final Entity target, final Location landLocation, final Projectile projectile) {
         GunManager.getInstance().removeProjectile(projectile);
 
         // Call event
-        final GunHitEvent event = new GunHitEvent(shooter, entity, this, getShotType(landLocation, entity.getLocation()));
+        final GunHitEvent event = new GunHitEvent(shooter, target, this, getShotType(landLocation, target.getLocation()));
         Bukkit.getPluginManager().callEvent(event);
 
         if(event.isCancelled())
             return;
 
         // Knockback
-        entity.setVelocity(entity.getLocation().getDirection().multiply(-1 * getBullet().getKnockback()));
+        target.setVelocity(target.getLocation().getDirection().multiply(-1 * getBullet().getKnockback()));
 
         // Apply damage
-        if(!(entity instanceof Damageable))
+        if(!(target instanceof Damageable))
             return;
-        final Damageable entityDamageable = (Damageable) entity;
+        final Damageable entityDamageable = (Damageable) target;
         double damage = Math.random() * (getBullet().getMaxDamage() - getBullet().getMinDamage()) + getBullet().getMinDamage();
         damage *= event.getDamageMultiplier();
         entityDamageable.damage(damage);

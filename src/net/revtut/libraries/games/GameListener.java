@@ -308,22 +308,7 @@ public class GameListener implements Listener {
             if(!(projectile.getShooter() instanceof Player))
                 return;
 
-            final Player bukkitDamager = ((Player) projectile.getShooter());
-            damagerUUID = bukkitDamager.getUniqueId();
-
-            // Projectile is a gun bullet
-            if(GunManager.getInstance().isBullet(projectile)) {
-                if(bukkitDamager.getItemInHand() == null)
-                    return;
-
-                final ItemStack itemInHand = bukkitDamager.getItemInHand();
-                if(!(itemInHand instanceof Gun))
-                    return;
-
-                final Gun gun = (Gun) itemInHand;
-                gun.onHit(bukkitDamager, event.getEntity(), projectile.getLocation(), projectile);
-                return;
-            }
+            damagerUUID = ((Player) projectile.getShooter()).getUniqueId();
         }
 
         // Get needed data
@@ -481,20 +466,6 @@ public class GameListener implements Listener {
             event.setCancelled(true);
             return;
         }
-
-        if(bukkitPlayer.getItemInHand() == null)
-            return;
-
-        // Check guns
-        final ItemStack itemInHand = bukkitPlayer.getItemInHand();
-        if(!(itemInHand instanceof Gun))
-            return;
-
-        final Gun gun = (Gun) itemInHand;
-        if(event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
-            gun.shoot(bukkitPlayer);
-        else if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
-            gun.reload(bukkitPlayer);
     }
 
     /**
