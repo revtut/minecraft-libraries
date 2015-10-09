@@ -1,5 +1,7 @@
 package net.revtut.libraries;
 
+import net.revtut.libraries.minecraft.network.NetworkHandler;
+import net.revtut.libraries.minecraft.network.bungee.BungeeHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -17,6 +19,11 @@ public class Libraries extends JavaPlugin {
      * Instance of Libraries
      */
     private static Libraries instance;
+
+    /**
+     * Network handler of the server
+     */
+    private NetworkHandler network;
 
     /**
      * Constructor of Libraries
@@ -43,5 +50,15 @@ public class Libraries extends JavaPlugin {
      */
     public static Libraries getInstance() {
         return instance;
+    }
+
+    /**
+     * Get the network handler of the server
+     * @return network handler of the server
+     */
+    public NetworkHandler getNetwork() {
+        if(network == null)
+            network = new BungeeHandler();
+        return network;
     }
 }

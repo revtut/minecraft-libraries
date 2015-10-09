@@ -5,7 +5,6 @@ import org.bukkit.Bukkit;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Reflection Library.
@@ -112,7 +111,7 @@ public final class ReflectionAPI {
         try {
             final Method getHandle = getMethod(obj.getClass(), "getHandle", new Class[0]);
             if(getHandle == null) {
-                Logger.getLogger("Minecraft").log(Level.SEVERE, "'getHandle' method does not exist on this object.");
+                Bukkit.getLogger().log(Level.SEVERE, "'getHandle' method does not exist on this object.");
                 return null;
             }
 

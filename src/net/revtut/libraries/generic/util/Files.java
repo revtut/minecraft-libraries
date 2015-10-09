@@ -1,10 +1,11 @@
 package net.revtut.libraries.generic.util;
 
+import org.bukkit.Bukkit;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Files Library.
@@ -143,7 +144,7 @@ public final class Files {
                         removeDirectory(c);
             }
             if(!dir.delete())
-                Logger.getLogger("Minecraft").log(Level.WARNING, "Error while trying to delete " + dir.getName() + ".");
+                Bukkit.getLogger().log(Level.WARNING, "Error while trying to delete " + dir.getName() + ".");
         } catch (final Exception e) {
             e.printStackTrace();
             return false;

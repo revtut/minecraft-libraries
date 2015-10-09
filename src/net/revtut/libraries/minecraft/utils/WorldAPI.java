@@ -7,7 +7,6 @@ import org.bukkit.entity.FallingBlock;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * World Library.
@@ -126,7 +125,7 @@ public final class WorldAPI {
             Class classzz = ReflectionAPI.getOBCClass("entity.CraftFallingSand");
             final Method getHandle = ReflectionAPI.getMethod(classzz, "getHandle");
             if(getHandle == null) {
-                Logger.getLogger("Minecraft").log(Level.SEVERE, "'getHandle' method does not exist on falling block class.");
+                Bukkit.getLogger().log(Level.SEVERE, "'getHandle' method does not exist on falling block class.");
                 return false;
             }
 
@@ -136,7 +135,7 @@ public final class WorldAPI {
             classzz = ReflectionAPI.getNMSClass("EntityFallingBlock");
             Field field = ReflectionAPI.getField(classzz, "hurtEntities");
             if(field == null) {
-                Logger.getLogger("Minecraft").log(Level.SEVERE, "'hurtEntities' field does not exist on falling block class.");
+                Bukkit.getLogger().log(Level.SEVERE, "'hurtEntities' field does not exist on falling block class.");
                 return false;
             }
             field.setAccessible(true);
@@ -146,7 +145,7 @@ public final class WorldAPI {
             // Set the hurt amount of a falling block
             field = ReflectionAPI.getField(classzz, "fallHurtAmount");
             if(field == null) {
-                Logger.getLogger("Minecraft").log(Level.SEVERE, "'fallHurtAmount' field does not exist on falling block class.");
+                Bukkit.getLogger().log(Level.SEVERE, "'fallHurtAmount' field does not exist on falling block class.");
                 return false;
             }
             field.setAccessible(true);
@@ -156,7 +155,7 @@ public final class WorldAPI {
             // Set the maximum hurt amount of a falling block
             field = ReflectionAPI.getField(classzz, "fallHurtMax");
             if(field == null) {
-                Logger.getLogger("Minecraft").log(Level.SEVERE, "'fallHurtMax' field does not exist on falling block class.");
+                Bukkit.getLogger().log(Level.SEVERE, "'fallHurtMax' field does not exist on falling block class.");
                 return false;
             }
             field.setAccessible(true);
