@@ -239,8 +239,19 @@ public class GameController {
             throw new IllegalStateException("List of worlds is null.");
 
         final int posWorld = (int) (Math.random() * (listWorlds.length - 1));
-        final String sourcePath = new File(getWorldsFolder() + File.separator + listWorlds[posWorld]).getAbsolutePath();
-        final String mapName = prefix + listWorlds[posWorld];
+
+        return loadWorld(prefix, listWorlds[posWorld]);
+    }
+
+    /**
+     * Load a world
+     * @param prefix prefix of the world name
+     * @param worldName name of the world to be loaded
+     * @return loaded world
+     */
+    public World loadWorld(final String prefix, final String worldName) {
+        final String sourcePath = new File(getWorldsFolder() + File.separator + worldName).getAbsolutePath();
+        final String mapName = prefix + worldName;
         final String targetPath = new File(System.getProperty("user.dir") + File.separator + mapName).getAbsolutePath();
 
         FilesAPI.copyDirectory(new File(sourcePath), new File(targetPath));
@@ -250,6 +261,7 @@ public class GameController {
         if(world == null)
             throw new IllegalStateException("Loaded world is null.");
         world.setAutoSave(false);
+
         return world;
     }
 }
