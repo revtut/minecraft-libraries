@@ -181,13 +181,13 @@ infoBoard.setTitle(new ScrollingLabel(new ColorScroller("MINI GAME", 1, ChatColo
 
 // Body
 infoBoard.addLabel(new BlankLabel(5)); // 5 is the position on the scoreboard
-infoBoard.addLabel(new ScrollingLabel(new TextScroller("§fBecome §6VIP §fat our store! | ", 15, 4)); // 15 is the length of the scroller text. 4 is the position on the scoreboard
+infoBoard.addLabel("vip", new ScrollingLabel(new TextScroller("§fBecome §6VIP §fat our store! | ", 15, 4)); // 15 is the length of the scroller text. "vip" is the ID of the label
 infoBoard.addLabel(new BlankLabel(3));
 
 // Footer
-infoBoard.addLabel(new StaticLabel("§8---------------", 2); // 2 is the position on the scoreboard
-infoBoard.addLabel(new StaticLabel("§fCheck us out", 1));
-infoBoard.addLabel(new StaticLabel("§6www.mywebsite.com")), 0;
+infoBoard.addLabel(new StaticLabel("separator", "§8---------------", 2);
+infoBoard.addLabel(new StaticLabel("", "§fCheck us out", 1)); // You can use empty strings for ID
+infoBoard.addLabel(new StaticLabel("website", "§6www.mywebsite.com")), 0;
 
 // Send to a player
 infoBoard.send(player);
