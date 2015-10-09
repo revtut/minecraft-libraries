@@ -9,19 +9,12 @@ public class StaticLabel extends InfoBoardLabel {
 
     /**
      * Constructor of StaticLabel
-     * @param text text of the label
-     */
-    public StaticLabel(final String text) {
-        this(text, -1);
-    }
-
-    /**
-     * Constructor of StaticLabel
+     * @param id identification of the label
      * @param text text of the label
      * @param position position of the label
      */
-    public StaticLabel(final String text, final int position) {
-        super(text, position);
+    public StaticLabel(final String id, final String text, final int position) {
+        super(id, text, position);
     }
 
     /**

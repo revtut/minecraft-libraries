@@ -9,17 +9,19 @@ public class BlankLabel extends InfoBoardLabel {
 
     /**
      * Constructor of BlankLabel
+     * @param position position of the label
      */
-    public BlankLabel() {
-        this(-1);
+    public BlankLabel(final int position) {
+        this("", position);
     }
 
     /**
      * Constructor of BlankLabel
+     * @param id identification of the label
      * @param position position of the label
      */
-    public BlankLabel(final int position) {
-        super(" ", position);
+    private BlankLabel(final String id, final int position) {
+        super(id, " ", position);
     }
 
     /**

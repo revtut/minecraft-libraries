@@ -46,7 +46,7 @@ public class InfoBoard {
      * Constructor of InfoBoard
      * @param interval interval between updates dynamic labels (-1 for disabling)
      */
-    public InfoBoard(int interval) {
+    public InfoBoard(final int interval) {
         scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         objective = scoreboard.registerNewObjective("side", "dummy");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -82,13 +82,13 @@ public class InfoBoard {
     }
 
     /**
-     * Get a information label by its name
-     * @param text name of the label
-     * @return label with that name
+     * Get a information label by its identification
+     * @param id identification of the label
+     * @return label with that identification
      */
-    public InfoBoardLabel getLabel(final String text) {
+    public InfoBoardLabel getLabel(final String id) {
         for(final InfoBoardLabel label : infoLabels)
-            if(label.getText().equalsIgnoreCase(text))
+            if(label.getId().equalsIgnoreCase(id))
                 return label;
         return null;
     }
@@ -165,8 +165,8 @@ public class InfoBoard {
      * @param text text to check if is contained
      * @return true if contains, false otherwise
      */
-    public boolean containsText(String text) {
-        for(InfoBoardLabel label : infoLabels)
+    public boolean containsText(final String text) {
+        for(final InfoBoardLabel label : infoLabels)
             if(label.getText().equalsIgnoreCase(text))
                 return true;
         return false;

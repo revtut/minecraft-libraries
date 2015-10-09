@@ -8,6 +8,11 @@ import org.bukkit.ChatColor;
 public abstract class InfoBoardLabel {
 
     /**
+     * Identification of the label
+     */
+    private String id;
+
+    /**
      * Text of the label
      */
     private String text;
@@ -24,21 +29,23 @@ public abstract class InfoBoardLabel {
 
     /**
      * Constructor of InfoBoardLabel
-     * @param text text of the label
-     */
-    public InfoBoardLabel(final String text) {
-        this(text, -1);
-    }
-
-    /**
-     * Constructor of InfoBoardLabel
+     * @param id identification of the label
      * @param text text of the label
      * @param position position of the label
      */
-    public InfoBoardLabel(final String text, final int position) {
+    public InfoBoardLabel(final String id, final String text, final int position) {
+        this.id = id;
         this.text = ChatColor.translateAlternateColorCodes('&', text);
         this.nextText = this.text;
         this.position = position;
+    }
+
+    /**
+     * Get the identification of the label
+     * @return identification of the label
+     */
+    public String getId() {
+        return id;
     }
 
     /**

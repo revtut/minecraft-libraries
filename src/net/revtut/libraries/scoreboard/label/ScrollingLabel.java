@@ -15,19 +15,12 @@ public class ScrollingLabel extends InfoBoardLabel {
 
     /**
      * Constructor of ScrollingLabel
-     * @param scroller scroller of the label
-     */
-    public ScrollingLabel(final Scroller scroller) {
-        this(scroller, -1);
-    }
-
-    /**
-     * Constructor of ScrollingLabel
+     * @param id identification of the label
      * @param scroller scroller of the label
      * @param position position of the label
      */
-    public ScrollingLabel(final Scroller scroller, final int position) {
-        super(scroller.next(), position);
+    public ScrollingLabel(final String id, final Scroller scroller, final int position) {
+        super(id, scroller.next(), position);
         this.scroller = scroller;
     }
 
