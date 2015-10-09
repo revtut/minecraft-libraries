@@ -1,4 +1,4 @@
-package net.revtut.libraries.games.guns;
+package net.revtut.libraries.guns;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -21,20 +21,26 @@ public class GunListener implements Listener {
      */
     @EventHandler
     public void onDamageByEntity(final EntityDamageByEntityEvent event) {
-        if (!(event.getEntity() instanceof Player))
+        // Get target
+        if (!(event.getEntity() instanceof LivingEntity))
             return;
+        final LivingEntity target = (LivingEntity) event.getEntity();
 
+        // Check if damager is projectile
         if (!(event.getDamager() instanceof Projectile))
             return;
 
+        // Get projectile
         final Projectile projectile = (Projectile) event.getDamager();
         if(!GunManager.getInstance().isBullet(projectile))
             return;
 
+        // Get the shooter
         if(!(projectile.getShooter() instanceof LivingEntity))
             return;
         final LivingEntity shooter = (LivingEntity) projectile.getShooter();
 
+        // Get the item in hand of the shooter
         final EntityEquipment shooterEquipment = shooter.getEquipment();
         if(shooterEquipment.getItemInHand() == null)
             return;
@@ -42,8 +48,9 @@ public class GunListener implements Listener {
         if(!(shooterEquipment.getItemInHand() instanceof Gun))
             return;
 
+        // Take care of the gun
         final Gun gun = (Gun) shooterEquipment.getItemInHand();
-        gun.hit(shooter, event.getEntity(), projectile.getLocation(), projectile);
+        gun.hit(shooter, target, projectile.getLocation(), projectile);
 
         event.setCancelled(true); // Cancelling the event because gun already applies custom damage
     }

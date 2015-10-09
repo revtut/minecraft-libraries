@@ -1,4 +1,4 @@
-package net.revtut.libraries.games.events.gun;
+package net.revtut.libraries.guns;
 
 /**
  * Shot type

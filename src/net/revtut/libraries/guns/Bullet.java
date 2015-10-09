@@ -1,4 +1,4 @@
-package net.revtut.libraries.games.guns;
+package net.revtut.libraries.guns;
 
 import org.bukkit.entity.Projectile;
 

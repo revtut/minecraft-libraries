@@ -6,6 +6,7 @@
 * #### [API](#api)
 * #### [Setup MiniGame](#setup_minigame)
 * #### [Setup Database](#setup_database)
+* #### [Scoreboard](#scoreboard)
 * #### [Credits](#credits)
 
 ## <a name="introduction"></a>Introduction
@@ -34,6 +35,13 @@ However there are a lots of missing functions and methods that would make a plug
 * Entities
     * Change entity goals on the fly
     * Custom entity goals
+* Guns
+    * Realistic guns
+    * Custom bullets
+    * Events
+        * Fire
+        * Hit
+        * Reload
 * Maths
     * Hashing
     * Get helix, tornado, sphere, circle list of locations
@@ -45,7 +53,7 @@ However there are a lots of missing functions and methods that would make a plug
     * String and list converters
 * Scoreboard
     * Custom scoreboard
-    * Static and Scrolling scoreboard labels
+    * Static, Blank and Scrolling scoreboard labels
 * Text
     * Send custom action bar
     * Get language of a player
@@ -59,7 +67,7 @@ However there are a lots of missing functions and methods that would make a plug
     * Copy, delete folders
     * Read files
     * Reflection methods
-    * Load world sync and unsync
+    * Load world sync and async
     * Unload world
     * Change falling block damage
 
@@ -78,10 +86,6 @@ However there are a lots of missing functions and methods that would make a plug
 * Events
     * Arena
         * Load
-    * Gun
-        * Fire
-        * Hit
-        * Reload
     * Player
         * Cross Arena Border
         * Damage / Die
@@ -90,9 +94,10 @@ However there are a lots of missing functions and methods that would make a plug
         * Leave Arena / Team
         * Spectate Arena / Team
         * Talk
-* Guns
-    * Realistic guns
-    * Custom bullets
+    * Session
+        * Start / Finish
+        * Timer Tick / Expire
+        * Switch state
 * Player
     * Data of a player
 * Statistics
@@ -162,6 +167,33 @@ parameters.add(player.getName());
 
 int numRowsUpdated = database.executeUpdate(update, parameters);
 ```
+
+## <a name="scoreboard"></a>Scoreboard
+
+You can create custom and epic scoreboards in only 10 seconds (the time you take to copy and paste this code).
+```java
+// InfoBoard is the custom class for scoreboard
+double updateInterval = 5; // Update interval (in ticks) of the scoreboard dynamic labels (eg. ScrollingLabel). Negative value to disable this automatic update.
+InfoBoard infoBoard = new InfoBoard(updateInterval);
+
+// Title
+infoBoard.setTitle(new ScrollingLabel(new ColorScroller("MINI GAME", 1, ChatColor.AQUA, ChatColor.YELLOW, ChatColor.GOLD))); // Color scroller on the title
+
+// Body
+infoBoard.addLabel(new BlankLabel(5)); // 5 is the position on the scoreboard
+infoBoard.addLabel(new ScrollingLabel(new TextScroller("§fBecome §6VIP §fat our store! | ", 15, 4)); // 15 is the length of the scroller text. 4 is the position on the scoreboard
+infoBoard.addLabel(new BlankLabel(3));
+
+// Footer
+infoBoard.addLabel(new StaticLabel("§8---------------", 2); // 2 is the position on the scoreboard
+infoBoard.addLabel(new StaticLabel("§fCheck us out", 1));
+infoBoard.addLabel(new StaticLabel("§6www.mywebsite.com")), 0;
+
+// Send to a player
+infoBoard.send(player);
+```
+
+Well there you go! You have a gorgeous scoreboard in no effort at all!
 
 ## <a name="credits"></a>Credits
 

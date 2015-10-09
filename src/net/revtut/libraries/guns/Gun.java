@@ -1,15 +1,12 @@
-package net.revtut.libraries.games.guns;
+package net.revtut.libraries.guns;
 
 import net.revtut.libraries.Libraries;
-import net.revtut.libraries.games.events.gun.GunFireEvent;
-import net.revtut.libraries.games.events.gun.GunHitEvent;
-import net.revtut.libraries.games.events.gun.GunReloadEvent;
-import net.revtut.libraries.games.events.gun.ShotType;
+import net.revtut.libraries.guns.events.GunFireEvent;
+import net.revtut.libraries.guns.events.GunHitEvent;
+import net.revtut.libraries.guns.events.GunReloadEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Damageable;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -177,7 +174,7 @@ public abstract class Gun extends ItemStack {
      * Shoot the gun
      * @param shooter player to shoot from
      */
-    public void shoot(final Player shooter) {
+    public void shoot(final LivingEntity shooter) {
         final GunManager gunManager = GunManager.getInstance();
 
         // Check if player can shoot
@@ -231,7 +228,7 @@ public abstract class Gun extends ItemStack {
      * @param landLocation projectile land location
      * @param projectile projectile that hit
      */
-    public void hit(final Entity shooter, final Entity target, final Location landLocation, final Projectile projectile) {
+    public void hit(final LivingEntity shooter, final LivingEntity target, final Location landLocation, final Projectile projectile) {
         GunManager.getInstance().removeProjectile(projectile);
 
         // Call event
@@ -245,12 +242,9 @@ public abstract class Gun extends ItemStack {
         target.setVelocity(target.getLocation().getDirection().multiply(-1 * getBullet().getKnockback()));
 
         // Apply damage
-        if(!(target instanceof Damageable))
-            return;
-        final Damageable entityDamageable = (Damageable) target;
         double damage = Math.random() * (getBullet().getMaxDamage() - getBullet().getMinDamage()) + getBullet().getMinDamage();
         damage *= event.getDamageMultiplier();
-        entityDamageable.damage(damage);
+        target.damage(damage);
     }
 
     /**
@@ -287,7 +281,7 @@ public abstract class Gun extends ItemStack {
      * Reload the gun
      * @param player player that is reloading the gun
      */
-    public void reload(final Player player) {
+    public void reload(final LivingEntity player) {
         // Call event
         final GunReloadEvent event = new GunReloadEvent(player, this);
         Bukkit.getPluginManager().callEvent(event);

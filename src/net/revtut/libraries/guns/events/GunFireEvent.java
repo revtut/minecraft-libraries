@@ -1,8 +1,7 @@
-package net.revtut.libraries.games.events.gun;
+package net.revtut.libraries.guns.events;
 
-import net.revtut.libraries.games.guns.Gun;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
+import net.revtut.libraries.guns.Gun;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.Cancellable;
 
 /**
@@ -15,7 +14,7 @@ public class GunFireEvent extends GunEvent implements Cancellable {
      * @param shooter player that used the gun
      * @param gun gun that was used
      */
-    public GunFireEvent(final Entity shooter, final Gun gun) {
+    public GunFireEvent(final LivingEntity shooter, final Gun gun) {
         super(shooter, gun);
     }
 }
