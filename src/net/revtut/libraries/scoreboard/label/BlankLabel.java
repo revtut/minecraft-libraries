@@ -27,5 +27,6 @@ public class BlankLabel extends InfoBoardLabel {
      */
     @Override
     public void update() {
+        super.update();
     }
 }

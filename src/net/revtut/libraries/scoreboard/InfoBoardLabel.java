@@ -13,6 +13,11 @@ public abstract class InfoBoardLabel {
     private String text;
 
     /**
+     * Text to be set on the next update
+     */
+    private String nextText;
+
+    /**
      * Position of the label
      */
     private int position;
@@ -32,6 +37,7 @@ public abstract class InfoBoardLabel {
      */
     public InfoBoardLabel(final String text, final int position) {
         this.text = ChatColor.translateAlternateColorCodes('&', text);
+        this.nextText = this.text;
         this.position = position;
     }
 
@@ -48,7 +54,7 @@ public abstract class InfoBoardLabel {
      * @param text text of the label
      */
     public void setText(final String text) {
-        this.text = text;
+        this.nextText = text;
     }
 
     /**
@@ -70,5 +76,7 @@ public abstract class InfoBoardLabel {
     /**
      * Update the label
      */
-    public abstract void update();
+    public void update() {
+        text = nextText;
+    }
 }

@@ -29,5 +29,6 @@ public class StaticLabel extends InfoBoardLabel {
      */
     @Override
     public void update() {
+        super.update();
     }
 }

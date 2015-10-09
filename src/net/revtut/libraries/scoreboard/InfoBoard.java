@@ -129,9 +129,12 @@ public class InfoBoard {
     public void addLabel(final InfoBoardLabel label) {
         // Fix duplicated entry
         String labelText = label.getText();
-        while(containsText(labelText))
-            labelText += "§r";
-        label.setText(labelText);
+        if(containsText(labelText)) {
+            while (containsText(labelText))
+                labelText += "§r";
+            label.setText(labelText);
+            label.update();
+        }
 
         objective.getScore(label.getText()).setScore(label.getPosition());
         infoLabels.add(label);

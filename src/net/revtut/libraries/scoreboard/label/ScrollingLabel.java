@@ -36,6 +36,7 @@ public class ScrollingLabel extends InfoBoardLabel {
      */
     @Override
     public void update() {
+        super.update();
         setText(scroller.next());
     }
 }
