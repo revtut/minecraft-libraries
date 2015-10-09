@@ -10,6 +10,7 @@ import net.revtut.libraries.games.arena.types.ArenaTeam;
 import net.revtut.libraries.games.arena.types.ArenaType;
 import net.revtut.libraries.games.events.player.*;
 import net.revtut.libraries.games.guns.Gun;
+import net.revtut.libraries.games.guns.GunManager;
 import net.revtut.libraries.games.player.PlayerData;
 import net.revtut.libraries.games.player.PlayerState;
 import net.revtut.libraries.maths.AlgebraAPI;
@@ -307,7 +308,22 @@ public class GameListener implements Listener {
             if(!(projectile.getShooter() instanceof Player))
                 return;
 
-            damagerUUID = ((Player) projectile.getShooter()).getUniqueId();
+            final Player bukkitDamager = ((Player) projectile.getShooter());
+            damagerUUID = bukkitDamager.getUniqueId();
+
+            // Projectile is a gun bullet
+            if(GunManager.getInstance().isBullet(projectile)) {
+                if(bukkitDamager.getItemInHand() == null)
+                    return;
+
+                final ItemStack itemInHand = bukkitDamager.getItemInHand();
+                if(!(itemInHand instanceof Gun))
+                    return;
+
+                final Gun gun = (Gun) itemInHand;
+                gun.onHit(bukkitDamager, event.getEntity(), projectile.getLocation(), projectile);
+                return;
+            }
         }
 
         // Get needed data

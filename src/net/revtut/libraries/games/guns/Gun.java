@@ -4,6 +4,7 @@ import net.revtut.libraries.Libraries;
 import net.revtut.libraries.games.events.gun.GunFireEvent;
 import net.revtut.libraries.games.events.gun.GunHitEvent;
 import net.revtut.libraries.games.events.gun.GunReloadEvent;
+import net.revtut.libraries.games.events.gun.ShotType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Damageable;
@@ -227,13 +228,14 @@ public abstract class Gun extends ItemStack {
      * On hit by a bullet
      * @param shooter player that shot the gun
      * @param entity entity that was hit
+     * @param landLocation projectile land location
      * @param projectile projectile that hit
      */
-    public void onHit(final Player shooter, final Entity entity, final Projectile projectile) {
+    public void onHit(final Player shooter, final Entity entity, final Location landLocation, final Projectile projectile) {
         GunManager.getInstance().removeProjectile(projectile);
 
         // Call event
-        final GunHitEvent event = new GunHitEvent(shooter, entity, this);
+        final GunHitEvent event = new GunHitEvent(shooter, entity, this, getShotType(landLocation, entity.getLocation()));
         Bukkit.getPluginManager().callEvent(event);
 
         if(event.isCancelled())
@@ -246,7 +248,39 @@ public abstract class Gun extends ItemStack {
         if(!(entity instanceof Damageable))
             return;
         final Damageable entityDamageable = (Damageable) entity;
-        entityDamageable.damage(Math.random() * (getBullet().getMaxDamage() - getBullet().getMinDamage()) + getBullet().getMinDamage());
+        double damage = Math.random() * (getBullet().getMaxDamage() - getBullet().getMinDamage()) + getBullet().getMinDamage();
+        damage *= event.getDamageMultiplier();
+        entityDamageable.damage(damage);
+    }
+
+    /**
+     * Get the shot type of a projectile
+     * @param landLocation land location of the projectile
+     * @param targetLocation location of the target
+     * @return shot type
+     */
+    private ShotType getShotType(final Location landLocation, final Location targetLocation) {
+        // Calculate the landing location relatively to the target body
+        final double bodyLandingX = landLocation.getX() - targetLocation.getX();
+        final double bodyLandingY = landLocation.getY() - targetLocation.getY();
+        final double bodyLandingZ = landLocation.getZ() - targetLocation.getZ();
+
+        if(bodyLandingY > 1.5D)
+            return ShotType.HEAD_SHOT;
+
+        if(bodyLandingY > 0.25D && bodyLandingY < 0.75D)
+            return ShotType.KNEE_SHOT;
+
+        if(bodyLandingY > 0.1D && bodyLandingY < 1.0D)
+            return ShotType.LEG_SHOT;
+
+        if(bodyLandingY <= 0.1D)
+            return ShotType.FOOT_SHOT;
+
+        if(bodyLandingX > 1.0D && bodyLandingZ > 1.0D || bodyLandingX < -1.0D && bodyLandingZ < -1.0D)
+            return ShotType.ARM_SHOT;
+
+        return ShotType.BODY_SHOT;
     }
 
     /**
