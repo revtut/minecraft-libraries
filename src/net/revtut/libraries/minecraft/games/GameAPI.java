@@ -106,6 +106,18 @@ public class GameAPI {
     }
 
     /**
+     * Get the game controller of a arena
+     * @param arena arena to get the game controller
+     * @return game controller of the arena
+     */
+    public GameController getGameController(final Arena arena) {
+        for(final GameController gameController : games)
+            if(gameController.hasArena(arena))
+                return gameController;
+        return null;
+    }
+
+    /**
      * Get a random game controller
      * @return game controller
      */

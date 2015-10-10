@@ -6,8 +6,10 @@ import net.revtut.libraries.minecraft.games.arena.ArenaPreference;
 import net.revtut.libraries.minecraft.games.arena.types.ArenaSolo;
 import net.revtut.libraries.minecraft.games.arena.types.ArenaTeam;
 import net.revtut.libraries.minecraft.games.arena.types.ArenaType;
+import net.revtut.libraries.minecraft.games.events.arena.ArenaLoadEvent;
 import net.revtut.libraries.minecraft.games.player.PlayerData;
 import net.revtut.libraries.minecraft.utils.WorldAPI;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 
@@ -39,6 +41,7 @@ public class GameController {
     /**
      * Constructor of GameController
      * @param plugin plugin owner of the controller
+     * @param worldsFolder folder where the worlds are located
      */
     public GameController(final Plugin plugin, final File worldsFolder) {
         this.plugin = plugin;
@@ -215,6 +218,16 @@ public class GameController {
         }
 
         arenas.add(arena);
+
+        // Call event
+        final ArenaLoadEvent event = new ArenaLoadEvent(arena);
+        Bukkit.getPluginManager().callEvent(event);
+
+        if(event.isCancelled()) {
+            removeArena(arena);
+            return null;
+        }
+
         return arena;
     }
 

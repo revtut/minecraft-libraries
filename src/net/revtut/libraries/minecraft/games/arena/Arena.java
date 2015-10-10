@@ -4,7 +4,6 @@ import net.revtut.libraries.generic.util.Files;
 import net.revtut.libraries.minecraft.games.arena.session.GameSession;
 import net.revtut.libraries.minecraft.games.arena.session.GameState;
 import net.revtut.libraries.minecraft.games.arena.types.ArenaType;
-import net.revtut.libraries.minecraft.games.events.arena.ArenaLoadEvent;
 import net.revtut.libraries.minecraft.games.events.player.PlayerJoinArenaEvent;
 import net.revtut.libraries.minecraft.games.events.player.PlayerLeaveArenaEvent;
 import net.revtut.libraries.minecraft.games.events.player.PlayerSpectateArenaEvent;
@@ -71,15 +70,9 @@ public abstract class Arena {
 
     /**
      * Constructor of the Arena
+     * @param name name of the arena
      */
     public Arena(final String name) {
-        // Call event
-        final ArenaLoadEvent event = new ArenaLoadEvent(this);
-        Bukkit.getPluginManager().callEvent(event);
-
-        if(event.isCancelled())
-            throw new IllegalStateException("Arena creation was cancelled!");
-
         this.id = currentID++;
         this.name = this.id + "_" + name;
         this.flags = new HashMap<>();

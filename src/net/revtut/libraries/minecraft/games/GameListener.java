@@ -1,6 +1,7 @@
 package net.revtut.libraries.minecraft.games;
 
 import com.google.common.collect.ImmutableList;
+import net.revtut.libraries.Libraries;
 import net.revtut.libraries.minecraft.games.arena.Arena;
 import net.revtut.libraries.minecraft.games.arena.ArenaFlag;
 import net.revtut.libraries.minecraft.games.arena.ArenaPreference;
@@ -29,6 +30,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -477,6 +479,8 @@ public class GameListener implements Listener {
      */
     @EventHandler
     public void onJoin(final PlayerJoinEvent event) {
+        event.setJoinMessage(null);
+
         final UUID uuid = event.getPlayer().getUniqueId();
 
         // Hide every player
@@ -492,10 +496,13 @@ public class GameListener implements Listener {
 
         // No arena available or not allowed to join the arena
         if(arena == null || !arena.join(player)) {
-            // TODO take care when player can not join an arena
+            Libraries.getInstance().getNetwork().connectPlayer(player.getBukkitPlayer(), "hub");
+            return;
         }
 
-        event.setJoinMessage(null);
+        // Create more arenas if needed
+        if(gameController.getAvailableArenas().size() <= 1)
+            gameController.createArena(arena.getType());
     }
 
     /**
@@ -566,19 +573,44 @@ public class GameListener implements Listener {
      */
     @EventHandler
     public void onQuit(final PlayerQuitEvent event) {
+        event.setQuitMessage(null);
+
         final UUID uuid = event.getPlayer().getUniqueId();
 
         // Get needed data
         final PlayerData player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
-        final Arena arena = gameAPI.getPlayerArena(uuid);
-        if(arena != null)
-            arena.leave(player);
-
         GameAPI.getInstance().removePlayer(player);
 
-        event.setQuitMessage(null);
+        final Arena arena = gameAPI.getPlayerArena(uuid);
+        if(arena == null)
+            return;
+
+        arena.leave(player);
+
+        // Delete arena if needed and join randomly all the remaining players
+        if(arena.getSession() != null && arena.getSession().getState() != GameState.LOBBY) {
+            if(arena.getPlayers(PlayerState.ALIVE).size() <= 1) {
+                for(final PlayerData target : new ArrayList<>(arena.getAllPlayers())) {
+                    if(target == player)
+                        continue;
+                    arena.leave(target);
+
+                    // Join random game
+                    final GameController gameController = gameAPI.getRandomGame();
+                    final Arena targetArena = gameController.getAvailableArena(ArenaPreference.MORE_PLAYERS);
+
+                    // No arena available or not allowed to join the arena
+                    if(targetArena == null || !arena.join(target)) // TODO Message user why he was reconnected
+                        Libraries.getInstance().getNetwork().connectPlayer(target.getBukkitPlayer(), "hub");
+                }
+                final GameController arenaController = GameAPI.getInstance().getGameController(arena);
+                if(arenaController == null)
+                    return;
+                arenaController.removeArena(arena);
+            }
+        }
     }
 
     /**
