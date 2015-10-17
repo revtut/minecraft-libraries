@@ -9,6 +9,10 @@ import net.revtut.libraries.minecraft.games.arena.session.GameState;
 import net.revtut.libraries.minecraft.games.arena.types.ArenaSolo;
 import net.revtut.libraries.minecraft.games.arena.types.ArenaTeam;
 import net.revtut.libraries.minecraft.games.arena.types.ArenaType;
+import net.revtut.libraries.minecraft.games.events.arena.ArenaBlockBreakEvent;
+import net.revtut.libraries.minecraft.games.events.arena.ArenaBlockPlaceEvent;
+import net.revtut.libraries.minecraft.games.events.arena.ArenaBucketEmptyEvent;
+import net.revtut.libraries.minecraft.games.events.arena.ArenaBucketFillEvent;
 import net.revtut.libraries.minecraft.games.events.player.*;
 import net.revtut.libraries.minecraft.games.player.PlayerData;
 import net.revtut.libraries.minecraft.games.player.PlayerState;
@@ -82,7 +86,14 @@ public class GameListener implements Listener {
             return;
 
         // Check flag
-        if(!arena.getFlag(ArenaFlag.BLOCK_BREAK)) // TODO add listeners for this events
+        if(!arena.getFlag(ArenaFlag.BLOCK_BREAK))
+            event.setCancelled(true);
+
+        // Call event
+        final ArenaBlockBreakEvent arenaBlockBreakEvent = new ArenaBlockBreakEvent(arena, player);
+        Bukkit.getPluginManager().callEvent(arenaBlockBreakEvent);
+
+        if (arenaBlockBreakEvent.isCancelled())
             event.setCancelled(true);
     }
 
@@ -105,6 +116,13 @@ public class GameListener implements Listener {
         // Check flag
         if(!arena.getFlag(ArenaFlag.BLOCK_PLACE))
             event.setCancelled(true);
+
+        // Call event
+        final ArenaBlockPlaceEvent arenaBlockPlaceEvent = new ArenaBlockPlaceEvent(arena, player);
+        Bukkit.getPluginManager().callEvent(arenaBlockPlaceEvent);
+
+        if (arenaBlockPlaceEvent.isCancelled())
+            event.setCancelled(true);
     }
 
     /**
@@ -126,6 +144,13 @@ public class GameListener implements Listener {
         // Check flag
         if(!arena.getFlag(ArenaFlag.BUCKET_EMPTY))
             event.setCancelled(true);
+
+        // Call event
+        final ArenaBucketEmptyEvent arenaBucketEmptyEvent = new ArenaBucketEmptyEvent(arena, player);
+        Bukkit.getPluginManager().callEvent(arenaBucketEmptyEvent);
+
+        if (arenaBucketEmptyEvent.isCancelled())
+            event.setCancelled(true);
     }
 
     /**
@@ -146,6 +171,13 @@ public class GameListener implements Listener {
 
         // Check flag
         if(!arena.getFlag(ArenaFlag.BUCKET_FILL))
+            event.setCancelled(true);
+
+        // Call event
+        final ArenaBucketFillEvent arenaBucketFillEvent = new ArenaBucketFillEvent(arena, player);
+        Bukkit.getPluginManager().callEvent(arenaBucketFillEvent);
+
+        if (arenaBucketFillEvent.isCancelled())
             event.setCancelled(true);
     }
 
@@ -407,6 +439,13 @@ public class GameListener implements Listener {
         // Check flag
         if(!arena.getFlag(ArenaFlag.DROP_ITEM))
             event.setCancelled(true);
+
+        // Call event
+        final PlayerThrowItemEvent playerThrowItemEvent = new PlayerThrowItemEvent(player, arena, event.getItemDrop());
+        Bukkit.getPluginManager().callEvent(playerThrowItemEvent);
+
+        if (playerThrowItemEvent.isCancelled())
+            event.setCancelled(true);
     }
 
     /**
@@ -428,6 +467,17 @@ public class GameListener implements Listener {
         // Check flag
         if(!arena.getFlag(ArenaFlag.HUNGER))
             event.setCancelled(true);
+
+        // Call event
+        final PlayerHungerEvent playerHungerEvent = new PlayerHungerEvent(player, arena, event.getFoodLevel());
+        Bukkit.getPluginManager().callEvent(playerHungerEvent);
+
+        if (playerHungerEvent.isCancelled()) {
+            event.setCancelled(true);
+            return;
+        }
+
+        event.setFoodLevel(playerHungerEvent.getHunger());
     }
 
     /**
@@ -450,6 +500,13 @@ public class GameListener implements Listener {
         // Check flag
         if(!arena.getFlag(ArenaFlag.INTERACT))
             event.setCancelled(true);
+
+        // Call event
+        final PlayerInteractionEvent playerInteractionEvent = new PlayerInteractionEvent(player, arena, event.getAction(), event.getClickedBlock(), event.getItem());
+        Bukkit.getPluginManager().callEvent(playerInteractionEvent);
+
+        if (playerInteractionEvent.isCancelled())
+            event.setCancelled(true);
     }
 
     /**
@@ -470,6 +527,13 @@ public class GameListener implements Listener {
 
         // Check flag
         if(!arena.getFlag(ArenaFlag.INVENTORY_CLICK))
+            event.setCancelled(true);
+
+        // Call event
+        final PlayerInventoryClickEvent playerInventoryClickEvent = new PlayerInventoryClickEvent(player, arena, event.getClickedInventory(), event.getSlot());
+        Bukkit.getPluginManager().callEvent(playerInventoryClickEvent);
+
+        if (playerInventoryClickEvent.isCancelled())
             event.setCancelled(true);
     }
 
@@ -527,7 +591,20 @@ public class GameListener implements Listener {
             return;
         }
 
-        // Crossing borders
+        // Events
+        // Jump event
+        if(event.getFrom().getY() != event.getTo().getX()) {
+            final double height = event.getTo().getY() - event.getFrom().getY();
+            final PlayerJumpEvent playerJumpEvent = new PlayerJumpEvent(player, arena, height);
+            Bukkit.getPluginManager().callEvent(playerJumpEvent);
+
+            if (playerJumpEvent.isCancelled()) {
+                event.setTo(event.getFrom());
+                return;
+            }
+        }
+
+        // Crossing borders event
         final Location[] corners;
         if(arena.getSession().getState() == GameState.DEATHMATCH)
             corners = arena.getCornersDeathMatch();
@@ -544,6 +621,14 @@ public class GameListener implements Listener {
                 return;
             }
         }
+
+        // Walk event
+        final double distance = AlgebraAPI.distanceBetween(event.getFrom(), event.getTo());
+        final PlayerWalkEvent playerWalkEvent = new PlayerWalkEvent(player, arena, distance);
+        Bukkit.getPluginManager().callEvent(playerWalkEvent);
+
+        if (playerWalkEvent.isCancelled())
+            event.setTo(event.getFrom());
     }
 
     /**
@@ -564,6 +649,13 @@ public class GameListener implements Listener {
 
         // Check flag
         if(!arena.getFlag(ArenaFlag.PICKUP_ITEM))
+            event.setCancelled(true);
+
+        // Call event
+        final PlayerCatchItemEvent playerCatchItemEvent = new PlayerCatchItemEvent(player, arena, event.getItem());
+        Bukkit.getPluginManager().callEvent(playerCatchItemEvent);
+
+        if (playerCatchItemEvent.isCancelled())
             event.setCancelled(true);
     }
 

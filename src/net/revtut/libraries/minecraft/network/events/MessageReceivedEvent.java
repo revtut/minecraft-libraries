@@ -8,12 +8,12 @@ public class MessageReceivedEvent extends MessageEvent {
     /**
      * Channel of the message
      */
-    private String channel;
+    private final String channel;
 
     /**
      * Flag to control if the message was accepted or not
      */
-    private boolean accepted;
+    private final boolean accepted;
 
     /**
      * Constructor of MessageReceivedEvent
