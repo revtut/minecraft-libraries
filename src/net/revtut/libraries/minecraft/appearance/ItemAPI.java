@@ -112,7 +112,7 @@ public final class ItemAPI {
         if (Math.random() < enchantProbability) {
             final org.bukkit.enchantments.Enchantment enchant = enchants[(int) (Math.random() * enchants.length)]; // Enchantment
             if (enchant.canEnchantItem(itemStack))
-                itemStack.addUnsafeEnchantment(enchant, (int) (Math.random() * maxEnchantLevel));
+                itemStack.addUnsafeEnchantment(enchant, (int) (Math.random() * maxEnchantLevel) + 1);
         }
 
         return itemStack;
