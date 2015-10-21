@@ -88,6 +88,37 @@ public final class ItemAPI {
     }
 
     /**
+     * Randomize a item stack
+     * @param materials possible materials for the item
+     * @return randomized item stack
+     */
+    public static ItemStack randomizeItem(final Material[] materials) {
+        return randomizeItem(materials, null, -1, -1);
+    }
+
+    /**
+     * Randomize a item stack
+     * @param materials possible materials for the item
+     * @param enchants possible enchantments for the item
+     * @param enchantProbability probability of an enchantment be applied to an item
+     * @param maxEnchantLevel maximum level of the enchantment
+     * @return randomized item stack
+     */
+    public static ItemStack randomizeItem(final Material[] materials, final org.bukkit.enchantments.Enchantment[] enchants, final double enchantProbability, final double maxEnchantLevel) {
+        // ItemStack
+        final ItemStack itemStack = new ItemStack(materials[(int) (Math.random() * materials.length)]);
+
+        // Enchantment
+        if (Math.random() < enchantProbability) {
+            final org.bukkit.enchantments.Enchantment enchant = enchants[(int) (Math.random() * enchants.length)]; // Enchantment
+            if (enchant.canEnchantItem(itemStack))
+                itemStack.addUnsafeEnchantment(enchant, (int) (Math.random() * maxEnchantLevel));
+        }
+
+        return itemStack;
+    }
+
+    /**
      * Open an anvil menu to player
      * @param player player to open the anvil menu
      */
