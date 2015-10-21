@@ -90,7 +90,7 @@ public class GameListener implements Listener {
             event.setCancelled(true);
 
         // Call event
-        final ArenaBlockBreakEvent arenaBlockBreakEvent = new ArenaBlockBreakEvent(arena, player);
+        final ArenaBlockBreakEvent arenaBlockBreakEvent = new ArenaBlockBreakEvent(arena, player, event.getBlock());
         Bukkit.getPluginManager().callEvent(arenaBlockBreakEvent);
 
         if (arenaBlockBreakEvent.isCancelled())
