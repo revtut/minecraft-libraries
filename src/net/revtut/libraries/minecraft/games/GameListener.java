@@ -118,7 +118,7 @@ public class GameListener implements Listener {
             event.setCancelled(true);
 
         // Call event
-        final ArenaBlockPlaceEvent arenaBlockPlaceEvent = new ArenaBlockPlaceEvent(arena, player);
+        final ArenaBlockPlaceEvent arenaBlockPlaceEvent = new ArenaBlockPlaceEvent(arena, player, event.getBlock());
         Bukkit.getPluginManager().callEvent(arenaBlockPlaceEvent);
 
         if (arenaBlockPlaceEvent.isCancelled())
