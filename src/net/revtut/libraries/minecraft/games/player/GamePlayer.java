@@ -205,7 +205,7 @@ public class GamePlayer implements Winner {
      * @param value value to be decremented
      */
     public void incrementStatistic(final Statistic statistic, final long value) {
-        statistics.put(statistic, getStatistic(statistic) + value);
+        addStatistic(statistic, getStatistic(statistic) + value);
     }
 
     /**
