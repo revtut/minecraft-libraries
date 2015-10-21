@@ -1,7 +1,7 @@
 package net.revtut.libraries.minecraft.games.events.player;
 
 import net.revtut.libraries.minecraft.games.arena.Arena;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 
 /**
  * Player Die Event
@@ -11,7 +11,7 @@ public class PlayerDieEvent extends PlayerEvent {
     /**
      * Killer of the player
      */
-    private final PlayerData killer;
+    private final GamePlayer killer;
 
     /**
      * Message on death
@@ -25,7 +25,7 @@ public class PlayerDieEvent extends PlayerEvent {
      * @param arena arena where the event occurred
      * @param deathMessage message on death
      */
-    public PlayerDieEvent(final PlayerData player, final PlayerData killer, final Arena arena, final String deathMessage) {
+    public PlayerDieEvent(final GamePlayer player, final GamePlayer killer, final Arena arena, final String deathMessage) {
         super(player, arena);
         this.killer = killer;
         this.deathMessage = deathMessage;
@@ -35,7 +35,7 @@ public class PlayerDieEvent extends PlayerEvent {
      * Get the killer of the player
      * @return killer of the player
      */
-    public PlayerData getKiller() {
+    public GamePlayer getKiller() {
         return killer;
     }
 

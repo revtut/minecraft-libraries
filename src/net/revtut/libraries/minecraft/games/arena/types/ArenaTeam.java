@@ -2,7 +2,7 @@ package net.revtut.libraries.minecraft.games.arena.types;
 
 import net.revtut.libraries.minecraft.games.arena.Arena;
 import net.revtut.libraries.minecraft.games.arena.session.GameSession;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 import net.revtut.libraries.minecraft.games.team.Team;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -95,7 +95,7 @@ public class ArenaTeam extends Arena {
      * @param player player to get its team
      * @return team of the player
      */
-    public Team getTeam(final PlayerData player) {
+    public Team getTeam(final GamePlayer player) {
         for(final Team team : teams)
             if(team.containsPlayer(player))
                 return team;
@@ -160,8 +160,8 @@ public class ArenaTeam extends Arena {
      * Get all the players on the arena
      * @return players on the arena
      */
-    public List<PlayerData> getAllPlayers() {
-        final List<PlayerData> players = new ArrayList<>();
+    public List<GamePlayer> getAllPlayers() {
+        final List<GamePlayer> players = new ArrayList<>();
         for(final Team team : teams)
             players.addAll(team.getAllPlayers());
         return players;
@@ -185,7 +185,7 @@ public class ArenaTeam extends Arena {
      * @param target player two
      * @return true if they are on the same team, false otherwise
      */
-    public boolean sameTeam(final PlayerData player, final PlayerData target) {
+    public boolean sameTeam(final GamePlayer player, final GamePlayer target) {
         return getTeam(player).equals(getTeam(target));
     }
 
@@ -194,7 +194,7 @@ public class ArenaTeam extends Arena {
      * @param player player to join
      */
     @Override
-    public boolean join(final PlayerData player) {
+    public boolean join(final GamePlayer player) {
         if(teams.size() <= 0)
             throw new IllegalStateException("Player is trying to join a arena without any team!");
 
@@ -207,7 +207,7 @@ public class ArenaTeam extends Arena {
      * @param team team to be joined
      * @return true if has joined, false otherwise
      */
-    public boolean join(final PlayerData player, final Team team) {
+    public boolean join(final GamePlayer player, final Team team) {
         if(!super.join(player))
             return false;
 
@@ -222,7 +222,7 @@ public class ArenaTeam extends Arena {
      * @return true if has left, false otherwise
      */
     @Override
-    public boolean leave(final PlayerData player) {
+    public boolean leave(final GamePlayer player) {
         if(!super.leave(player))
             return false;
 
@@ -242,7 +242,7 @@ public class ArenaTeam extends Arena {
      * @param player player to spectate
      * @return true if is spectating, false otherwise
      */
-    public boolean spectate(final PlayerData player) {
+    public boolean spectate(final GamePlayer player) {
         if(!super.spectate(player))
             return false;
 

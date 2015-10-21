@@ -1,7 +1,7 @@
 package net.revtut.libraries.minecraft.games.events.player;
 
 import net.revtut.libraries.minecraft.games.arena.Arena;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 
 /**
  * Player Leave Arena Event
@@ -19,7 +19,7 @@ public class PlayerLeaveArenaEvent extends PlayerEvent {
      * @param arena arena that was left
      * @param joinMessage leave message
      */
-    public PlayerLeaveArenaEvent(final PlayerData player, final Arena arena, final String joinMessage) {
+    public PlayerLeaveArenaEvent(final GamePlayer player, final Arena arena, final String joinMessage) {
         super(player, arena);
         this.leaveMessage = joinMessage;
     }

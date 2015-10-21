@@ -1,7 +1,7 @@
 package net.revtut.libraries.minecraft.games.events.player;
 
 import net.revtut.libraries.minecraft.games.arena.Arena;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 import org.bukkit.inventory.Inventory;
 
 /**
@@ -26,7 +26,7 @@ public class PlayerInventoryClickEvent extends PlayerEvent {
      * @param inventory inventory where the click occurred
      * @param slot slot of the click on the event
      */
-    public PlayerInventoryClickEvent(final PlayerData player, final Arena arena, final Inventory inventory, final int slot) {
+    public PlayerInventoryClickEvent(final GamePlayer player, final Arena arena, final Inventory inventory, final int slot) {
         super(player, arena);
         this.inventory = inventory;
         this.slot = slot;

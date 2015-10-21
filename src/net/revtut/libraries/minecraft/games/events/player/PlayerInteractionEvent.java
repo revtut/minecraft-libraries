@@ -1,7 +1,7 @@
 package net.revtut.libraries.minecraft.games.events.player;
 
 import net.revtut.libraries.minecraft.games.arena.Arena;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.event.block.Action;
 import org.bukkit.inventory.ItemStack;
@@ -34,7 +34,7 @@ public class PlayerInteractionEvent extends PlayerEvent {
      * @param clickedBlock clicked block on the event
      * @param itemStack item stack used in the event
      */
-    public PlayerInteractionEvent(final PlayerData player, final Arena arena, final Action action, final Block clickedBlock, final ItemStack itemStack) {
+    public PlayerInteractionEvent(final GamePlayer player, final Arena arena, final Action action, final Block clickedBlock, final ItemStack itemStack) {
         super(player, arena);
         this.action = action;
         this.clickedBlock = clickedBlock;

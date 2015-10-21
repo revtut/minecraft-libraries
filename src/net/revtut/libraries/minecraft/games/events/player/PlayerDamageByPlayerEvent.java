@@ -1,7 +1,7 @@
 package net.revtut.libraries.minecraft.games.events.player;
 
 import net.revtut.libraries.minecraft.games.arena.Arena;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -12,7 +12,7 @@ public class PlayerDamageByPlayerEvent extends PlayerEvent {
     /**
      * Damager of the target
      */
-    private final PlayerData damager;
+    private final GamePlayer damager;
 
     /**
      * Item used when attacked the player
@@ -32,7 +32,7 @@ public class PlayerDamageByPlayerEvent extends PlayerEvent {
      * @param damage damage caused by the attack
      * @param arena arena where the event occurred
      */
-    public PlayerDamageByPlayerEvent(final PlayerData player, final PlayerData damager, final ItemStack itemUsed, final double damage, final Arena arena) {
+    public PlayerDamageByPlayerEvent(final GamePlayer player, final GamePlayer damager, final ItemStack itemUsed, final double damage, final Arena arena) {
         super(player, arena);
         this.damager = damager;
         this.itemUsed = itemUsed;
@@ -43,7 +43,7 @@ public class PlayerDamageByPlayerEvent extends PlayerEvent {
      * Get the damager of the target
      * @return damager of the target
      */
-    public PlayerData getDamager() {
+    public GamePlayer getDamager() {
         return damager;
     }
 

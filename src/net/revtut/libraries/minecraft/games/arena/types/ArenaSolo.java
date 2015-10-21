@@ -2,7 +2,7 @@ package net.revtut.libraries.minecraft.games.arena.types;
 
 import net.revtut.libraries.minecraft.games.arena.Arena;
 import net.revtut.libraries.minecraft.games.arena.session.GameSession;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 import org.bukkit.Location;
 import org.bukkit.World;
 
@@ -19,7 +19,7 @@ public class ArenaSolo extends Arena {
     /**
      * List with players in the arena
      */
-    private final List<PlayerData> players;
+    private final List<GamePlayer> players;
 
     /**
      * List with all spawn locations and death match locations
@@ -116,7 +116,7 @@ public class ArenaSolo extends Arena {
      * Get all the players on the arena
      * @return players on the arena
      */
-    public List<PlayerData> getAllPlayers() {
+    public List<GamePlayer> getAllPlayers() {
         return players;
     }
 
@@ -126,7 +126,7 @@ public class ArenaSolo extends Arena {
      * @return true if contains, false otherwise
      */
     public boolean containsPlayer(final UUID uuid) {
-        for(final PlayerData target : players)
+        for(final GamePlayer target : players)
             if(target.getUuid().equals(uuid))
                 return true;
         return false;
@@ -138,7 +138,7 @@ public class ArenaSolo extends Arena {
      * @return true if has joined, false otherwise
      */
     @Override
-    public boolean join(final PlayerData player) {
+    public boolean join(final GamePlayer player) {
         if(!super.join(player))
             return false;
 
@@ -153,7 +153,7 @@ public class ArenaSolo extends Arena {
      * @return true if has left, false otherwise
      */
     @Override
-    public boolean leave(final PlayerData player) {
+    public boolean leave(final GamePlayer player) {
         if(!super.leave(player))
             return false;
 
@@ -167,7 +167,7 @@ public class ArenaSolo extends Arena {
      * @param player player to spectate
      * @return true if is spectating, false otherwise
      */
-    public boolean spectate(final PlayerData player) {
+    public boolean spectate(final GamePlayer player) {
         if(!super.spectate(player))
             return false;
 

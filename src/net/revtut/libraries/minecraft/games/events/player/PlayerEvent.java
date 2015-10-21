@@ -1,7 +1,7 @@
 package net.revtut.libraries.minecraft.games.events.player;
 
 import net.revtut.libraries.minecraft.games.arena.Arena;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -19,7 +19,7 @@ public abstract class PlayerEvent extends Event implements Cancellable {
     /**
      * Player that caused the event
      */
-    private final PlayerData player;
+    private final GamePlayer player;
 
     /**
      * Arena where the event occurred
@@ -36,7 +36,7 @@ public abstract class PlayerEvent extends Event implements Cancellable {
      * @param player player that caused the event
      * @param arena arena where the event occurred
      */
-    public PlayerEvent(final PlayerData player, final Arena arena) {
+    public PlayerEvent(final GamePlayer player, final Arena arena) {
         this.player = player;
         this.arena = arena;
         this.isCancelled = false;
@@ -46,7 +46,7 @@ public abstract class PlayerEvent extends Event implements Cancellable {
      * Get the player that caused the event
      * @return player that caused the event
      */
-    public PlayerData getPlayer() {
+    public GamePlayer getPlayer() {
         return player;
     }
 

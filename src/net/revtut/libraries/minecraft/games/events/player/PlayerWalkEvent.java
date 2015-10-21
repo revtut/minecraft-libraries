@@ -1,7 +1,7 @@
 package net.revtut.libraries.minecraft.games.events.player;
 
 import net.revtut.libraries.minecraft.games.arena.Arena;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 
 /**
  * Player Walk Event
@@ -19,7 +19,7 @@ public class PlayerWalkEvent extends PlayerEvent {
      * @param arena arena where the event occurred
      * @param distance walked distance
      */
-    public PlayerWalkEvent(final PlayerData player, final Arena arena, final double distance) {
+    public PlayerWalkEvent(final GamePlayer player, final Arena arena, final double distance) {
         super(player, arena);
         this.distance = distance;
     }

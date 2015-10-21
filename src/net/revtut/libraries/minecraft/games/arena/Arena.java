@@ -7,7 +7,7 @@ import net.revtut.libraries.minecraft.games.arena.types.ArenaType;
 import net.revtut.libraries.minecraft.games.events.player.PlayerJoinArenaEvent;
 import net.revtut.libraries.minecraft.games.events.player.PlayerLeaveArenaEvent;
 import net.revtut.libraries.minecraft.games.events.player.PlayerSpectateArenaEvent;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 import net.revtut.libraries.minecraft.games.player.PlayerState;
 import net.revtut.libraries.minecraft.utils.WorldAPI;
 import org.bukkit.Bukkit;
@@ -237,7 +237,7 @@ public abstract class Arena {
      * @param state state to filter players
      * @return players that correspond to that state
      */
-    public List<PlayerData> getPlayers(final PlayerState state) {
+    public List<GamePlayer> getPlayers(final PlayerState state) {
         return getAllPlayers().stream().filter(player -> player.getState() == state).collect(Collectors.toList());
     }
 
@@ -272,7 +272,7 @@ public abstract class Arena {
      * @param player player to join
      * @return true if has joined, false otherwise
      */
-    public boolean join(final PlayerData player) {
+    public boolean join(final GamePlayer player) {
         if(!canJoin(player))
             return false;
 
@@ -292,7 +292,7 @@ public abstract class Arena {
         player.getBukkitPlayer().setGameMode(GameMode.ADVENTURE);
 
         // Visibility configuration
-        for(final PlayerData target : getAllPlayers()) {
+        for(final GamePlayer target : getAllPlayers()) {
             target.getBukkitPlayer().showPlayer(player.getBukkitPlayer());
 
             if(target.getState() == PlayerState.SPECTATOR)
@@ -309,7 +309,7 @@ public abstract class Arena {
      * @param player player to leave
      * @return true if has left, false otherwise
      */
-    public boolean leave(final PlayerData player) {
+    public boolean leave(final GamePlayer player) {
         // Call event
         final PlayerLeaveArenaEvent event = new PlayerLeaveArenaEvent(player, this, player.getName() + " has left the arena " + name);
         Bukkit.getPluginManager().callEvent(event);
@@ -333,7 +333,7 @@ public abstract class Arena {
      * @param player player to spectate
      * @return true if is spectating, false otherwise
      */
-    public boolean spectate(final PlayerData player) {
+    public boolean spectate(final GamePlayer player) {
         // Call event
         final PlayerSpectateArenaEvent event = new PlayerSpectateArenaEvent(player, this, player.getName() + " is spectating the arena " + name);
         Bukkit.getPluginManager().callEvent(event);
@@ -362,7 +362,7 @@ public abstract class Arena {
      * @param player player to be joined
      * @return true if can, false otherwise
      */
-    public boolean canJoin(final PlayerData player) {
+    public boolean canJoin(final GamePlayer player) {
         // Avoid joining when no session is created
         if(currentSession == null)
             return false;
@@ -383,7 +383,7 @@ public abstract class Arena {
      * @param message message to be broadcast
      */
     public void broadcastMessage(final String message) {
-        for(final PlayerData player : getAllPlayers())
+        for(final GamePlayer player : getAllPlayers())
             player.getBukkitPlayer().sendMessage(message);
     }
 
@@ -391,7 +391,7 @@ public abstract class Arena {
      * Get all the players on the arena
      * @return players on the arena
      */
-    public abstract List<PlayerData> getAllPlayers();
+    public abstract List<GamePlayer> getAllPlayers();
 
     /**
      * Get the type of the arena

@@ -7,7 +7,7 @@ import net.revtut.libraries.minecraft.games.arena.types.ArenaSolo;
 import net.revtut.libraries.minecraft.games.arena.types.ArenaTeam;
 import net.revtut.libraries.minecraft.games.arena.types.ArenaType;
 import net.revtut.libraries.minecraft.games.events.arena.ArenaLoadEvent;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 import net.revtut.libraries.minecraft.utils.WorldAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -93,8 +93,8 @@ public class GameController {
      * Get all the online players on the game
      * @return online players on the game
      */
-    public List<PlayerData> getOnlinePlayers() {
-        final List<PlayerData> players = new ArrayList<>();
+    public List<GamePlayer> getOnlinePlayers() {
+        final List<GamePlayer> players = new ArrayList<>();
         for(final Arena arena : arenas)
             players.addAll(arena.getAllPlayers());
         return players;

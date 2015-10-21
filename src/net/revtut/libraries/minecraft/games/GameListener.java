@@ -14,7 +14,7 @@ import net.revtut.libraries.minecraft.games.events.arena.ArenaBlockPlaceEvent;
 import net.revtut.libraries.minecraft.games.events.arena.ArenaBucketEmptyEvent;
 import net.revtut.libraries.minecraft.games.events.arena.ArenaBucketFillEvent;
 import net.revtut.libraries.minecraft.games.events.player.*;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 import net.revtut.libraries.minecraft.games.player.PlayerState;
 import net.revtut.libraries.minecraft.maths.AlgebraAPI;
 import net.revtut.libraries.minecraft.text.checks.*;
@@ -81,7 +81,7 @@ public class GameListener implements Listener {
         final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        final PlayerData player = gameAPI.getPlayer(uuid);
+        final GamePlayer player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -109,7 +109,7 @@ public class GameListener implements Listener {
         final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        final PlayerData player = gameAPI.getPlayer(uuid);
+        final GamePlayer player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -137,7 +137,7 @@ public class GameListener implements Listener {
         final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        final PlayerData player = gameAPI.getPlayer(uuid);
+        final GamePlayer player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -165,7 +165,7 @@ public class GameListener implements Listener {
         final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        final PlayerData player = gameAPI.getPlayer(uuid);
+        final GamePlayer player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -194,7 +194,7 @@ public class GameListener implements Listener {
         final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        final PlayerData player = gameAPI.getPlayer(uuid);
+        final GamePlayer player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -240,7 +240,7 @@ public class GameListener implements Listener {
         final Arena arena = gameAPI.getPlayerArena(event.getEntity().getUniqueId());
         if(arena == null)
             return;
-        final PlayerData target = gameAPI.getPlayer(event.getEntity().getUniqueId());
+        final GamePlayer target = gameAPI.getPlayer(event.getEntity().getUniqueId());
         if(target == null)
             return;
 
@@ -340,10 +340,10 @@ public class GameListener implements Listener {
         final Arena arenaDamager = gameAPI.getPlayerArena(damagerUUID);
         if (arenaDamager == null)
             return;
-        final PlayerData target = gameAPI.getPlayer(event.getEntity().getUniqueId());
+        final GamePlayer target = gameAPI.getPlayer(event.getEntity().getUniqueId());
         if (target == null)
             return;
-        final PlayerData damager = gameAPI.getPlayer(damagerUUID);
+        final GamePlayer damager = gameAPI.getPlayer(damagerUUID);
         if (damager == null)
             return;
 
@@ -402,10 +402,10 @@ public class GameListener implements Listener {
         final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        final PlayerData player = gameAPI.getPlayer(uuid);
+        final GamePlayer player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
-        PlayerData killer = null;
+        GamePlayer killer = null;
         if(event.getEntity().getKiller() != null) {
             killer = gameAPI.getPlayer(event.getEntity().getKiller().getUniqueId());
             if (killer == null)
@@ -432,7 +432,7 @@ public class GameListener implements Listener {
         final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        final PlayerData player = gameAPI.getPlayer(uuid);
+        final GamePlayer player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -460,7 +460,7 @@ public class GameListener implements Listener {
         final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        final PlayerData player = gameAPI.getPlayer(uuid);
+        final GamePlayer player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -493,7 +493,7 @@ public class GameListener implements Listener {
         final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        final PlayerData player = gameAPI.getPlayer(uuid);
+        final GamePlayer player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -521,7 +521,7 @@ public class GameListener implements Listener {
         final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        final PlayerData player = gameAPI.getPlayer(uuid);
+        final GamePlayer player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -551,7 +551,7 @@ public class GameListener implements Listener {
         gameAPI.hideServer(event.getPlayer());
 
         // Get needed data
-        final PlayerData player = new PlayerData(uuid);
+        final GamePlayer player = new GamePlayer(uuid);
         // TODO get database information about the player
 
         // Join random game
@@ -581,7 +581,7 @@ public class GameListener implements Listener {
         final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        final PlayerData player = gameAPI.getPlayer(uuid);
+        final GamePlayer player = gameAPI.getPlayer(uuid);
         if (player == null)
             return;
 
@@ -643,7 +643,7 @@ public class GameListener implements Listener {
         final Arena arena = gameAPI.getPlayerArena(uuid);
         if(arena == null)
             return;
-        final PlayerData player = gameAPI.getPlayer(uuid);
+        final GamePlayer player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
 
@@ -670,7 +670,7 @@ public class GameListener implements Listener {
         final UUID uuid = event.getPlayer().getUniqueId();
 
         // Get needed data
-        final PlayerData player = gameAPI.getPlayer(uuid);
+        final GamePlayer player = gameAPI.getPlayer(uuid);
         if(player == null)
             return;
         GameAPI.getInstance().removePlayer(player);
@@ -684,7 +684,7 @@ public class GameListener implements Listener {
         // Delete arena if needed and join randomly all the remaining players
         if(arena.getSession() != null && arena.getSession().getState() != GameState.LOBBY) {
             if(arena.getPlayers(PlayerState.ALIVE).size() <= 1) {
-                for(final PlayerData target : new ArrayList<>(arena.getAllPlayers())) {
+                for(final GamePlayer target : new ArrayList<>(arena.getAllPlayers())) {
                     if(target == player)
                         continue;
                     arena.leave(target);

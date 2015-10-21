@@ -1,7 +1,7 @@
 package net.revtut.libraries.minecraft.games.events.arena;
 
 import net.revtut.libraries.minecraft.games.arena.Arena;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 
 /**
  * Arena Block Place Event
@@ -11,7 +11,7 @@ public class ArenaBlockPlaceEvent extends ArenaEvent {
     /**
      * Player that place the block
      */
-    private final PlayerData player;
+    private final GamePlayer player;
 
     /**
      * Constructor of ArenaBlockPlaceEvent
@@ -19,7 +19,7 @@ public class ArenaBlockPlaceEvent extends ArenaEvent {
      * @param arena arena where the event occurred
      * @param player player that place the block
      */
-    public ArenaBlockPlaceEvent(final Arena arena, final PlayerData player) {
+    public ArenaBlockPlaceEvent(final Arena arena, final GamePlayer player) {
         super(arena);
 
         this.player = player;
@@ -29,7 +29,7 @@ public class ArenaBlockPlaceEvent extends ArenaEvent {
      * Get the player that place the block
      * @return player that place the block
      */
-    public PlayerData getPlayer() {
+    public GamePlayer getPlayer() {
         return player;
     }
 }

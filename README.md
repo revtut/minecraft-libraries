@@ -1,18 +1,18 @@
 # Minecraft - Libraries
 
 ## Index
-* #### [Introduction](#introduction)
-* #### [Requirements](#requirements)
-* #### [API](#api)
-* #### [Setup MiniGame](#setup_minigame)
-* #### [Setup Database](#setup_database)
-* #### [Scoreboard](#scoreboard)
-* #### [Credits](#credits)
+* [Introduction](#introduction)
+* [Requirements](#requirements)
+* [API](#api)
+* [Setup MiniGame](#setup_minigame)
+* [Setup Database](#setup_database)
+* [Scoreboard](#scoreboard)
+* [Credits](#credits)
 
 ## <a name="introduction"></a>Introduction
 
-Nowadays libraries such as **Spigot, Bukkit** and so on have given lots of useful APIs in order to code *Minecraft server* plugins.
-However there are a lots of missing functions and methods that would make a plugin development easier so we have created a collection of useful functions to use side by side with a Minecraft server library.
+Nowadays libraries such as **Spigot, Bukkit** and so on, gave lots of useful APIs in order to code *Minecraft server* plugins.
+However there are lots of missing functions and methods that would make a plugin development easier. In order to accomplish that, we have created a collection of useful functions to use side by side with a Minecraft server library.
 
 ## <a name="requirements"></a>Requirements
 * Spigot or Bukkit
@@ -22,28 +22,32 @@ However there are a lots of missing functions and methods that would make a plug
 ## <a name="api"></a>API
 ### Generic
 * Database
-    * MySQL
-    * OracleSQL
-    * PostegreSQL
+    * MySQL, OracleSQL and PostegreSQL
+    * Methods to querie database using prepared statements
+* Hash
+    * BCrypt
+* Structures
+    * Pair
+* Files
+    * Read lines of a file
+    * Copy and delete files / directories             
 
 ### Minecraft
 * Appearance
-    * Virtual Anvil
-    * Modify item attributes
-    * Modify player name tags
+    * Create virtual anvils
+    * Modify item attributes and player name tags
+    * Send cameras to players
     * Particle Effects
 * Entities
-    * Change entity goals on the fly
+    * Change entity behaviors on the fly
     * Custom entity goals
 * Guns
     * Realistic guns
     * Custom bullets
+    * Precise shot type (head shot, knee shot, etc)
     * Events
-        * Fire
-        * Hit
-        * Reload
+        * Fire, Hit and Reload
 * Maths
-    * Hashing
     * Get helix, tornado, sphere, circle list of locations
     * Rotate vectors
     * Check vectors intersections
@@ -51,29 +55,25 @@ However there are a lots of missing functions and methods that would make a plug
     * Convert text to JSON format
     * Time converters
     * String and list converters
+* Network
+    * Bungeecord handler
+    * Message received event
 * Scoreboard
     * Custom scoreboard
     * Static, Blank and Scrolling scoreboard labels
 * Text
-    * Send custom action bar
-    * Get language of a player
-    * Multiple languages
-    * Send custom tab player
-    * Send custom titles and subtitles
+    * Multi-language methods
+    * Send custom tab player, action bar, titles and subtitles
     * Checks for bad words, advertisements, caps lock and emoji
     * Scroll's such as text and color
 * Utils
     * Bypass respawn screen
-    * Copy, delete folders
-    * Read files
     * Reflection methods
-    * Load world sync and async
-    * Unload world
+    * Load / unload world sync and async
     * Change falling block damage
 
 ### Mini-Games
 * Achievements
-    * Custom achievements
 * Arena
     * Solo arena (all vs all)
     * Team arena (team vs team)
@@ -81,33 +81,27 @@ However there are a lots of missing functions and methods that would make a plug
     * Custom arena flags for events
     * Game session for each round
 * Classes
-    * Custom game classes
-    * Register events
 * Events
     * Arena
         * Load
+        * Block break and place
+        * Bucket fill and empty
     * Player
-        * Cross Arena Border
-        * Damage / Die
-        * Friendly Fire
-        * Join Arena / Team
-        * Leave Arena / Team
-        * Spectate Arena / Team
-        * Talk
+        * Catch, throw item
+        * Cross arena border
+        * Damage, friendly fire, die and hunger
+        * Interaction, talk, jump, move
+        * Join, spectate, leave arena and / or Team
     * Session
-        * Start / Finish
-        * Timer Tick / Expire
+        * Start and finish
+        * Timer tick and expire
         * Switch state
 * Player
     * Data of a player
 * Statistics
-    * Pre-made statistics
-* Team
-    * List with all players
-    * Custom color
+* Teams
 * Utils
-    * Color
-    * Winner
+    * Custom colors
     
 ## <a name="setup_minigame"></a>Setup Minigame
 
@@ -193,7 +187,7 @@ infoBoard.addLabel(new StaticLabel("website", "§6www.mywebsite.com")), 0;
 infoBoard.send(player);
 ```
 
-Well there you go! You have a gorgeous scoreboard in no effort at all!
+Well there you go! You have a gorgeous scoreboard with no effort at all!
 
 ## <a name="credits"></a>Credits
 

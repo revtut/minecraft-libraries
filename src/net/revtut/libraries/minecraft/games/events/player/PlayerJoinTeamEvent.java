@@ -1,7 +1,7 @@
 package net.revtut.libraries.minecraft.games.events.player;
 
 import net.revtut.libraries.minecraft.games.arena.Arena;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 import net.revtut.libraries.minecraft.games.team.Team;
 
 /**
@@ -21,7 +21,7 @@ public class PlayerJoinTeamEvent extends PlayerJoinArenaEvent {
      * @param team team that was joined
      * @param joinMessage join message
      */
-    public PlayerJoinTeamEvent(final PlayerData player, final Arena arena, final Team team, final String joinMessage) {
+    public PlayerJoinTeamEvent(final GamePlayer player, final Arena arena, final Team team, final String joinMessage) {
         super(player, arena, joinMessage);
         this.team = team;
     }

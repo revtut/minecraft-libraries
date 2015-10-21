@@ -2,7 +2,7 @@ package net.revtut.libraries.minecraft.games;
 
 import net.revtut.libraries.Libraries;
 import net.revtut.libraries.minecraft.games.arena.Arena;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -25,7 +25,7 @@ public class GameAPI {
     /**
      * List with all players
      */
-    private final List<PlayerData> players;
+    private final List<GamePlayer> players;
 
     /**
      * List with all game controllers
@@ -129,7 +129,7 @@ public class GameAPI {
      * Get all the players on the server
      * @return players on the server
      */
-    public List<PlayerData> getPlayers() {
+    public List<GamePlayer> getPlayers() {
         return players;
     }
 
@@ -138,8 +138,8 @@ public class GameAPI {
      * @param uuid uuid of the player to get the player data
      * @return player data of the player
      */
-    public PlayerData getPlayer(final UUID uuid) {
-        for(final PlayerData player : players)
+    public GamePlayer getPlayer(final UUID uuid) {
+        for(final GamePlayer player : players)
             if(player.getUuid().equals(uuid))
                 return player;
         return null;
@@ -181,7 +181,7 @@ public class GameAPI {
      * Add a player to the list
      * @param player player to be added
      */
-    public void addPlayer(final PlayerData player) {
+    public void addPlayer(final GamePlayer player) {
         players.add(player);
     }
 
@@ -189,7 +189,7 @@ public class GameAPI {
      * Remove a player from the list
      * @param player player to be removed
      */
-    public void removePlayer(final PlayerData player) {
+    public void removePlayer(final GamePlayer player) {
         players.remove(player);
     }
 

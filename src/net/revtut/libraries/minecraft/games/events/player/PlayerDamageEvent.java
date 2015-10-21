@@ -1,7 +1,7 @@
 package net.revtut.libraries.minecraft.games.events.player;
 
 import net.revtut.libraries.minecraft.games.arena.Arena;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 
 /**
  * Player Damage Event
@@ -19,7 +19,7 @@ public class PlayerDamageEvent extends PlayerEvent {
      * @param arena arena where the event occurred
      * @param damage damage of the event
      */
-    public PlayerDamageEvent(final PlayerData player, final Arena arena, final double damage) {
+    public PlayerDamageEvent(final GamePlayer player, final Arena arena, final double damage) {
         super(player, arena);
         this.damage = damage;
     }

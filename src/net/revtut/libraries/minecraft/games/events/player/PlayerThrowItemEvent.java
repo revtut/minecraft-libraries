@@ -1,7 +1,7 @@
 package net.revtut.libraries.minecraft.games.events.player;
 
 import net.revtut.libraries.minecraft.games.arena.Arena;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 import org.bukkit.entity.Item;
 
 /**
@@ -20,7 +20,7 @@ public class PlayerThrowItemEvent extends PlayerEvent {
      * @param arena arena where the event occurred
      * @param item item that was thrown
      */
-    public PlayerThrowItemEvent(final PlayerData player, final Arena arena, final Item item) {
+    public PlayerThrowItemEvent(final GamePlayer player, final Arena arena, final Item item) {
         super(player, arena);
         this.item = item;
     }

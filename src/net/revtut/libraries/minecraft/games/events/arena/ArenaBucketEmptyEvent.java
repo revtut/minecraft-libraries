@@ -1,7 +1,7 @@
 package net.revtut.libraries.minecraft.games.events.arena;
 
 import net.revtut.libraries.minecraft.games.arena.Arena;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 
 /**
  * Arena Bucket Empty Event
@@ -11,7 +11,7 @@ public class ArenaBucketEmptyEvent extends ArenaEvent {
     /**
      * Player that emptied the bucket
      */
-    private final PlayerData player;
+    private final GamePlayer player;
 
     /**
      * Constructor of ArenaBucketEmptyEvent
@@ -19,7 +19,7 @@ public class ArenaBucketEmptyEvent extends ArenaEvent {
      * @param arena arena where the event occurred
      * @param player player that emptied the bucket
      */
-    public ArenaBucketEmptyEvent(final Arena arena, final PlayerData player) {
+    public ArenaBucketEmptyEvent(final Arena arena, final GamePlayer player) {
         super(arena);
 
         this.player = player;
@@ -29,7 +29,7 @@ public class ArenaBucketEmptyEvent extends ArenaEvent {
      * Get the player that emptied the bucket
      * @return player that emptied the bucket
      */
-    public PlayerData getPlayer() {
+    public GamePlayer getPlayer() {
         return player;
     }
 }

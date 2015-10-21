@@ -1,7 +1,7 @@
 package net.revtut.libraries.minecraft.games.classes;
 
 import net.revtut.libraries.Libraries;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
@@ -66,5 +66,5 @@ public abstract class GameClass implements Listener {
      * Equip a player with this class
      * @param player player to be equipped
      */
-    public abstract void equip(PlayerData player);
+    public abstract void equip(GamePlayer player);
 }

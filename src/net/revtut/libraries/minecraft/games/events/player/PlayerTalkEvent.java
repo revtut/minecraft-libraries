@@ -1,7 +1,7 @@
 package net.revtut.libraries.minecraft.games.events.player;
 
 import net.revtut.libraries.minecraft.games.arena.Arena;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 
 /**
  * Player Talk Event
@@ -19,7 +19,7 @@ public class PlayerTalkEvent extends PlayerEvent {
      * @param arena arena that was joined
      * @param formattedMessage formatted message
      */
-    public PlayerTalkEvent(final PlayerData player, final Arena arena, final String formattedMessage) {
+    public PlayerTalkEvent(final GamePlayer player, final Arena arena, final String formattedMessage) {
         super(player, arena);
         this.formattedMessage = formattedMessage;
     }

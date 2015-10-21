@@ -1,7 +1,7 @@
 package net.revtut.libraries.minecraft.games.events.player;
 
 import net.revtut.libraries.minecraft.games.arena.Arena;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 
 /**
  * Player Hunger Event
@@ -19,7 +19,7 @@ public class PlayerHungerEvent extends PlayerEvent {
      * @param arena arena where the event occurred
      * @param hunger hunger level of the event
      */
-    public PlayerHungerEvent(final PlayerData player, final Arena arena, final int hunger) {
+    public PlayerHungerEvent(final GamePlayer player, final Arena arena, final int hunger) {
         super(player, arena);
         this.hunger = hunger;
     }

@@ -14,9 +14,9 @@ import org.bukkit.entity.Player;
 import java.util.*;
 
 /**
- * PlayerData Object
+ * GamePlayer Object
  */
-public class PlayerData implements Winner {
+public class GamePlayer implements Winner {
 
     /**
      * Player owner of this data
@@ -54,10 +54,10 @@ public class PlayerData implements Winner {
     private final List<Achievement> achievements;
 
     /**
-     * Constructor of PlayerData
+     * Constructor of GamePlayer
      * @param uuid uuid of the owner player
      */
-    public PlayerData(final UUID uuid) {
+    public GamePlayer(final UUID uuid) {
         this.uuid = uuid;
         this.lastLogin = new Date();
         this.currentArena = null;

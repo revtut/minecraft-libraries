@@ -4,7 +4,7 @@ import net.revtut.libraries.Libraries;
 import net.revtut.libraries.minecraft.games.events.player.PlayerJoinTeamEvent;
 import net.revtut.libraries.minecraft.games.events.player.PlayerLeaveTeamEvent;
 import net.revtut.libraries.minecraft.games.events.player.PlayerSpectateTeamEvent;
-import net.revtut.libraries.minecraft.games.player.PlayerData;
+import net.revtut.libraries.minecraft.games.player.GamePlayer;
 import net.revtut.libraries.minecraft.games.player.PlayerState;
 import net.revtut.libraries.minecraft.games.utils.Color;
 import net.revtut.libraries.minecraft.games.utils.Winner;
@@ -32,7 +32,7 @@ public class Team implements Winner {
     /**
      * List with all players on the team
      */
-    private final List<PlayerData> players;
+    private final List<GamePlayer> players;
 
     /**
      * Default constructor of Team
@@ -72,7 +72,7 @@ public class Team implements Winner {
      * Get the players on the team
      * @return players on the team
      */
-    public List<PlayerData> getAllPlayers() {
+    public List<GamePlayer> getAllPlayers() {
         return players;
     }
 
@@ -81,7 +81,7 @@ public class Team implements Winner {
      * @param state state to filter players
      * @return players that correspond to that state
      */
-    public List<PlayerData> getPlayers(final PlayerState state) {
+    public List<GamePlayer> getPlayers(final PlayerState state) {
         return players.stream().filter(player -> player.getState() == state).collect(Collectors.toList());
     }
 
@@ -98,7 +98,7 @@ public class Team implements Winner {
      * @param player player to be checked
      * @return true if belongs, false otherwise
      */
-    public boolean containsPlayer(final PlayerData player) {
+    public boolean containsPlayer(final GamePlayer player) {
         return containsPlayer(player.getUuid());
     }
 
@@ -108,7 +108,7 @@ public class Team implements Winner {
      * @return true if belongs, false otherwise
      */
     public boolean containsPlayer(final UUID player) {
-        for(final PlayerData target : players)
+        for(final GamePlayer target : players)
             if(player.equals(target.getUuid()))
                 return true;
         return false;
@@ -119,7 +119,7 @@ public class Team implements Winner {
      * @param player player to be added
      * @return true if has joined, false otherwise
      */
-    public boolean join(final PlayerData player) {
+    public boolean join(final GamePlayer player) {
         if(players.contains(player))
             return true;
 
@@ -142,7 +142,7 @@ public class Team implements Winner {
      * @param player player to be removed
      * @return true if has left, false otherwise
      */
-    public boolean leave(final PlayerData player) {
+    public boolean leave(final GamePlayer player) {
         if(!players.contains(player))
             return true;
 
@@ -165,7 +165,7 @@ public class Team implements Winner {
      * @param player player to spectate
      * @return true if is spectating, false otherwise
      */
-    public boolean spectate(final PlayerData player) {
+    public boolean spectate(final GamePlayer player) {
         if(players.contains(player))
             return true;
 
@@ -188,7 +188,7 @@ public class Team implements Winner {
      * @param message message to be broadcast
      */
     public void broadcastMessage(final String message) {
-        for(final PlayerData player : getAllPlayers())
+        for(final GamePlayer player : getAllPlayers())
             player.getBukkitPlayer().sendMessage(message);
     }
 
