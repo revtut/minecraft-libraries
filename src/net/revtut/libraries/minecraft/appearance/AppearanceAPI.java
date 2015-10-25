@@ -1,10 +1,7 @@
 package net.revtut.libraries.minecraft.appearance;
 
 import net.revtut.libraries.Libraries;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
+import org.bukkit.*;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -39,10 +36,21 @@ public final class AppearanceAPI {
      * @param delay  delay between each firework
      */
     public static void launchFirework(final Player player, final int amount, final int delay) {
+        launchFirework(player.getLocation(), amount, delay);
+    }
+
+    /**
+     * Launch firework on a location
+     *
+     * @param location location to launch firework
+     * @param amount amount of fireworks to launch
+     * @param delay  delay between each firework
+     */
+    public static void launchFirework(final Location location, final int amount, final int delay) {
         final Libraries plugin = Libraries.getInstance();
         for (int i = 0; i < amount; i++) {
             Bukkit.getScheduler().runTaskLater(plugin, () -> {
-                final Firework fw = player.getWorld().spawn(player.getLocation(), Firework.class);
+                final Firework fw = location.getWorld().spawn(location, Firework.class);
                 final FireworkMeta fm = fw.getFireworkMeta();
 
                 final int fType = random.nextInt(5) + 1;
@@ -75,7 +83,7 @@ public final class AppearanceAPI {
                 fm.addEffect(effect);
                 fm.setPower(1);
                 fw.setFireworkMeta(fm);
-            }, delay);
+            }, delay * i);
         }
     }
 
