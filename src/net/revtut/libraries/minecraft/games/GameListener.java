@@ -214,7 +214,7 @@ public class GameListener implements Listener {
                 message = check.fixMessage(message);
 
         // Call event
-        final PlayerTalkEvent playerTalkEvent = new PlayerTalkEvent(player, arena, "<" + player.getName() + "> " + message);
+        final PlayerTalkEvent playerTalkEvent = new PlayerTalkEvent(player, arena, message);
         Bukkit.getPluginManager().callEvent(playerTalkEvent);
 
         if(playerTalkEvent.isCancelled())

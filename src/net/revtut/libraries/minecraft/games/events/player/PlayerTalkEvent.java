@@ -9,7 +9,12 @@ import net.revtut.libraries.minecraft.games.player.GamePlayer;
 public class PlayerTalkEvent extends PlayerEvent {
 
     /**
-     * Message on joining the arena
+     * Message sent
+     */
+    private final String message;
+
+    /**
+     * Formatted message
      */
     private String formattedMessage;
 
@@ -17,11 +22,19 @@ public class PlayerTalkEvent extends PlayerEvent {
      * Constructor of PlayerJoinArenaEvent
      * @param player player that joined the arena
      * @param arena arena that was joined
-     * @param formattedMessage formatted message
      */
-    public PlayerTalkEvent(final GamePlayer player, final Arena arena, final String formattedMessage) {
+    public PlayerTalkEvent(final GamePlayer player, final Arena arena, final String message) {
         super(player, arena);
-        this.formattedMessage = formattedMessage;
+        this.message = message;
+        this.formattedMessage = "<" + player.getName() + "> " + message;
+    }
+
+    /**
+     * Get the message that was sent
+     * @return message that was sent
+     */
+    public String getMessage() {
+        return message;
     }
 
     /**
