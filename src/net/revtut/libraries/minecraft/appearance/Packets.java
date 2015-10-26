@@ -2,8 +2,8 @@ package net.revtut.libraries.minecraft.appearance;
 
 import net.minecraft.server.v1_8_R3.*;
 import net.revtut.libraries.Libraries;
-import net.revtut.libraries.minecraft.maths.AlgebraAPI;
-import net.revtut.libraries.minecraft.maths.ConvertersAPI;
+import net.revtut.libraries.minecraft.maths.Maths;
+import net.revtut.libraries.minecraft.text.Converters;
 import net.revtut.libraries.minecraft.utils.Reflection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -11,6 +11,7 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.lang.reflect.Field;
+import java.util.logging.Level;
 
 /**
  * Packets Library.
@@ -34,7 +35,7 @@ public class Packets {
     public static void sendParticle(final Location location, final PacketPlayOutWorldParticles particlePacket) {
         Bukkit.getOnlinePlayers().stream()
                 .filter(player -> player.getWorld().getName().equalsIgnoreCase(location.getWorld().getName()))
-                .filter(player -> AlgebraAPI.distanceBetween(player.getLocation(), location) <= 20.0D)
+                .filter(player -> Maths.distanceBetween(player.getLocation(), location) <= 20.0D)
                 .forEach(player -> ((CraftPlayer) player).getHandle().playerConnection.sendPacket(particlePacket));
     }
 
@@ -94,7 +95,7 @@ public class Packets {
     public static void sendActionBar(final Player player, final String message, final int stay) {
         for(int i = 0; i < stay; i++) {
             Bukkit.getScheduler().runTaskLater(Libraries.getInstance(), () -> Bukkit.getScheduler().runTaskAsynchronously(Libraries.getInstance(), () -> {
-                final IChatBaseComponent actionMessage = IChatBaseComponent.ChatSerializer.a(ConvertersAPI.convertToJSON(message));
+                final IChatBaseComponent actionMessage = IChatBaseComponent.ChatSerializer.a(Converters.convertToJSON(message));
                 final PacketPlayOutChat ppoc = new PacketPlayOutChat(actionMessage, (byte) 2);
                 ((CraftPlayer) player).getHandle().playerConnection.sendPacket(ppoc);
             }), i * 20);
@@ -112,13 +113,15 @@ public class Packets {
      */
     public static void sendTabTitle(final Player player, final String title) {
         Bukkit.getScheduler().runTaskAsynchronously(Libraries.getInstance(), () -> {
-            final IChatBaseComponent tabTitle = IChatBaseComponent.ChatSerializer.a(ConvertersAPI.convertToJSON(title));
+            final IChatBaseComponent tabTitle = IChatBaseComponent.ChatSerializer.a(Converters.convertToJSON(title));
             final PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
 
             try {
                 final Field headerField = Reflection.getField(packet.getClass(), "a");;
-                if(headerField == null)
+                if(headerField == null) {
+                    Bukkit.getLogger().log(Level.SEVERE, "'a' field does not exist on header title packet class.");
                     return;
+                }
                 headerField.set(packet, tabTitle);
                 headerField.setAccessible(!headerField.isAccessible());
             } catch (final Exception e) {
@@ -136,13 +139,15 @@ public class Packets {
      */
     public static void sendTabFooter(final Player player, final String footer) {
         Bukkit.getScheduler().runTaskAsynchronously(Libraries.getInstance(), () -> {
-            final IChatBaseComponent tabFooter = IChatBaseComponent.ChatSerializer.a(ConvertersAPI.convertToJSON(footer));
+            final IChatBaseComponent tabFooter = IChatBaseComponent.ChatSerializer.a(Converters.convertToJSON(footer));
             final PacketPlayOutPlayerListHeaderFooter packet = new PacketPlayOutPlayerListHeaderFooter();
 
             try {
                 final Field footerField = Reflection.getField(packet.getClass(), "b");
-                if(footerField == null)
+                if(footerField == null) {
+                    Bukkit.getLogger().log(Level.SEVERE, "'b' field does not exist on footer tab packet class.");
                     return;
+                }
                 footerField.set(packet, tabFooter);
                 footerField.setAccessible(false);
             } catch (final Exception e) {
@@ -175,7 +180,7 @@ public class Packets {
      */
     public static void sendTitle(final Player player, final String title) {
         Bukkit.getScheduler().runTaskAsynchronously(Libraries.getInstance(), () -> {
-            final IChatBaseComponent titleSerializer = IChatBaseComponent.ChatSerializer.a(ConvertersAPI.convertToJSON(title));
+            final IChatBaseComponent titleSerializer = IChatBaseComponent.ChatSerializer.a(Converters.convertToJSON(title));
             final PacketPlayOutTitle packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.TITLE, titleSerializer);
             ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
         });
@@ -188,7 +193,7 @@ public class Packets {
      */
     public static void sendSubtitle(final Player player, final String subtitle) {
         Bukkit.getScheduler().runTaskAsynchronously(Libraries.getInstance(), () -> {
-            final IChatBaseComponent subTitleSerializer = IChatBaseComponent.ChatSerializer.a(ConvertersAPI.convertToJSON(subtitle));
+            final IChatBaseComponent subTitleSerializer = IChatBaseComponent.ChatSerializer.a(Converters.convertToJSON(subtitle));
             final PacketPlayOutTitle packet = new PacketPlayOutTitle(PacketPlayOutTitle.EnumTitleAction.SUBTITLE, subTitleSerializer);
             ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
         });

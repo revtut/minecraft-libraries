@@ -8,7 +8,7 @@ import net.revtut.libraries.minecraft.games.arena.types.ArenaTeam;
 import net.revtut.libraries.minecraft.games.arena.types.ArenaType;
 import net.revtut.libraries.minecraft.games.events.arena.ArenaLoadEvent;
 import net.revtut.libraries.minecraft.games.player.GamePlayer;
-import net.revtut.libraries.minecraft.utils.WorldAPI;
+import net.revtut.libraries.minecraft.utils.Worlds;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
@@ -270,7 +270,7 @@ public class GameController {
         Files.copyDirectory(new File(sourcePath), new File(targetPath));
 
         // Load World
-        final World world = WorldAPI.loadWorld(mapName);
+        final World world = Worlds.loadWorld(mapName);
         if(world == null)
             throw new IllegalStateException("Loaded world is null.");
         world.setAutoSave(false);

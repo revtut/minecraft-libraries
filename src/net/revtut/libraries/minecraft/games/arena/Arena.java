@@ -9,7 +9,7 @@ import net.revtut.libraries.minecraft.games.events.player.PlayerLeaveArenaEvent;
 import net.revtut.libraries.minecraft.games.events.player.PlayerSpectateArenaEvent;
 import net.revtut.libraries.minecraft.games.player.GamePlayer;
 import net.revtut.libraries.minecraft.games.player.PlayerState;
-import net.revtut.libraries.minecraft.utils.WorldAPI;
+import net.revtut.libraries.minecraft.utils.Worlds;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -156,7 +156,7 @@ public abstract class Arena {
         if(arenaWorld == null)
             return;
 
-        WorldAPI.unloadWorld(arenaWorld.getName());
+        Worlds.unloadWorld(arenaWorld.getName());
         Files.removeDirectory(arenaWorld.getWorldFolder());
     }
 

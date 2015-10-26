@@ -1,25 +1,24 @@
-package net.revtut.libraries.minecraft.maths;
+package net.revtut.libraries.minecraft.text;
 
 import java.util.List;
 
 /**
  * Converters Library.
  *
- * <P>Usefull converters to be used.</P>
+ * <P>Useful converters to be used.</P>
  *
  * @author Joao Silva
  * @version 1.0
  */
-public final class ConvertersAPI {
+public final class Converters {
 
     /**
-     * Constructor of ConvertersAPI
+     * Constructor of Converters
      */
-    private ConvertersAPI() {}
+    private Converters() {}
 
     /**
      * Convert a text to JSON format
-     *
      * @param text text to be converted
      * @return converted text to JSON
      */
@@ -74,86 +73,8 @@ public final class ConvertersAPI {
     }
 
     /**
-     * Replace some text with special characters in a text
-     *
-     * @param text text to be replaced
-     * @return text with special characters
-     */
-    public static String convertSpecialCharacters(String text) {
-        // First Section
-        text = text.replace("%ALT1%", "☺");
-        text = text.replace("%ALT2%", "☻");
-        text = text.replace("%ALT3%", "♥");
-        text = text.replace("%ALT4%", "♦");
-        text = text.replace("%ALT5%", "♣");
-        text = text.replace("%ALT6%", "♠");
-        text = text.replace("%ALT7%", "•");
-        text = text.replace("%ALT8%", "◘");
-        text = text.replace("%ALT9%", "○");
-        text = text.replace("%ALT10%", "◙");
-        text = text.replace("%ALT11%", "♂");
-        text = text.replace("%ALT12%", "♀");
-        text = text.replace("%ALT13%", "♪");
-        text = text.replace("%ALT14%", "♫");
-        text = text.replace("%ALT15%", "☼");
-        text = text.replace("%ALT16%", "►");
-        text = text.replace("%ALT17%", "◄");
-        text = text.replace("%ALT18%", "↕");
-        text = text.replace("%ALT19%", "‼");
-        text = text.replace("%ALT20%", "¶");
-        text = text.replace("%ALT21%", "§");
-        text = text.replace("%ALT22%", "▬");
-        text = text.replace("%ALT23%", "↨");
-        text = text.replace("%ALT24%", "↑");
-        text = text.replace("%ALT25%", "↓");
-        text = text.replace("%ALT26%", "→");
-        text = text.replace("%ALT28%", "∟");
-        text = text.replace("%ALT29%", "↔");
-        text = text.replace("%ALT30%", "▲");
-        text = text.replace("%ALT31%", "▼");
-        // Second Section
-        text = text.replace("%ALT127%", "⌂");
-        // Third Section
-        text = text.replace("%ALT0153%", "™");
-        text = text.replace("%ALT0169%", "©");
-        text = text.replace("%ALT0169%", "®");
-        return text;
-    }
-
-    /**
-     * Convert hours to days
-     *
-     * @param hours hours to be converted
-     * @return converted days
-     */
-    private static long convertHoursToDays(final long hours) {
-        return hours / 24;
-    }
-
-    /**
-     * Convert minutes to hours
-     *
-     * @param minutes minutes to be converted
-     * @return converted hours
-     */
-    private static long convertMinutesToHours(final long minutes) {
-        return minutes / 60;
-    }
-
-    /**
-     * Convert seconds to minutes
-     *
-     * @param seconds seconds to be converted
-     * @return converted minutes
-     */
-    private static long convertSecondsToMinutes(final long seconds) {
-        return seconds / 60;
-    }
-
-    /**
      * Convert seconds to D : H : M : S format.
      * Days : Hours : Minutes : Seconds
-     *
      * @param sec seconds to be converted
      * @return seconds converted to the format
      */
@@ -171,7 +92,6 @@ public final class ConvertersAPI {
     /**
      * Convert seconds to M : S format.
      * Minutes : Seconds
-     *
      * @param sec seconds to be converted
      * @return seconds converted to the format
      */
@@ -184,9 +104,8 @@ public final class ConvertersAPI {
 
     /**
      * Convert a string list to a string
-     *
-     * @param list      list with all the strings
-     * @param separator string to separe each string
+     * @param list list with all the strings
+     * @param separator string to split each string
      * @return string unified
      */
     public static String convertListToString(final List<?> list, final String separator) {

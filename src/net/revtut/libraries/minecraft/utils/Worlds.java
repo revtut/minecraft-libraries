@@ -16,12 +16,12 @@ import java.util.logging.Level;
  * @author Joao Silva
  * @version 1.0
  */
-public final class WorldAPI {
+public final class Worlds {
 
     /**
-     * Constructor of WorldAPI
+     * Constructor of Worlds
      */
-    private WorldAPI() {}
+    private Worlds() {}
 
     /**
      * Load a new world to the server.
@@ -138,7 +138,6 @@ public final class WorldAPI {
                 Bukkit.getLogger().log(Level.SEVERE, "'hurtEntities' field does not exist on falling block class.");
                 return false;
             }
-            field.setAccessible(true);
             field.setBoolean(fallingBlock, true);
             field.setAccessible(false);
 
@@ -148,7 +147,6 @@ public final class WorldAPI {
                 Bukkit.getLogger().log(Level.SEVERE, "'fallHurtAmount' field does not exist on falling block class.");
                 return false;
             }
-            field.setAccessible(true);
             field.setFloat(fallingBlock, damage);
             field.setAccessible(false);
 
@@ -158,7 +156,6 @@ public final class WorldAPI {
                 Bukkit.getLogger().log(Level.SEVERE, "'fallHurtMax' field does not exist on falling block class.");
                 return false;
             }
-            field.setAccessible(true);
             field.setInt(fallingBlock, max);
             field.setAccessible(false);
 

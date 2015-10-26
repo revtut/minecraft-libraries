@@ -5,14 +5,11 @@ import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles;
 import net.revtut.libraries.Libraries;
 import net.revtut.libraries.minecraft.maths.*;
 import org.bukkit.*;
-import org.bukkit.Rotation;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 import java.util.List;
-import java.util.Random;
 
 /**
  * Appearance Library.
@@ -104,7 +101,7 @@ public final class Effects {
      * @param enumParticle particle to be played
      */
     public static void circleParticleEffect(final Location center, final double slope, final double radius, final int numberPoints, final EnumParticle enumParticle) {
-        final List<Location> circleLocations = AlgebraAPI.getCircle(center, 0, slope, radius, numberPoints, net.revtut.libraries.minecraft.maths.Rotation.CLOCKWISE);
+        final List<Location> circleLocations = Maths.getCircle(center, 0, slope, radius, numberPoints, net.revtut.libraries.minecraft.maths.Rotation.CLOCKWISE);
         for (final Location playLocation : circleLocations) {
             final PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(enumParticle, false, (float) playLocation.getX(), (float) playLocation.getY(), (float) playLocation.getZ(), 0f, 0f, 0f, 0f, 1);
             Packets.sendParticle(playLocation, particlePacket);
@@ -133,7 +130,7 @@ public final class Effects {
      * @param enumParticle particle to be played
      */
     public static void helixParticleEffect(final Location center, final double height, final double radius, final int numberPoints, final int numberCircles, final EnumParticle enumParticle) {
-        final List<Location> helixLocations = AlgebraAPI.getHelix(center, height, 0, radius, numberPoints, numberCircles, net.revtut.libraries.minecraft.maths.Rotation.CLOCKWISE);
+        final List<Location> helixLocations = Maths.getHelix(center, height, 0, radius, numberPoints, numberCircles, net.revtut.libraries.minecraft.maths.Rotation.CLOCKWISE);
         for (final Location playLocation : helixLocations) {
             final PacketPlayOutWorldParticles particlePacket = new PacketPlayOutWorldParticles(enumParticle, false, (float) playLocation.getX(), (float) playLocation.getY(), (float) playLocation.getZ(), 0f, 0f, 0f, 0f, 1);
             Packets.sendParticle(playLocation, particlePacket);

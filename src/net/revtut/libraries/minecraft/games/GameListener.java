@@ -16,7 +16,7 @@ import net.revtut.libraries.minecraft.games.events.arena.ArenaBucketFillEvent;
 import net.revtut.libraries.minecraft.games.events.player.*;
 import net.revtut.libraries.minecraft.games.player.GamePlayer;
 import net.revtut.libraries.minecraft.games.player.PlayerState;
-import net.revtut.libraries.minecraft.maths.AlgebraAPI;
+import net.revtut.libraries.minecraft.maths.Maths;
 import net.revtut.libraries.minecraft.text.checks.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -611,7 +611,7 @@ public class GameListener implements Listener {
         else
             corners = arena.getCorners();
 
-        if(!AlgebraAPI.isInAABB(event.getTo(), corners[0], corners[1])) {
+        if(!Maths.isInAABB(event.getTo(), corners[0], corners[1])) {
             // Call event
             final PlayerCrossArenaBorderEvent crossArenaBorderEvent = new PlayerCrossArenaBorderEvent(player, arena);
             Bukkit.getPluginManager().callEvent(crossArenaBorderEvent);
@@ -623,7 +623,7 @@ public class GameListener implements Listener {
         }
 
         // Walk event
-        final double distance = AlgebraAPI.distanceBetween(event.getFrom(), event.getTo());
+        final double distance = Maths.distanceBetween(event.getFrom(), event.getTo());
         final PlayerWalkEvent playerWalkEvent = new PlayerWalkEvent(player, arena, distance);
         Bukkit.getPluginManager().callEvent(playerWalkEvent);
 

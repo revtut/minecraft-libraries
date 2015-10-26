@@ -21,10 +21,10 @@ import java.util.Map;
  *
  * <P>Help manage entities</P>
  *
- * @author Jo�o Silva
+ * @author Joao Silva
  * @version 1.0
  */
-public final class EntitiesAPI {
+public final class Entities {
 
     /**
      * Rename a entity

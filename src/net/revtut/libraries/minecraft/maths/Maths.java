@@ -10,29 +10,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Algebra Library.
+ * Maths Library.
  *
- * <P>A library with methods which envolve to maths and mathematics.</P>
+ * <P>A library with methods which envolve mathematics.</P>
  *
  * @author Joao Silva
  * @version 1.0
  */
-public final class AlgebraAPI {
+public final class Maths {
 
     /**
-     * Constructor of AlgebraAPI
+     * Constructor of Maths
      */
-    private AlgebraAPI() {}
+    private Maths() {}
 
     /**
      * Make a location look at another location, in other words, change the pitch/yaw in such manner that,
      * if applied to a player or entity, it will look at the specified location
-     *
      * @param location location to set pitch and yaw
      * @param lookAt location to look at
      * @return location that will look lookAt
      */
-    public static Location locationLookAt(final Location location, final Location lookAt) {
+    public static void setLocationLookAt(final Location location, final Location lookAt) {
         // Values of change in distance (make it relative)
         final double deltaX = lookAt.getX() - location.getX();
         final double deltaY = lookAt.getY() - location.getY();
@@ -65,7 +64,12 @@ public final class AlgebraAPI {
         yaw *= -1 * 180f / (float) Math.PI;
         pitch *= 180f / (float) Math.PI;
 
-        return new Location(location.getWorld(), x, y, z, yaw, pitch);
+        // Update location
+        location.setX(x);
+        location.setY(y);
+        location.setZ(z);
+        location.setYaw(yaw);
+        location.setPitch(pitch);
     }
 
     /**
@@ -75,7 +79,7 @@ public final class AlgebraAPI {
      * @param player player to get the closest player
      * @return closest player
      */
-    public static Player closestPlayer(final List<Player> players, final Player player) {
+    public static Player getClosestPlayer(final List<Player> players, final Player player) {
         Player closest = null;
         double minDistance = Integer.MAX_VALUE;
         for(final Player target : players) {
@@ -96,50 +100,6 @@ public final class AlgebraAPI {
     }
 
     /**
-     * Distance between two locations in meters
-     *
-     * @param initial initial location
-     * @param target target location
-     * @return distance in meters
-     */
-    public static double distanceBetween(final Location initial, final Location target) {
-        final int xI = initial.getBlockX();
-        final int xF = target.getBlockX();
-        final int yI = initial.getBlockY();
-        final int yF = target.getBlockY();
-        final int zI = initial.getBlockZ();
-        final int zF = target.getBlockZ();
-
-        final int deltaX = xF - xI;
-        final int deltaY = yF - yI;
-        final int deltaZ = zF - zI;
-
-        return Math.sqrt((deltaX * deltaX) + (deltaY * deltaY) + (deltaZ * deltaZ));
-    }
-
-    /**
-     * Generates a list with unique random integers
-     *
-     * @param minInteger minimum integer that may be generated
-     * @param maxInteger maximum integer that may be generated
-     * @param numberIntegers number of unique integeres to be generated
-     * @return list with random integers
-     */
-    public static List<Integer> getUniqueRandomIntegers(final int minInteger, final int maxInteger, final int numberIntegers) {
-        if(maxInteger < numberIntegers)
-            return null;
-        final List<Integer> list = new ArrayList<>();
-        int number;
-        for(int i = 0; i < numberIntegers; i++) {
-            do {
-                number = (int) (Math.random() * (maxInteger - minInteger)) + minInteger;
-            } while(list.contains(number));
-            list.add(number);
-        }
-        return list;
-    }
-
-    /**
      * Get a random vector
      * @return random vector
      */
@@ -156,7 +116,6 @@ public final class AlgebraAPI {
 
     /**
      * Get the player that was hit by another one
-     *
      * @param player player to get hit target
      * @return player that was hit
      */
@@ -188,11 +147,55 @@ public final class AlgebraAPI {
             final Vector maximum = targetPos.add(new Vector(0.5, 1.67, 0.5));
 
             if (hasIntersection(playerStart, playerEnd, minimum, maximum))
-                if (hit == null || AlgebraAPI.distanceBetween(hit.getLocation(), playerPos) > AlgebraAPI.distanceBetween(target.getLocation(), playerPos))
+                if (hit == null || Maths.distanceBetween(hit.getLocation(), playerPos) > Maths.distanceBetween(target.getLocation(), playerPos))
                     hit = target;
         }
 
         return hit;
+    }
+
+    /**
+     * Generates a list with unique random integers
+     *
+     * @param minInteger minimum integer that may be generated
+     * @param maxInteger maximum integer that may be generated
+     * @param numberIntegers number of unique integeres to be generated
+     * @return list with random integers
+     */
+    public static List<Integer> getUniqueRandomIntegers(final int minInteger, final int maxInteger, final int numberIntegers) {
+        if(maxInteger < numberIntegers)
+            return null;
+        final List<Integer> list = new ArrayList<>();
+        int number;
+        for(int i = 0; i < numberIntegers; i++) {
+            do {
+                number = (int) (Math.random() * (maxInteger - minInteger)) + minInteger;
+            } while(list.contains(number));
+            list.add(number);
+        }
+        return list;
+    }
+
+    /**
+     * Distance between two locations in meters
+     *
+     * @param initial initial location
+     * @param target target location
+     * @return distance in meters
+     */
+    public static double distanceBetween(final Location initial, final Location target) {
+        final int xI = initial.getBlockX();
+        final int xF = target.getBlockX();
+        final int yI = initial.getBlockY();
+        final int yF = target.getBlockY();
+        final int zI = initial.getBlockZ();
+        final int zF = target.getBlockZ();
+
+        final int deltaX = xF - xI;
+        final int deltaY = yF - yI;
+        final int deltaZ = zF - zI;
+
+        return Math.sqrt((deltaX * deltaX) + (deltaY * deltaY) + (deltaZ * deltaZ));
     }
 
     /**
