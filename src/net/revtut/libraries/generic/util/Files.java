@@ -6,6 +6,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 /**
  * Files Library.
@@ -149,6 +151,55 @@ public final class Files {
             e.printStackTrace();
             return false;
         }
+        return true;
+    }
+
+    /**
+     * Unzip a file to a directory
+     * @param zipFile zip file to be unzip
+     * @param outputFolder output folder of the unzip file
+     * @return true if successfully, false otherwise
+     */
+    public static boolean unzipFile(final File zipFile, final File outputFolder) {
+        final byte[] buffer = new byte[2048];
+
+        try {
+            final FileInputStream fInput = new FileInputStream(zipFile);
+            final ZipInputStream zipInput = new ZipInputStream(fInput);
+
+            ZipEntry entry = zipInput.getNextEntry();
+
+            while(entry != null) {
+                final String entryName = entry.getName();
+                final File file = new File(outputFolder.getName() + File.separator + entryName);
+
+                // Create the directories of the ZIP file
+                if(entry.isDirectory()) {
+                    if(!file.exists() && !file.mkdirs())
+                            Bukkit.getLogger().log(Level.WARNING, "Error while creating folder " + file.getName() + ".");
+                } else {
+                    final FileOutputStream fOutput = new FileOutputStream(file);
+                    int count;
+                    while ((count = zipInput.read(buffer)) > 0)
+                        fOutput.write(buffer, 0, count); // Write 'count' bytes to the file output stream
+                    fOutput.close();
+                }
+
+                // Close current ZIP entry and get the next one
+                zipInput.closeEntry();
+                entry = zipInput.getNextEntry();
+            }
+
+            // close the last ZipEntry
+            zipInput.closeEntry();
+
+            zipInput.close();
+            fInput.close();
+        } catch (final IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
         return true;
     }
 }

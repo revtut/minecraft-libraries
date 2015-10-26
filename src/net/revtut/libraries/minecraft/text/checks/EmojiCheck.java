@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Caps Lock Check
+ * Emoji Check
  */
 public class EmojiCheck implements Check {
 

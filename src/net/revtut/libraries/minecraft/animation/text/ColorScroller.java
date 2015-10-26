@@ -1,4 +1,4 @@
-package net.revtut.libraries.minecraft.text.scroller;
+package net.revtut.libraries.minecraft.animation.text;
 
 import org.bukkit.ChatColor;
 
@@ -44,6 +44,38 @@ public class ColorScroller extends Scroller {
         this.base1 = base1;
         this.base2 = base2;
         this.scroll = scroll;
+    }
+
+    /**
+     * Get the previous string for the scroller
+     * @return previous string for the scroller
+     */
+    public String previous() {
+        position--;
+        if(position < 0)
+            position = text.length() - 1;
+
+        // Build the string
+        final StringBuilder builder = new StringBuilder(text);
+        builder.insert(position, scroll);
+        int endPosition = (position + 2) + length; // Position + 2 because a color is two characters
+        if(endPosition >= builder.length()) {
+            // Swap colors
+            final ChatColor temp = base1;
+            base1 = base2;
+            base2 = temp;
+
+            endPosition -= builder.length();
+
+            builder.insert(endPosition, base2);
+            builder.insert(0, scroll);
+        } else {
+            builder.insert(endPosition, base2);
+            builder.insert(0, base1);
+        }
+
+
+        return builder.toString();
     }
 
     /**

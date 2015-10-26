@@ -4,6 +4,7 @@ import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -100,17 +101,28 @@ public final class ItemAPI {
      * Randomize a item stack
      * @param materials possible materials for the item
      * @param enchants possible enchantments for the item
+     * @param maxEnchantLevel maximum level of the enchantment
+     * @return randomized item stack
+     */
+    public static ItemStack randomizeItem(final Material[] materials, final Enchantment[] enchants, final double maxEnchantLevel) {
+        return randomizeItem(materials, enchants, 1, maxEnchantLevel);
+    }
+
+    /**
+     * Randomize a item stack
+     * @param materials possible materials for the item
+     * @param enchants possible enchantments for the item
      * @param enchantProbability probability of an enchantment be applied to an item
      * @param maxEnchantLevel maximum level of the enchantment
      * @return randomized item stack
      */
-    public static ItemStack randomizeItem(final Material[] materials, final org.bukkit.enchantments.Enchantment[] enchants, final double enchantProbability, final double maxEnchantLevel) {
+    public static ItemStack randomizeItem(final Material[] materials, final Enchantment[] enchants, final double enchantProbability, final double maxEnchantLevel) {
         // ItemStack
         final ItemStack itemStack = new ItemStack(materials[(int) (Math.random() * materials.length)]);
 
         // Enchantment
         if (Math.random() < enchantProbability) {
-            final org.bukkit.enchantments.Enchantment enchant = enchants[(int) (Math.random() * enchants.length)]; // Enchantment
+            final Enchantment enchant = enchants[(int) (Math.random() * enchants.length)]; // Enchantment
             if (enchant.canEnchantItem(itemStack))
                 itemStack.addUnsafeEnchantment(enchant, (int) (Math.random() * maxEnchantLevel) + 1);
         }

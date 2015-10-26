@@ -1,7 +1,7 @@
 package net.revtut.libraries.minecraft.scoreboard.label;
 
 import net.revtut.libraries.minecraft.scoreboard.InfoBoardLabel;
-import net.revtut.libraries.minecraft.text.scroller.Scroller;
+import net.revtut.libraries.minecraft.animation.text.Scroller;
 
 /**
  * Scrolling label
@@ -30,6 +30,6 @@ public class ScrollingLabel extends InfoBoardLabel {
     @Override
     public void update() {
         super.update();
-        setText(scroller.next());
+        setText(scroller.scrollLeft());
     }
 }

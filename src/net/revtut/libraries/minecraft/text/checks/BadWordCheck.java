@@ -12,7 +12,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Caps Lock Check
+ * Bad Words Check
  */
 public class BadWordCheck implements Check {
 
