@@ -8,6 +8,8 @@ import net.revtut.libraries.minecraft.games.player.GamePlayer;
 import net.revtut.libraries.minecraft.games.player.PlayerState;
 import net.revtut.libraries.minecraft.games.utils.Color;
 import net.revtut.libraries.minecraft.games.utils.Winner;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -188,8 +190,11 @@ public class Team implements Winner {
      * @param message message to be broadcast
      */
     public void broadcastMessage(final String message) {
-        for(final GamePlayer player : getAllPlayers())
-            player.getBukkitPlayer().sendMessage(message);
+        for(final GamePlayer player : getAllPlayers()) {
+            final Player bukkitPlayer = Bukkit.getPlayer(player.getUuid());
+            if (bukkitPlayer != null)
+                bukkitPlayer.sendMessage(message);
+        }
     }
 
     /**

@@ -3,7 +3,7 @@ package net.revtut.libraries.minecraft.appearance;
 import net.minecraft.server.v1_8_R3.EnumParticle;
 import net.minecraft.server.v1_8_R3.PacketPlayOutWorldParticles;
 import net.revtut.libraries.Libraries;
-import net.revtut.libraries.minecraft.maths.*;
+import net.revtut.libraries.minecraft.maths.Maths;
 import org.bukkit.*;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;

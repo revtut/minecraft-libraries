@@ -14,11 +14,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 /**
@@ -285,20 +287,31 @@ public abstract class Arena {
 
         broadcastMessage(event.getJoinMessage());
 
+        // Get bukkit player
+        final Player bukkitPlayer = Bukkit.getPlayer(player.getUuid());
+        if(bukkitPlayer == null) {
+            Bukkit.getLogger().log(Level.SEVERE, "Bukkit player for " + player.getName() + " is null on join!");
+            return false;
+        }
+
         // Update player
         player.updateState(PlayerState.ALIVE);
         player.setCurrentArena(this);
-        player.getBukkitPlayer().teleport(lobbyLocation);
-        player.getBukkitPlayer().setGameMode(GameMode.ADVENTURE);
+        bukkitPlayer.teleport(lobbyLocation);
+        bukkitPlayer.setGameMode(GameMode.ADVENTURE);
 
         // Visibility configuration
         for(final GamePlayer target : getAllPlayers()) {
-            target.getBukkitPlayer().showPlayer(player.getBukkitPlayer());
+            final Player bukkitTarget = Bukkit.getPlayer(target.getUuid());
+            if(bukkitTarget == null)
+                continue;
+
+            bukkitTarget.showPlayer(bukkitPlayer);
 
             if(target.getState() == PlayerState.SPECTATOR)
-                player.getBukkitPlayer().hidePlayer(target.getBukkitPlayer());
+                bukkitPlayer.hidePlayer(bukkitTarget);
             else if(target.getState() == PlayerState.ALIVE)
-                player.getBukkitPlayer().showPlayer(target.getBukkitPlayer());
+                bukkitPlayer.showPlayer(bukkitTarget);
         }
 
         return true;
@@ -319,11 +332,18 @@ public abstract class Arena {
 
         broadcastMessage(event.getLeaveMessage());
 
+        // Get bukkit player
+        final Player bukkitPlayer = Bukkit.getPlayer(player.getUuid());
+        if(bukkitPlayer == null) {
+            Bukkit.getLogger().log(Level.SEVERE, "Bukkit player for " + player.getName() + " is null on leave!");
+            return false;
+        }
+
         // Update player
         player.updateState(PlayerState.NOT_ASSIGNED);
         player.setCurrentArena(null);
-        player.getBukkitPlayer().teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
-        player.getBukkitPlayer().setGameMode(Bukkit.getDefaultGameMode());
+        bukkitPlayer.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+        bukkitPlayer.setGameMode(Bukkit.getDefaultGameMode());
 
         return true;
     }
@@ -343,16 +363,24 @@ public abstract class Arena {
 
         broadcastMessage(event.getJoinMessage());
 
+        // Get bukkit player
+        final Player bukkitPlayer = Bukkit.getPlayer(player.getUuid());
+        if(bukkitPlayer == null) {
+            Bukkit.getLogger().log(Level.SEVERE, "Bukkit player for " + player.getName() + " is null on spectate!");
+            return false;
+        }
+
         // Update player
         player.updateState(PlayerState.SPECTATOR);
         player.setCurrentArena(this);
-        player.getBukkitPlayer().teleport(lobbyLocation);
-        player.getBukkitPlayer().setGameMode(GameMode.SPECTATOR);
+        bukkitPlayer.teleport(lobbyLocation);
+        bukkitPlayer.setGameMode(GameMode.SPECTATOR);
 
         // Hide to players ingame except spectators
         getAllPlayers().stream()
                 .filter(target -> target.getState() != PlayerState.SPECTATOR)
-                .forEach(target -> player.getBukkitPlayer().hidePlayer(target.getBukkitPlayer()));
+                .filter(target -> Bukkit.getPlayer(target.getUuid()) != null)
+                .forEach(target -> bukkitPlayer.hidePlayer(Bukkit.getPlayer(target.getUuid())));
 
         return true;
     }
@@ -383,8 +411,11 @@ public abstract class Arena {
      * @param message message to be broadcast
      */
     public void broadcastMessage(final String message) {
-        for(final GamePlayer player : getAllPlayers())
-            player.getBukkitPlayer().sendMessage(message);
+        for(final GamePlayer player : getAllPlayers()) {
+            final Player bukkitPlayer = Bukkit.getPlayer(player.getUuid());
+            if (bukkitPlayer != null)
+                bukkitPlayer.sendMessage(message);
+        }
     }
 
     /**
