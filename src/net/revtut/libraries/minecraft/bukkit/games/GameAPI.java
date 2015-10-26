@@ -3,7 +3,9 @@ package net.revtut.libraries.minecraft.bukkit.games;
 import net.revtut.libraries.Libraries;
 import net.revtut.libraries.minecraft.bukkit.games.arena.Arena;
 import net.revtut.libraries.minecraft.bukkit.games.arena.ArenaPreference;
+import net.revtut.libraries.minecraft.bukkit.games.arena.session.GameState;
 import net.revtut.libraries.minecraft.bukkit.games.player.GamePlayer;
+import net.revtut.libraries.minecraft.bukkit.games.player.PlayerState;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -240,5 +242,35 @@ public class GameAPI {
         // Create more arenas if needed
         if(gameController.getAvailableArenas().size() <= 1)
             gameController.createArena(arena.getType());
+    }
+
+    /**
+     * Leave a game arena
+     * @param player player to leave
+     * @param arena arena to be left
+     */
+    public void leaveGame(final GamePlayer player, final Arena arena) {
+        arena.leave(player);
+
+        // Delete arena if needed and join randomly all the remaining players
+        if(arena.getSession() != null && arena.getSession().getState() != GameState.LOBBY) {
+            if(arena.getPlayers(PlayerState.ALIVE).size() <= 1) {
+                for(final GamePlayer target : new ArrayList<>(arena.getAllPlayers())) {
+                    if(target == player)
+                        continue;
+                    final Player targetBukkitPlayer = Bukkit.getPlayer(target.getUuid());
+                    if(targetBukkitPlayer == null)
+                        continue;
+                    arena.leave(target);
+
+                    // Join game
+                    joinRandomGame(target);
+                }
+                final GameController arenaController = GameAPI.getInstance().getGameController(arena);
+                if(arenaController == null)
+                    return;
+                arenaController.removeArena(arena);
+            }
+        }
     }
 }

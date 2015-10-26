@@ -667,33 +667,7 @@ public class GameListener implements Listener {
         if(arena == null)
             return;
 
-        arena.leave(player);
-
-        // Delete arena if needed and join randomly all the remaining players
-        if(arena.getSession() != null && arena.getSession().getState() != GameState.LOBBY) {
-            if(arena.getPlayers(PlayerState.ALIVE).size() <= 1) {
-                for(final GamePlayer target : new ArrayList<>(arena.getAllPlayers())) {
-                    if(target == player)
-                        continue;
-                    final Player targetBukkitPlayer = Bukkit.getPlayer(target.getUuid());
-                    if(targetBukkitPlayer == null)
-                        continue;
-                    arena.leave(target);
-
-                    // Join random game
-                    final GameController gameController = gameAPI.getRandomGame();
-                    final Arena targetArena = gameController.getAvailableArena(ArenaPreference.MORE_PLAYERS);
-
-                    // No arena available or not allowed to join the arena
-                    if(targetArena == null || !arena.join(target)) // TODO Message user why he was reconnected
-                        Libraries.getInstance().getNetwork().connectPlayer(targetBukkitPlayer, "hub");
-                }
-                final GameController arenaController = GameAPI.getInstance().getGameController(arena);
-                if(arenaController == null)
-                    return;
-                arenaController.removeArena(arena);
-            }
-        }
+        gameAPI.leaveGame(player, arena);
     }
 
     /**
