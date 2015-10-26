@@ -2,10 +2,8 @@ package net.revtut.libraries.minecraft.appearance;
 
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -18,10 +16,10 @@ import java.util.List;
  *
  * <P>Help make items with simple methods</P>
  *
- * @author Jo�o Silva
+ * @author Joao Silva
  * @version 1.0
  */
-public final class ItemAPI {
+public final class Items {
 
     /**
      * Create a ItemStack
@@ -93,8 +91,8 @@ public final class ItemAPI {
      * @param materials possible materials for the item
      * @return randomized item stack
      */
-    public static ItemStack randomizeItem(final Material[] materials) {
-        return randomizeItem(materials, null, -1, -1);
+    public static ItemStack getRandomItem(final Material[] materials) {
+        return getRandomItem(materials, null, -1, -1);
     }
 
     /**
@@ -104,8 +102,8 @@ public final class ItemAPI {
      * @param maxEnchantLevel maximum level of the enchantment
      * @return randomized item stack
      */
-    public static ItemStack randomizeItem(final Material[] materials, final Enchantment[] enchants, final double maxEnchantLevel) {
-        return randomizeItem(materials, enchants, 1, maxEnchantLevel);
+    public static ItemStack getRandomItem(final Material[] materials, final Enchantment[] enchants, final double maxEnchantLevel) {
+        return getRandomItem(materials, enchants, 1, maxEnchantLevel);
     }
 
     /**
@@ -116,7 +114,7 @@ public final class ItemAPI {
      * @param maxEnchantLevel maximum level of the enchantment
      * @return randomized item stack
      */
-    public static ItemStack randomizeItem(final Material[] materials, final Enchantment[] enchants, final double enchantProbability, final double maxEnchantLevel) {
+    public static ItemStack getRandomItem(final Material[] materials, final Enchantment[] enchants, final double enchantProbability, final double maxEnchantLevel) {
         // ItemStack
         final ItemStack itemStack = new ItemStack(materials[(int) (Math.random() * materials.length)]);
 
@@ -128,21 +126,5 @@ public final class ItemAPI {
         }
 
         return itemStack;
-    }
-
-    /**
-     * Open an anvil menu to player
-     * @param player player to open the anvil menu
-     */
-    public static void openAnvil(final Player player) {
-        final EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
-
-        final AnvilContainer container = new AnvilContainer(entityPlayer);
-
-        final int containerCounter = entityPlayer.nextContainerCounter();
-        entityPlayer.playerConnection.sendPacket(new PacketPlayOutOpenWindow(containerCounter, "minecraft:anvil", new ChatMessage("Repairing"), 0));
-        entityPlayer.activeContainer = container;
-        entityPlayer.activeContainer.windowId = containerCounter;
-        entityPlayer.activeContainer.addSlotListener(entityPlayer);
     }
 }

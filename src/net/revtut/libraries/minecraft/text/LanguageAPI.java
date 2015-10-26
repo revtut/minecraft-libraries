@@ -19,7 +19,7 @@ import java.util.logging.Level;
 public final class LanguageAPI {
 
     /**
-     * Constructor of AppearanceAPI
+     * Constructor of Effects
      */
     private LanguageAPI() {}
 

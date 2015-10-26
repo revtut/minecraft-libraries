@@ -19,7 +19,7 @@ import org.bukkit.scoreboard.Team;
  * @author Joao Silva
  * @version 1.0
  */
-public final class NameTagAPI implements Listener {
+public final class NameTag implements Listener {
 
     /**
      * Hide name tag of a player.
