@@ -2,6 +2,7 @@ package net.revtut.libraries.minecraft.bukkit.games;
 
 import net.revtut.libraries.Libraries;
 import net.revtut.libraries.minecraft.bukkit.games.arena.Arena;
+import net.revtut.libraries.minecraft.bukkit.games.arena.ArenaPreference;
 import net.revtut.libraries.minecraft.bukkit.games.player.GamePlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -202,5 +203,42 @@ public class GameAPI {
             target.hidePlayer(player);
             player.hidePlayer(target);
         }
+    }
+
+    /**
+     * Join a random game
+     * @param player player to join a random game
+     */
+    public void joinRandomGame(final GamePlayer player) {
+        // Hide every player
+        final Player bukkitPlayer = Bukkit.getPlayer(player.getUuid());
+        if(bukkitPlayer != null)
+            hideServer(bukkitPlayer);
+
+        // Join random game
+        final GameController gameController = getRandomGame();
+        joinGame(player, gameController);
+
+    }
+
+    /**
+     * Join a game
+     * @param player player to join the game
+     * @param gameController game to be joined
+     */
+    public void joinGame(final GamePlayer player, final GameController gameController) {
+        final Arena arena = gameController.getAvailableArena(ArenaPreference.MORE_PLAYERS);
+
+        // No arena available or not allowed to join the arena
+        if(arena == null || !arena.join(player)) {
+            final Player bukkitPlayer = Bukkit.getPlayer(player.getUuid());
+            if(bukkitPlayer != null)
+                Libraries.getInstance().getNetwork().connectPlayer(bukkitPlayer, "hub");
+            return;
+        }
+
+        // Create more arenas if needed
+        if(gameController.getAvailableArenas().size() <= 1)
+            gameController.createArena(arena.getType());
     }
 }

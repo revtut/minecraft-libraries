@@ -549,26 +549,12 @@ public class GameListener implements Listener {
 
         final Player bukkitPlayer = event.getPlayer();
 
-        // Hide every player
-        gameAPI.hideServer(event.getPlayer());
-
-        // Get needed data
+        // Create game player
         final GamePlayer player = new GamePlayer(bukkitPlayer.getUniqueId(), bukkitPlayer.getName(), Language.getByCode(bukkitPlayer.spigot().getLocale()));
         // TODO get database information about the player
 
-        // Join random game
-        final GameController gameController = gameAPI.getRandomGame();
-        final Arena arena = gameController.getAvailableArena(ArenaPreference.MORE_PLAYERS);
-
-        // No arena available or not allowed to join the arena
-        if(arena == null || !arena.join(player)) {
-            Libraries.getInstance().getNetwork().connectPlayer(bukkitPlayer, "hub");
-            return;
-        }
-
-        // Create more arenas if needed
-        if(gameController.getAvailableArenas().size() <= 1)
-            gameController.createArena(arena.getType());
+        // Join the game
+        gameAPI.joinRandomGame(player);
     }
 
     /**
