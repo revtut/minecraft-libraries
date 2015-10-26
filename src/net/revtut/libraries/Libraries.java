@@ -1,7 +1,7 @@
 package net.revtut.libraries;
 
-import net.revtut.libraries.minecraft.network.NetworkHandler;
-import net.revtut.libraries.minecraft.network.bungee.BungeeHandler;
+import net.revtut.libraries.minecraft.bukkit.network.NetworkHandler;
+import net.revtut.libraries.minecraft.bukkit.network.bungee.BungeeHandler;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
