@@ -4,7 +4,7 @@ import net.minecraft.server.v1_8_R3.*;
 import net.revtut.libraries.minecraft.entities.goals.PetGoalFollowEntity;
 import net.revtut.libraries.minecraft.entities.goals.PetGoalLookEntity;
 import net.revtut.libraries.minecraft.entities.goals.PetGoalRideByEntity;
-import net.revtut.libraries.minecraft.utils.ReflectionAPI;
+import net.revtut.libraries.minecraft.utils.Reflection;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
@@ -120,7 +120,7 @@ public final class EntitiesAPI {
                 final EntityInsentient entityInsentient = (EntityInsentient) entityLiving;
 
                 // Get "b"
-                final Field bSelector = ReflectionAPI.getField(PathfinderGoalSelector.class, "b");
+                final Field bSelector = Reflection.getField(PathfinderGoalSelector.class, "b");
                 if(bSelector == null)
                     return;
                 bSelector.setAccessible(true);
@@ -147,7 +147,7 @@ public final class EntitiesAPI {
                 final EntityInsentient entityInsentient = (EntityInsentient) entityLiving;
 
                 // Get "b"
-                final Field bSelector = ReflectionAPI.getField(PathfinderGoalSelector.class, "b");
+                final Field bSelector = Reflection.getField(PathfinderGoalSelector.class, "b");
                 if(bSelector == null)
                     return;
                 bSelector.setAccessible(true);

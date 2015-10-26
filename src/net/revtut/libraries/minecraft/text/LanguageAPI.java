@@ -1,6 +1,6 @@
 package net.revtut.libraries.minecraft.text;
 
-import net.revtut.libraries.minecraft.utils.ReflectionAPI;
+import net.revtut.libraries.minecraft.utils.Reflection;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -31,7 +31,7 @@ public final class LanguageAPI {
      */
     public static Language getLanguageReflection(final Player player){
         try {
-            final Method getHandle = ReflectionAPI.getMethod(player.getClass(), "getHandle");
+            final Method getHandle = Reflection.getMethod(player.getClass(), "getHandle");
             if(getHandle == null) {
                 Bukkit.getLogger().log(Level.SEVERE, "'getHandle' method does not exist on player class.");
                 return null;
@@ -43,7 +43,7 @@ public final class LanguageAPI {
                 return null;
             }
 
-            final Field field = ReflectionAPI.getField(playerMethod.getClass(), "locale");
+            final Field field = Reflection.getField(playerMethod.getClass(), "locale");
             if(field == null) {
                 Bukkit.getLogger().log(Level.SEVERE, "'locale' field not found on player class.");
                 return null;

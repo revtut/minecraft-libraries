@@ -14,12 +14,12 @@ import java.util.logging.Level;
  * @author Joao Silva
  * @version 1.0
  */
-public final class ReflectionAPI {
+public final class Reflection {
 
     /**
-     * Constructor of ReflectionAPI
+     * Constructor of Reflection
      */
-    private ReflectionAPI() {}
+    private Reflection() {}
 
     /**
      * Get version of Minecraft.
@@ -109,13 +109,13 @@ public final class ReflectionAPI {
      */
     public static Object getHandle(final Object obj) {
         try {
-            final Method getHandle = getMethod(obj.getClass(), "getHandle", new Class[0]);
+            final Method getHandle = getMethod(obj.getClass(), "getHandle");
             if(getHandle == null) {
                 Bukkit.getLogger().log(Level.SEVERE, "'getHandle' method does not exist on this object.");
                 return null;
             }
 
-            return getHandle.invoke(obj, new Object[0]);
+            return getHandle.invoke(obj, new Object());
         } catch (final Exception e) {
             e.printStackTrace();
         }

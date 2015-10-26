@@ -122,8 +122,8 @@ public final class WorldAPI {
     public static boolean changeFallingBlockDamage(final FallingBlock block, final float damage, final int max) {
         try {
             // Falling block
-            Class classzz = ReflectionAPI.getOBCClass("entity.CraftFallingSand");
-            final Method getHandle = ReflectionAPI.getMethod(classzz, "getHandle");
+            Class classzz = Reflection.getOBCClass("entity.CraftFallingSand");
+            final Method getHandle = Reflection.getMethod(classzz, "getHandle");
             if(getHandle == null) {
                 Bukkit.getLogger().log(Level.SEVERE, "'getHandle' method does not exist on falling block class.");
                 return false;
@@ -132,8 +132,8 @@ public final class WorldAPI {
             final Object fallingBlock = getHandle.invoke(block);
 
             // Enable falling block damage
-            classzz = ReflectionAPI.getNMSClass("EntityFallingBlock");
-            Field field = ReflectionAPI.getField(classzz, "hurtEntities");
+            classzz = Reflection.getNMSClass("EntityFallingBlock");
+            Field field = Reflection.getField(classzz, "hurtEntities");
             if(field == null) {
                 Bukkit.getLogger().log(Level.SEVERE, "'hurtEntities' field does not exist on falling block class.");
                 return false;
@@ -143,7 +143,7 @@ public final class WorldAPI {
             field.setAccessible(false);
 
             // Set the hurt amount of a falling block
-            field = ReflectionAPI.getField(classzz, "fallHurtAmount");
+            field = Reflection.getField(classzz, "fallHurtAmount");
             if(field == null) {
                 Bukkit.getLogger().log(Level.SEVERE, "'fallHurtAmount' field does not exist on falling block class.");
                 return false;
@@ -153,7 +153,7 @@ public final class WorldAPI {
             field.setAccessible(false);
 
             // Set the maximum hurt amount of a falling block
-            field = ReflectionAPI.getField(classzz, "fallHurtMax");
+            field = Reflection.getField(classzz, "fallHurtMax");
             if(field == null) {
                 Bukkit.getLogger().log(Level.SEVERE, "'fallHurtMax' field does not exist on falling block class.");
                 return false;
