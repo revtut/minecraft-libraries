@@ -1,7 +1,5 @@
 package net.revtut.libraries.minecraft.common.player;
 
-import net.revtut.libraries.minecraft.bukkit.games.achievements.Achievement;
-import net.revtut.libraries.minecraft.bukkit.games.statistics.Statistic;
 import net.revtut.libraries.minecraft.common.text.Language;
 
 import java.util.*;

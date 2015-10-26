@@ -1,4 +1,4 @@
-package net.revtut.libraries.minecraft.bukkit.games.statistics;
+package net.revtut.libraries.minecraft.common.player;
 
 import java.util.ArrayList;
 import java.util.List;
