@@ -47,7 +47,7 @@ public class GameAPI {
         // Run the tick task
         Bukkit.getScheduler().runTaskTimer(Libraries.getInstance(), () -> {
             for(GameController gameController : games)
-                gameController.getArenas().stream()
+                new ArrayList<>(gameController.getArenas()).stream()
                         .filter(arena -> arena.getSession() != null)
                         .forEach(arena -> arena.getSession().tick());
         }, 20L, 20L);
