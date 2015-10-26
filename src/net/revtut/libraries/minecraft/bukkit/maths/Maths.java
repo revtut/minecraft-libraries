@@ -29,7 +29,6 @@ public final class Maths {
      * if applied to a player or entity, it will look at the specified location
      * @param location location to set pitch and yaw
      * @param lookAt location to look at
-     * @return location that will look lookAt
      */
     public static void setLocationLookAt(final Location location, final Location lookAt) {
         // Values of change in distance (make it relative)

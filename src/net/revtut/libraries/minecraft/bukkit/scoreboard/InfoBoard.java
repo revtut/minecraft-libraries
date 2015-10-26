@@ -25,7 +25,7 @@ public class InfoBoard {
     /**
      * Bukkit scoreboard
      */
-    private Scoreboard scoreboard;
+    private final Scoreboard scoreboard;
 
     /**
      * Scoreboard objective
@@ -40,7 +40,7 @@ public class InfoBoard {
     /**
      * Map with all the information labels
      */
-    private List<InfoBoardLabel> infoLabels;
+    private final List<InfoBoardLabel> infoLabels;
 
     /**
      * Constructor of InfoBoard

@@ -10,7 +10,7 @@ public abstract class InfoBoardLabel {
     /**
      * Identification of the label
      */
-    private String id;
+    private final String id;
 
     /**
      * Text of the label
