@@ -154,7 +154,7 @@ while(result.next()) {
 
 Also insert updates?
 ```java
-String update = "INSERT INTO Players(UUID uuid, String name) VALUES (?, ?)";
+String update = "INSERT INTO Players(UUID, Name) VALUES (?, ?)";
 List<Object> parameters = new ArrayList();
 parameters.add(player.getUuid()); // Parameters must be sorted accordingly with the statement
 parameters.add(player.getName());
