@@ -40,7 +40,7 @@ public class CapsCheck implements Check {
      */
     @Override
     public String getErrorMessage() {
-        return "ง4You may not write in caps lock here!";
+        return "ยง4You may not write in caps lock here!";
     }
 
     /**

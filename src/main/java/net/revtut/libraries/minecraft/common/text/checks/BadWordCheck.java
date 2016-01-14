@@ -72,7 +72,7 @@ public class BadWordCheck implements Check {
      */
     @Override
     public String getErrorMessage() {
-        return "ง4You may not use bad words here!";
+        return "ยง4You may not use bad words here!";
     }
 
     /**

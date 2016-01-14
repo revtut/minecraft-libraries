@@ -2,15 +2,14 @@ version = '1.0.0-beta'
 
 repositories() {
     mavenCentral()
-    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+    maven { url 'https://repo.techcable.net/content/groups/public/' }
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
 }
 
 apply plugin: 'java'
 
 dependencies {
-    compile 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
-    compile 'org.bukkit:bukkit:1.8.8-R0.1-SNAPSHOT'
+    compile 'org.spigotmc:spigot:1.8.8-R0.1-SNAPSHOT'
     compile 'net.md-5:bungeecord-chat:1.8-SNAPSHOT'
 }
 

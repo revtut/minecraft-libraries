@@ -50,7 +50,7 @@ public class AdvertisementCheck implements Check {
      */
     @Override
     public String getErrorMessage() {
-        return "ง4You may not advertise here!";
+        return "ยง4You may not advertise here!";
     }
 
     /**
