@@ -4,7 +4,7 @@ version = '1.0.0-beta'
 archivesBaseName = 'Libraries'
 
 dependencies {
-    compile files('src/main/resources/libs/paperSpigot.jar')
+    compile files('src/main/resources/libs/spigot.jar')
 }
 
 sourceSets {
@@ -23,6 +23,5 @@ processResources {
 jar {
     doFirst {
         exclude 'libs/**'
-        exclude 'META-INF'
     }
 }
