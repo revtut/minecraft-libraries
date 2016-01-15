@@ -30,7 +30,7 @@ However there are lots of missing functions and methods that would make a plugin
     * Pair
 * Files
     * Read lines of a file
-    * Copy and delete files / directories             
+    * Copy and delete files / directories
 
 ### Minecraft
 * Appearance
@@ -102,7 +102,7 @@ However there are lots of missing functions and methods that would make a plugin
 * Teams
 * Utils
     * Custom colors
-    
+
 ## <a name="setup_minigame"></a>Setup Minigame
 
 In order to use this minigame API first you have to register your minigame. You need to have a folder where you keep all the *sample worlds* for being loaded on the fly.
