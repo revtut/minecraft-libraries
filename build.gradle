@@ -1,18 +1,28 @@
-version = '1.0.0-beta'
-
-repositories {
-    mavenCentral()
-    maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
-}
-
 apply plugin: 'java'
 
+version = '1.0.0-beta'
+archivesBaseName = 'Libraries'
+
 dependencies {
-    runtime files('src/main/resources/spigot.jar')
-    compile 'net.md-5:bungeecord-chat:1.8-SNAPSHOT'
+    compile files('src/main/resources/libs/paperSpigot.jar')
 }
 
 sourceSets {
-    main.java.srcDir 'src/main'
-    test.java.srcDir 'src/test'
+    main.java.srcDir 'src/main/java'
+    test.java.srcDir 'src/test/java'
+}
+
+processResources {
+    from('src/main/resources/plugin.yml') {
+        filter {
+            String line -> line.replace 'version:', 'version: ' + version
+        }
+    }
+}
+
+jar {
+    doFirst {
+        exclude 'libs/**'
+        exclude 'META-INF'
+    }
 }
