@@ -1,0 +1,7 @@
+image: java
+
+build:
+    script:
+        - gradle version
+        - gradle build
+
