@@ -2,7 +2,6 @@ apply plugin: 'java'
 
 group = group
 version = version
-archivesBaseName = name
 
 dependencies {
     compile files('src/main/resources/libs/spigot.jar')

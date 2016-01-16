@@ -1,7 +1,7 @@
 package net.revtut.libraries.minecraft.bukkit.scoreboard.label;
 
-import net.revtut.libraries.minecraft.common.animation.text.Scroller;
 import net.revtut.libraries.minecraft.bukkit.scoreboard.InfoBoardLabel;
+import net.revtut.libraries.minecraft.common.animation.text.Scroller;
 
 /**
  * Scrolling label

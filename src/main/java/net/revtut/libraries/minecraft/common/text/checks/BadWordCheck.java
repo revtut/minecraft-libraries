@@ -29,7 +29,7 @@ public class BadWordCheck implements Check {
      */
     static {
         // Bad Words
-        final InputStream inputStream = Libraries.getInstance().getResource("resources/badwords.txt");
+        final InputStream inputStream = Libraries.getInstance().getResource("utils/badwords.txt");
         BAD_WORDS = Files.getLines(inputStream);
 
         // Replace symbols
