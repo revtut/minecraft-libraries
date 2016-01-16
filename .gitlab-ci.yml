@@ -5,7 +5,7 @@ before_script:
     - apt-get --quiet install --yes wget unzip
     - wget --quiet --output-document=gradle.zip https://services.gradle.org/distributions/gradle-2.10-bin.zip
     - unzip -q gradle.zip
-    - wget --quiet --output-document=src/main/resources/lib/spigot.jar http://getspigot.org/jenkins/job/PaperSpigot/lastSuccessfulBuild/artifact/paperspigot-1.8.8.jar
+    - wget --quiet --output-document=src/main/resources/libs/spigot.jar http://getspigot.org/jenkins/job/PaperSpigot/lastSuccessfulBuild/artifact/paperspigot-1.8.8.jar
 
 build:
     script:
