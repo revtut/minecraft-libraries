@@ -1,7 +1,8 @@
 apply plugin: 'java'
 
-version = '1.0.0-beta'
-archivesBaseName = 'Libraries'
+group = group
+version = version
+archivesBaseName = name
 
 dependencies {
     compile files('src/main/resources/libs/spigot.jar')
