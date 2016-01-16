@@ -1,7 +1,9 @@
-image: java
+before-script:
+    - wget --quiet --output-document=gradle.zip https://services.gradle.org/distributions/gradle-2.10-bin.zip
+    - unzip -q gradle.zip
 
 build:
     script:
-        - gradle version
-        - gradle build
+        - gradle-2.10/bin/gradle version
+        - gradle-2.10/bin/gradle build
 
