@@ -9,6 +9,6 @@ before_script:
 build:
     script:
         - java -version
-        - gradle-2.10/bin/gradle version
+        - gradle-2.10/bin/gradle -version
         - gradle-2.10/bin/gradle build
 
