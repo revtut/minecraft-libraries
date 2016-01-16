@@ -1,4 +1,4 @@
-before-script:
+before_script:
     - wget --quiet --output-document=gradle.zip https://services.gradle.org/distributions/gradle-2.10-bin.zip
     - unzip -q gradle.zip
 
