@@ -1,11 +1,13 @@
 before_script:
+    - add-apt-repository ppa:webupd8team/java
     - apt-get --quiet update --yes
-    - apt-get --quiet install --yes wget unzip openjdk-8-jdk
+    - apt-get --quiet install --yes wget unzip oracle-java8-set-default
     - wget --quiet --output-document=gradle.zip https://services.gradle.org/distributions/gradle-2.10-bin.zip
     - unzip -q gradle.zip
 
 build:
     script:
+        - java -version
         - gradle-2.10/bin/gradle version
         - gradle-2.10/bin/gradle build
 
