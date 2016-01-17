@@ -191,4 +191,4 @@ Well there you go! You have a gorgeous scoreboard with no effort at all!
 
 ## <a name="credits"></a>Credits
 
-This plugin is being developed by [João Silva](https://gitlab.com/u/RevTut). Some of the methods were adapted from existing ones that may be found either on [Bukkit](http://bukkit.org/forums/) or [Spigot](https://www.spigotmc.org/forums/) forum.
+This plugin is being developed by [João Silva](https://gitlab.com/u/joaosilva2095). Some of the methods were adapted from existing ones that may be found either on [Bukkit](http://bukkit.org/forums/) or [Spigot](https://www.spigotmc.org/forums/) forum.
