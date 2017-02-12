@@ -1,6 +1,6 @@
-package org.assis.api.libs.database;
+package net.revtut.libraries.generic.database;
 
-import org.assis.api.libs.database.utils.DataType;
+import net.revtut.libraries.generic.database.utils.DataType;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;

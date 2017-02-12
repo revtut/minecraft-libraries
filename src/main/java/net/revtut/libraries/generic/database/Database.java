@@ -1,10 +1,10 @@
-package org.assis.api.libs.database;
+package net.revtut.libraries.generic.database;
 
 
-import org.assis.api.libs.database.types.DatabaseType;
-import org.assis.api.libs.database.types.MySQL;
-import org.assis.api.libs.database.types.OracleSQL;
-import org.assis.api.libs.database.types.PostgreSQL;
+import net.revtut.libraries.generic.database.types.DatabaseType;
+import net.revtut.libraries.generic.database.types.MySQL;
+import net.revtut.libraries.generic.database.types.OracleSQL;
+import net.revtut.libraries.generic.database.types.PostgreSQL;
 
 import java.sql.*;
 import java.util.List;

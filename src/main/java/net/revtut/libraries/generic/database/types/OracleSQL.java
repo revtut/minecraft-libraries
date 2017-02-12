@@ -1,6 +1,6 @@
-package org.assis.api.libs.database.types;
+package net.revtut.libraries.generic.database.types;
 
-import org.assis.api.libs.database.Database;
+import net.revtut.libraries.generic.database.Database;
 
 /**
  * OracleSQL Database

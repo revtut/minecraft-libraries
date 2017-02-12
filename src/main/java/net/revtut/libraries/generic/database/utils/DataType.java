@@ -1,4 +1,4 @@
-package org.assis.api.libs.database.utils;
+package net.revtut.libraries.generic.database.utils;
 
 /**
  * Data Type for MySQL

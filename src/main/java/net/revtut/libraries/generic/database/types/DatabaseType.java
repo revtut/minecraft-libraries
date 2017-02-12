@@ -1,4 +1,4 @@
-package org.assis.api.libs.database.types;
+package net.revtut.libraries.generic.database.types;
 
 /**
  * Types of Databases
