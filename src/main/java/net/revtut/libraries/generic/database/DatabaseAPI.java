@@ -1,6 +1,6 @@
-package net.revtut.libraries.generic.database;
+package org.assis.api.libs.database;
 
-import net.revtut.libraries.generic.database.utils.DataType;
+import org.assis.api.libs.database.utils.DataType;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class DatabaseAPI {
      * @param where columns of the "Where" condition
      * @param whereValues values of the where columns
      */
-    public static ResultSet executeQuery(final Database database, final String tableName, final List<String> columns, final List<String> where, final List<String> whereValues) {
+    public static ResultSet executeQuery(final Database database, final String tableName, final List<String> columns, final List<String> where, final List<Object> whereValues) {
         String sql = "SELECT ";
 
         // Columns to select

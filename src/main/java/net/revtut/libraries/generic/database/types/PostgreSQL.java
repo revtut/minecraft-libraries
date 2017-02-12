@@ -1,6 +1,6 @@
-package net.revtut.libraries.generic.database.types;
+package org.assis.api.libs.database.types;
 
-import net.revtut.libraries.generic.database.Database;
+import org.assis.api.libs.database.Database;
 
 /**
  * PostgreSQL Database

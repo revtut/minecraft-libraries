@@ -1,9 +1,10 @@
-package net.revtut.libraries.generic.database;
+package org.assis.api.libs.database;
 
-import net.revtut.libraries.generic.database.types.DatabaseType;
-import net.revtut.libraries.generic.database.types.MySQL;
-import net.revtut.libraries.generic.database.types.OracleSQL;
-import net.revtut.libraries.generic.database.types.PostgreSQL;
+
+import org.assis.api.libs.database.types.DatabaseType;
+import org.assis.api.libs.database.types.MySQL;
+import org.assis.api.libs.database.types.OracleSQL;
+import org.assis.api.libs.database.types.PostgreSQL;
 
 import java.sql.*;
 import java.util.List;
@@ -40,8 +41,9 @@ public abstract class Database {
 
     /**
      * Constructor of Database
-     * @param driver driver of the database
-     * @param url url for connecting to the database
+     *
+     * @param driver   driver of the database
+     * @param url      url for connecting to the database
      * @param username username of the database
      * @param password password of the database
      */
@@ -54,6 +56,7 @@ public abstract class Database {
 
     /**
      * Create a database
+     *
      * @param type type of the database
      * @return created database
      */
@@ -72,6 +75,7 @@ public abstract class Database {
 
     /**
      * Get the connection to a database
+     *
      * @return connection to database
      */
     public Connection getConnection() {
@@ -81,16 +85,12 @@ public abstract class Database {
     /**
      * Connect to the database
      */
-    public void connect() {
-        try {
-            if(connection != null && !connection.isClosed())
-                return;
+    public void connect() throws SQLException, ClassNotFoundException {
+        if (connection != null && !connection.isClosed())
+            return;
 
-            Class.forName(driver);
-            connection = DriverManager.getConnection(url, username, password);
-        } catch (final SQLException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
+        Class.forName(driver);
+        connection = DriverManager.getConnection(url, username, password);
     }
 
     /**
@@ -98,7 +98,7 @@ public abstract class Database {
      */
     public void close() {
         try {
-            if(connection != null)
+            if (connection != null)
                 connection.close();
         } catch (final SQLException e) {
             e.printStackTrace();
@@ -110,7 +110,7 @@ public abstract class Database {
      */
     public void rollback() {
         try {
-            if(connection != null)
+            if (connection != null)
                 connection.rollback();
         } catch (final SQLException e) {
             e.printStackTrace();
@@ -119,11 +119,12 @@ public abstract class Database {
 
     /**
      * Check the connection to the database
+     *
      * @return true if closed, false otherwise
      */
     public boolean isClosed() {
         try {
-            if(connection != null)
+            if (connection != null)
                 return connection.isClosed();
         } catch (final SQLException e) {
             e.printStackTrace();
@@ -133,6 +134,7 @@ public abstract class Database {
 
     /**
      * Close a statement
+     *
      * @param statement statement to be closed
      */
     public void close(final Statement statement) {
@@ -146,6 +148,7 @@ public abstract class Database {
 
     /**
      * Close a ResultSet
+     *
      * @param resultSet result set to be closed
      */
     public void close(final ResultSet resultSet) {
@@ -159,13 +162,14 @@ public abstract class Database {
 
     /**
      * Query Database
-     * @param sql sql query
+     *
+     * @param sql        sql query
      * @param parameters parameters of the prepared statement
      * @return result of the given query
      */
     public ResultSet executeQuery(final String sql, final List<Object> parameters) {
         ResultSet resultSet = null;
-        PreparedStatement preparedStatement = null;
+        PreparedStatement preparedStatement;
         try {
             preparedStatement = connection.prepareStatement(sql);
 
@@ -176,8 +180,6 @@ public abstract class Database {
             resultSet = preparedStatement.executeQuery();
         } catch (final SQLException e) {
             e.printStackTrace();
-        } finally {
-            close(preparedStatement);
         }
 
         return resultSet;
@@ -185,7 +187,8 @@ public abstract class Database {
 
     /**
      * Update Database
-     * @param sql sql statement
+     *
+     * @param sql        sql statement
      * @param parameters parameters of the prepared statement
      * @return number of rows updated
      */
